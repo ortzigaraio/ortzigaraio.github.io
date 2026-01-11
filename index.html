@@ -1,267 +1,744 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ortzi Garaio | Data Scientist Portfolio</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ortzi Garaio | Data Scientist</title>
 
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet" />
 
   <style>
     :root {
-      --glass: rgba(255, 255, 255, 0.1);
-      --glass-border: rgba(255, 255, 255, 0.2);
-      --text-main: #ffffff;
+      --bg: #050816;
+      --bg-alt: #0b1020;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
       --accent: #38bdf8;
+      --accent-soft: rgba(56, 189, 248, 0.12);
+      --border-subtle: rgba(148, 163, 184, 0.3);
+    }
+
+    * {
+      box-sizing: border-box;
     }
 
     body {
-      font-family: 'Inter', sans-serif;
-      background: #0f172a;
-      color: var(--text-main);
+      margin: 0;
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: radial-gradient(circle at top left, #1d2940 0, #050816 35%, #020617 100%);
+      color: var(--text);
       overflow-x: hidden;
-      transition: background 0.5s ease;
     }
 
-    /* Fondo dinámico animado */
-    .liquid-bg {
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      z-index: -1;
-      background: linear-gradient(60deg, #0f172a, #1e293b, #334155);
-      background-size: 300% 300%;
-      animation: gradientBG 15s ease infinite;
+    a {
+      text-decoration: none;
+      color: inherit;
     }
 
-    @keyframes gradientBG {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+    /* Layout general tipo dashboard */
+    .page-shell {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: minmax(280px, 340px) minmax(0, 1fr);
+      gap: 2rem;
+      padding: 2rem clamp(1.5rem, 4vw, 4rem);
     }
 
-    /* Glassmorphism */
-    .glass-card {
-      background: var(--glass);
-      backdrop-filter: blur(12px);
-      border: 1px solid var(--glass-border);
+    @media (max-width: 992px) {
+      .page-shell {
+        grid-template-columns: 1fr;
+        padding: 1.5rem;
+      }
+    }
+
+    /* Panel lateral (bio + timeline) */
+    .side-panel {
+      position: sticky;
+      top: 1.5rem;
+      align-self: flex-start;
+      border-radius: 24px;
+      background: linear-gradient(145deg, rgba(15, 23, 42, 0.95), rgba(8, 16, 32, 0.98));
+      border: 1px solid var(--border-subtle);
+      padding: 1.75rem 1.5rem 1.5rem;
+      box-shadow: 0 20px 60px rgba(15, 23, 42, 0.8);
+    }
+
+    @media (max-width: 992px) {
+      .side-panel {
+        position: static;
+      }
+    }
+
+    .avatar {
+      width: 84px;
+      height: 84px;
       border-radius: 20px;
-      padding: 2rem;
-      transition: transform 0.3s ease, background 0.4s;
-    }
-
-    .glass-card:hover {
-      transform: translateY(-10px);
-      background: rgba(255, 255, 255, 0.15);
-    }
-
-    /* Hero Section */
-    .hero-img-container {
       overflow: hidden;
-      border-radius: 20px;
-      position: relative;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      box-shadow: 0 12px 40px rgba(15, 23, 42, 0.9);
     }
 
-    .thumbnail { width: 100%; height: auto; border-radius: 20px; }
-
-    .btn-glass {
-      background: rgba(255, 255, 255, 0.1);
-      color: white;
-      border: 1px solid var(--glass-border);
-      border-radius: 10px;
-      padding: 10px 25px;
-      transition: 0.3s;
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
     }
 
-    .btn-glass:hover {
-      background: var(--accent);
-      color: #0f172a;
-    }
-
-    .badge-skill {
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid var(--glass-border);
-      margin: 5px;
-      padding: 8px 15px;
-      transition: transform 0.2s ease;
-    }
-
-    .badge-skill:hover {
-      transform: scale(1.1);
-      background: var(--accent);
-      color: #0f172a;
-    }
-
-    /* Light/Dark Mode Toggle */
-    .toggle-theme {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: rgba(255,255,255,0.15);
-      border: 1px solid var(--glass-border);
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      display: flex;
-      justify-content: center;
+    .tag-pill {
+      display: inline-flex;
       align-items: center;
-      font-size: 1.5rem;
-      cursor: pointer;
-      transition: 0.3s;
+      gap: 0.35rem;
+      padding: 0.2rem 0.7rem;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      font-size: 0.75rem;
+      color: var(--muted);
     }
 
-    .toggle-theme:hover {
+    .pill-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 0 5px rgba(34, 197, 94, 0.2);
+    }
+
+    h1 {
+      font-size: clamp(2.2rem, 3vw, 2.8rem);
+      font-weight: 800;
+      letter-spacing: -0.045em;
+      margin-bottom: 0.3rem;
+    }
+
+    .role {
+      font-size: 0.95rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+    }
+
+    .bio {
+      font-size: 0.95rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* Chips skills */
+    .skills-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 1.2rem;
+    }
+
+    .skill-chip {
+      padding: 0.35rem 0.75rem;
+      border-radius: 999px;
+      border: 1px dashed rgba(148, 163, 184, 0.6);
+      font-size: 0.78rem;
+      color: var(--muted);
+      background: rgba(15, 23, 42, 0.75);
+      transition: border 0.2s, background 0.2s, transform 0.15s;
+      cursor: default;
+    }
+
+    .skill-chip:hover {
+      border-style: solid;
+      border-color: var(--accent);
+      background: var(--accent-soft);
+      color: var(--accent);
+      transform: translateY(-1px);
+    }
+
+    /* Timeline simple */
+    .timeline {
+      margin-top: 1.75rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid rgba(31, 41, 55, 0.9);
+    }
+
+    .time-item {
+      display: grid;
+      grid-template-columns: 18px 1fr;
+      gap: 0.75rem;
+      margin-bottom: 0.9rem;
+    }
+
+    .time-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
       background: var(--accent);
-      color: #0f172a;
+      box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.22);
+      margin-top: 0.2rem;
     }
 
-    /* Animaciones de los elementos al hacer scroll */
-    .reveal {
+    .time-label {
+      font-size: 0.83rem;
+      color: var(--muted);
+      margin-bottom: 0.1rem;
+    }
+
+    .time-title {
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    /* Links de contacto */
+    .contact-block {
+      margin-top: 1.5rem;
+      padding-top: 1.1rem;
+      border-top: 1px dashed rgba(31, 41, 55, 0.7);
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .contact-links a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.25rem 0.65rem;
+      margin-right: 0.35rem;
+      margin-top: 0.2rem;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      font-size: 0.78rem;
+      transition: background 0.2s, transform 0.15s, color 0.2s, border 0.2s;
+    }
+
+    .contact-links a:hover {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-1px);
+    }
+
+    /* Columna principal */
+    .main-column {
+      display: flex;
+      flex-direction: column;
+      gap: 1.75rem;
+    }
+
+    /* Fila cabecera "hero" */
+    .hero-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.9rem 1.1rem;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(31, 41, 55, 0.95);
+    }
+
+    @media (max-width: 600px) {
+      .hero-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        border-radius: 16px;
+      }
+    }
+
+    .hero-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .hero-pill span {
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .btn-primary-soft,
+    .btn-ghost {
+      border-radius: 999px;
+      font-size: 0.82rem;
+      padding: 0.45rem 0.9rem;
+      border-width: 1px;
+    }
+
+    .btn-primary-soft {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .btn-primary-soft:hover {
+      background: var(--accent);
+      color: #020617;
+    }
+
+    .btn-ghost {
+      background: transparent;
+      border-color: rgba(148, 163, 184, 0.6);
+      color: var(--muted);
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* Secciones */
+    .section-label {
+      font-size: 0.8rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.4rem;
+    }
+
+    .section-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.8rem;
+    }
+
+    /* Cards horizontales de proyecto */
+    .project-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 18px;
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.96), rgba(8, 47, 73, 0.95));
+      border: 1px solid rgba(30, 64, 175, 0.7);
+      padding: 1rem 1.1rem;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 0.9rem;
+      align-items: center;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border 0.2s ease;
+    }
+
+    .project-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.28), transparent 55%);
       opacity: 0;
-      transform: translateY(30px);
-      transition: all 0.8s ease-out;
+      transition: opacity 0.25s ease;
+      pointer-events: none;
     }
 
-    .reveal.active {
+    .project-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 22px 60px rgba(15, 23, 42, 0.95);
+      border-color: rgba(56, 189, 248, 0.9);
+    }
+
+    .project-card:hover::before {
       opacity: 1;
-      transform: translateY(0);
+    }
+
+    .project-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.15rem;
+    }
+
+    .project-tag {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+    }
+
+    .project-title {
+      font-weight: 600;
+      font-size: 0.98rem;
+    }
+
+    .project-desc {
+      font-size: 0.86rem;
+      color: var(--muted);
+      margin-bottom: 0.4rem;
+    }
+
+    .project-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.3rem;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .meta-pill {
+      padding: 0.18rem 0.55rem;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(30, 64, 175, 0.8);
+    }
+
+    .project-cta {
+      font-size: 0.82rem;
+      color: var(--accent);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      white-space: nowrap;
+    }
+
+    .project-cta span {
+      transition: transform 0.2s;
+    }
+
+    .project-card:hover .project-cta span {
+      transform: translateX(3px);
+    }
+
+    /* Grid de proyectos */
+    .projects-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    /* Ficha de mini métricas */
+    .metrics-strip {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.75rem;
+      font-size: 0.78rem;
+    }
+
+    @media (max-width: 600px) {
+      .metrics-strip {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    .metric-card {
+      padding: 0.7rem 0.8rem;
+      border-radius: 14px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(31, 41, 55, 0.9);
+    }
+
+    .metric-label {
+      color: var(--muted);
+      margin-bottom: 0.1rem;
+    }
+
+    .metric-value {
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    /* Hover reveal con detalles */
+    .project-details {
+      margin-top: 0.35rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      transition: max-height 0.35s ease, opacity 0.3s ease;
+    }
+
+    .project-card.open .project-details {
+      max-height: 200px;
+      opacity: 1;
+    }
+
+    .project-card.open .project-cta span {
+      transform: rotate(90deg);
+    }
+
+    /* Footer simple */
+    .footer-note {
+      margin-top: 1.2rem;
+      font-size: 0.78rem;
+      color: var(--muted);
+      text-align: right;
+      opacity: 0.8;
     }
   </style>
 </head>
 <body>
+  <main class="page-shell">
 
-  <div class="liquid-bg"></div>
-
-  <nav class="navbar navbar-expand-lg sticky-top mb-5">
-    <div class="container glass-card py-2 mt-3">
-      <a class="navbar-brand fw-bold text-white" href="#">ORTZI GARAIO</a>
-      <div class="ms-auto">
-        <a href="#contacto" class="btn btn-glass btn-sm me-2">Contacto</a>
+    <!-- LADO IZQUIERDO -->
+    <aside class="side-panel">
+      <div class="d-flex align-items-center gap-3 mb-3">
+        <div class="avatar">
+          <img src="foto_perfil_cv.png" alt="Ortzi Garaio" />
+        </div>
+        <div>
+          <div class="tag-pill">
+            <span class="pill-dot"></span>
+            Disponible para proyectos
+          </div>
+        </div>
       </div>
-    </div>
-  </nav>
 
-  <div class="container">
-    <header class="row align-items-center mb-5 mt-4">
-      <div class="col-md-6 mb-4 reveal">
-        <h1 class="display-3 fw-bold">Data Scientist</h1>
-        <p class="lead opacity-75">
-          Entusiasta de la IA con <strong>precisión de píxel</strong>. Creando soluciones mediante Machine Learning y Visualización.
+      <p class="role">Data Scientist · Madrid</p>
+      <h1>Ortzi Garaio</h1>
+
+      <p class="bio">
+        Data Scientist orientado a producto, combinando modelos de <strong>Machine Learning</strong> con métricas de negocio reales.
+        Me interesan NLP, sistemas de recomendación y visualización clara para gente no técnica.
+      </p>
+
+      <div class="skills-wrap">
+        <span class="skill-chip">Python · Pandas · NumPy</span>
+        <span class="skill-chip">Scikit-learn · XGBoost</span>
+        <span class="skill-chip">NLP · Transformers</span>
+        <span class="skill-chip">SQL · Postgres</span>
+        <span class="skill-chip">Streamlit · Dashboards</span>
+        <span class="skill-chip">AWS · Docker</span>
+      </div>
+
+      <div class="timeline">
+        <div class="time-item">
+          <div class="time-dot"></div>
+          <div>
+            <div class="time-label">2023 – 2026</div>
+            <div class="time-title">Proyectos de Data Science & IA aplicados a negocio</div>
+          </div>
+        </div>
+        <div class="time-item">
+          <div class="time-dot"></div>
+          <div>
+            <div class="time-label">Antes</div>
+            <div class="time-title">Formación cuantitativa y foco en producto digital</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="contact-block">
+        <div>Actualmente abierto a:</div>
+        <ul class="mt-1 mb-2 ps-3">
+          <li>Roles de Data Scientist / ML</li>
+          <li>Consultoría de analítica y dashboards</li>
+        </ul>
+        <div class="contact-links">
+          <a href="mailto:Ortzigar@gmail.com">✉️ Email</a>
+          <a href="https://github.com/ortzigaraio" target="_blank">🐱 GitHub</a>
+          <a href="https://www.linkedin.com/in/ortzi" target="_blank">in LinkedIn</a>
+        </div>
+      </div>
+    </aside>
+
+    <!-- COLUMNA PRINCIPAL -->
+    <section class="main-column">
+
+      <!-- CINTA SUPERIOR -->
+      <div class="hero-bar">
+        <div class="hero-pill">
+          Últimos proyectos centrados en <span>impacto de negocio</span> y <span>historias con datos</span>.
+        </div>
+        <div class="hero-actions">
+          <a href="#proyectos" class="btn btn-sm btn-primary-soft">Ver proyectos</a>
+          <a href="mailto:Ortzigar@gmail.com" class="btn btn-sm btn-ghost">Enviar mensaje</a>
+        </div>
+      </div>
+
+      <!-- METRICAS -->
+      <section>
+        <div class="section-label">Snapshot</div>
+        <div class="metrics-strip">
+          <div class="metric-card">
+            <div class="metric-label">Modelos en producción</div>
+            <div class="metric-value">3+</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Repos en GitHub</div>
+            <div class="metric-value">10+</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">KPIs monitorizados</div>
+            <div class="metric-value">20+</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PROYECTOS -->
+      <section id="proyectos">
+        <div class="section-label">Proyectos</div>
+        <h2 class="section-title">Data & Machine Learning</h2>
+
+        <div class="projects-grid">
+
+          <!-- PROYECTO 1 -->
+          <article class="project-card" onclick="toggleProject(this)">
+            <div>
+              <div class="project-header">
+                <span class="project-tag">NLP · Clasificación</span>
+              </div>
+              <div class="project-title">Análisis de Sentimiento en Twitter con Transformers</div>
+              <p class="project-desc">
+                Pipeline de NLP de extremo a extremo para clasificar sentimiento y temas en tweets sobre una marca,
+                con dashboard para el equipo de marketing.
+              </p>
+              <div class="project-meta">
+                <span class="meta-pill">Python · Hugging Face</span>
+                <span class="meta-pill">FastAPI</span>
+                <span class="meta-pill">Docker · AWS</span>
+              </div>
+              <div class="project-details">
+                Entrenamiento de un modelo BERT fine-tuned con manejo de desbalanceo, explicación de predicciones con SHAP
+                y API para consumir el modelo desde otras apps. Incluye experiment tracking y alertas cuando cambia la
+                distribución de los datos.
+              </div>
+            </div>
+            <div>
+              <div class="project-cta">
+                Ver en GitHub <span>➜</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- PROYECTO 2 -->
+          <article class="project-card" onclick="toggleProject(this)">
+            <div>
+              <div class="project-header">
+                <span class="project-tag">Regresión · Pricing</span>
+              </div>
+              <div class="project-title">Predicción de Precios Inmobiliarios</div>
+              <p class="project-desc">
+                Modelo de valoración de inmuebles con features geoespaciales y variables de mercado, pensado para
+                equipos de negocio no técnicos.
+              </p>
+              <div class="project-meta">
+                <span class="meta-pill">Scikit-learn · XGBoost</span>
+                <span class="meta-pill">GeoPandas</span>
+                <span class="meta-pill">MLflow</span>
+              </div>
+              <div class="project-details">
+                Pipeline con feature engineering (distancia a puntos de interés, densidad de oferta, etc.), comparación de
+                modelos y validación cruzada. Dashboard de error por zona para identificar mercados infrainfravalorados.
+              </div>
+            </div>
+            <div>
+              <div class="project-cta">
+                Ver en GitHub <span>➜</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- PROYECTO 3 -->
+          <article class="project-card" onclick="toggleProject(this)">
+            <div>
+              <div class="project-header">
+                <span class="project-tag">Dashboard · Producto</span>
+              </div>
+              <div class="project-title">Panel de KPIs en Tiempo Real con Streamlit</div>
+              <p class="project-desc">
+                Dashboard interactivo para equipos de producto: funnel, cohortes y retención, conectado a una base de
+                datos en vivo.
+              </p>
+              <div class="project-meta">
+                <span class="meta-pill">Streamlit</span>
+                <span class="meta-pill">PostgreSQL</span>
+                <span class="meta-pill">Plotly</span>
+              </div>
+              <div class="project-details">
+                Incluye segmentación dinámica por país, plan y dispositivo, alertas de drop en conversión y exploración
+                de cohortes para tomar decisiones sobre roadmap.
+              </div>
+            </div>
+            <div>
+              <div class="project-cta">
+                Ver en GitHub <span>➜</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- PROYECTO 4 NUEVO -->
+          <article class="project-card" onclick="toggleProject(this)">
+            <div>
+              <div class="project-header">
+                <span class="project-tag">Recomendadores</span>
+              </div>
+              <div class="project-title">Sistema de Recomendación de Contenidos</div>
+              <p class="project-desc">
+                Recomendador híbrido (colaborativo + contenido) para sugerir artículos personalizados a usuarios
+                recurrentes.
+              </p>
+              <div class="project-meta">
+                <span class="meta-pill">Python</span>
+                <span class="meta-pill">Matrix Factorization</span>
+                <span class="meta-pill">API REST</span>
+              </div>
+              <div class="project-details">
+                Implementación de embeddings de usuario y contenido, ranking por probabilidad de clic, y experimento A/B
+                simulado para medir el uplift en CTR frente a una baseline.
+              </div>
+            </div>
+            <div>
+              <div class="project-cta">
+                Ver en GitHub <span>➜</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- PROYECTO 5 NUEVO -->
+          <article class="project-card" onclick="toggleProject(this)">
+            <div>
+              <div class="project-header">
+                <span class="project-tag">MLOps</span>
+              </div>
+              <div class="project-title">Pipeline de ML reproducible de extremo a extremo</div>
+              <p class="project-desc">
+                Proyecto plantilla con estructura limpia, tracking, tests y CI para acelerar nuevos modelos en producción.
+              </p>
+              <div class="project-meta">
+                <span class="meta-pill">MLflow</span>
+                <span class="meta-pill">Pytest</span>
+                <span class="meta-pill">GitHub Actions</span>
+              </div>
+              <div class="project-details">
+                Incluye preprocesado, entrenamiento, evaluación, empaquetado del modelo y despliegue continuo. Pensado
+                para mostrar cómo trabajas en entornos reales, no sólo notebooks aislados.
+              </div>
+            </div>
+            <div>
+              <div class="project-cta">
+                Ver en GitHub <span>➜</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- SECCIÓN EXTRA: CÓMO TRABAJO -->
+      <section>
+        <div class="section-label">Texto corto</div>
+        <h2 class="section-title">Cómo suelo trabajar</h2>
+        <p style="font-size: 0.9rem; color: var(--muted); max-width: 56ch;">
+          Empiezo por entender el contexto de negocio, defino una métrica clara de éxito y sólo entonces elijo la
+          técnica de modelado. Me gusta documentar el proceso, dejar artefactos reutilizables (datasets limpios,
+          notebooks explicativos, dashboards) y entregar algo que un equipo de producto pueda usar sin depender
+          siempre de mí.
         </p>
-        <div class="mt-4">
-          <span class="badge badge-skill">Python</span>
-          <span class="badge badge-skill">SQL</span>
-          <span class="badge badge-skill">NLP</span>
-          <span class="badge badge-skill">AWS</span>
-          <span class="badge badge-skill">Streamlit</span>
-        </div>
-      </div>
+      </section>
 
-      <div class="col-md-6 reveal">
-        <div class="hero-img-container shadow-lg">
-          <img src="foto_perfil_cv.png" class="thumbnail img-parallax" alt="Profile">
-        </div>
-      </div>
-    </header>
-
-    <section id="proyectos" class="py-5">
-      <h2 class="text-center mb-5 fw-bold reveal">🚀 Proyectos Destacados</h2>
-      <div class="row g-4">
-        <div class="col-md-4 reveal">
-          <div class="glass-card h-100">
-            <h3>🐦 Análisis de Sentimiento</h3>
-            <p class="opacity-75">NLP con Python y transformers de Hugging Face aplicado a datos de Twitter.</p>
-            <button class="btn btn-glass mt-2" onclick="toggleDetails(this)">Ver Detalles ↓</button>
-            <div class="details mt-3" style="display:none;">
-              <p>Clasificación de sentimientos, visualización de emociones y modelo BERT fine-tuned.</p>
-              <a href="#" class="text-info text-decoration-none fw-bold">Ver en GitHub →</a>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4 reveal">
-          <div class="glass-card h-100">
-            <h3>🏠 Predicción de Precios</h3>
-            <p class="opacity-75">Modelos predictivos de precios inmobiliarios con regresión avanzada.</p>
-            <button class="btn btn-glass mt-2" onclick="toggleDetails(this)">Ver Detalles ↓</button>
-            <div class="details mt-3" style="display:none;">
-              <p>Pipeline completo con feature engineering, evaluación y despliegue en AWS Lambda.</p>
-              <a href="#" class="text-info text-decoration-none fw-bold">Ver en GitHub →</a>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4 reveal">
-          <div class="glass-card h-100">
-            <h3>📊 Dashboard Streamlit</h3>
-            <p class="opacity-75">Visualización interactiva de KPIs en tiempo real para toma de decisiones.</p>
-            <button class="btn btn-glass mt-2" onclick="toggleDetails(this)">Ver Detalles ↓</button>
-            <div class="details mt-3" style="display:none;">
-              <p>Aplicación dinámica conectada a APIs con visualizaciones avanzadas en Plotly.</p>
-              <a href="#" class="text-info text-decoration-none fw-bold">Ver en GitHub →</a>
-            </div>
-          </div>
-        </div>
+      <div class="footer-note">
+        © 2026 · Construido con HTML/CSS/JS y alojado en GitHub Pages.
       </div>
     </section>
-
-    <footer id="contacto" class="py-5 text-center">
-      <div class="glass-card reveal">
-        <h2 class="mb-4">¿Hablamos?</h2>
-        <p>GitHub: @ortzigaraio | LinkedIn: in/ortzi</p>
-        <a href="mailto:Ortzigar@gmail.com" class="btn btn-glass">Enviar Email</a>
-      </div>
-      <p class="mt-5 opacity-50 small">© 2026 Ortzi Garaio - Data Science Portfolio</p>
-    </footer>
-  </div>
-
-  <div class="toggle-theme" id="themeToggle">🌙</div>
+  </main>
 
   <script>
-    // Parallax
-    const images = document.querySelectorAll('.img-parallax');
-    if (images.length) {
-      import('https://cdn.jsdelivr.net/npm/simple-parallax-js@5.5.1/dist/simpleParallax.min.js').then(() => {
-        new simpleParallax(images, { scale: 1.5, delay: .6, transition: 'cubic-bezier(0,0,0,1)' });
-      });
+    function toggleProject(card) {
+      card.classList.toggle("open");
     }
-
-    // Función para detallar proyectos
-    function toggleDetails(button) {
-      const details = button.nextElementSibling;
-      const visible = details.style.display === 'block';
-      details.style.display = visible ? 'none' : 'block';
-      button.textContent = visible ? 'Ver Detalles ↓' : 'Ocultar ↑';
-    }
-
-    // Light / Dark Mode
-    const toggleBtn = document.getElementById('themeToggle');
-    toggleBtn.addEventListener('click', () => {
-      document.body.classList.toggle('light-mode');
-      if (document.body.classList.contains('light-mode')) {
-        document.body.style.background = '#f8fafc';
-        document.body.style.color = '#0f172a';
-        toggleBtn.textContent = '☀️';
-      } else {
-        document.body.style.background = '#0f172a';
-        document.body.style.color = '#ffffff';
-        toggleBtn.textContent = '🌙';
-      }
-    });
-
-    // Animación reveal al hacer scroll
-    function reveal() {
-      const reveals = document.querySelectorAll(".reveal");
-      for (let i = 0; i < reveals.length; i++) {
-        let windowHeight = window.innerHeight;
-        let elementTop = reveals[i].getBoundingClientRect().top;
-        let elementVisible = 100;
-
-        if (elementTop < windowHeight - elementVisible) {
-          reveals[i].classList.add("active");
-        }
-      }
-    }
-    window.addEventListener("scroll", reveal);
-    reveal(); // inicializar
   </script>
 </body>
 </html>
