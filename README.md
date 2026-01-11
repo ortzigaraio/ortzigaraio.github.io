@@ -3,12 +3,14 @@
 </p>
 
 <p align="center">
-  <a align="center" href="https://github.com/DenverCoder1/readme-typing-svg"><img src="https://readme-typing-svg.herokuapp.com?&font=IBM+Plex+Sans&color=38BDF8&size=25&lines=Data+Scientist;AI+Enthusiast;Pixel+Perfectionist;Turning+Data+into+Impact" /></a>
+  <a align="center" href="https://github.com/DenverCoder1/readme-typing-svg">
+    <img src="https://readme-typing-svg.herokuapp.com?&font=IBM+Plex+Sans&color=38BDF8&size=25&lines=Data+Scientist;AI+Enthusiast;Machine+Learning+%26+NLP;Turning+Data+into+Impact" />
+  </a>
 </p>
 
-<p>Soy un apasionado de la <b>Ciencia de Datos</b> y la <b>Inteligencia Artificial</b>. Mi enfoque es la "pixel perfection": construir soluciones técnicas impecables que generen un impacto real y significativo.</p>
-
-<img align="right" src="https://media.giphy.com/media/M9gbBd9nbDrOTu1Mqx/giphy.gif" width="200">
+<p>
+Soy un apasionado de la <b>Ciencia de Datos</b> y la <b>Inteligencia Artificial</b>. Me gusta construir soluciones claras y mantenibles que conecten buenos modelos con problemas de negocio reales y medibles.
+</p>
 
 <ul>
   <li>👋 Hola, soy @ortzigaraio</li>
@@ -25,8 +27,8 @@ const ortzi = {
   code: ["Python", "R", "SQL", "JavaScript"],
   askMeAbout: ["machine learning", "deep learning", "nlp", "data viz"],
   technologies: {
-      libraries: ["Pandas", "Scikit-Learn", "PyTorch", "Plotly"],
-      visualization: ["Matplotlib", "Seaborn", "Power BI", "Streamlit"],
-      cloud: ["AWS", "Docker"]
+    libraries: ["Pandas", "Scikit-Learn", "PyTorch", "Plotly"],
+    visualization: ["Matplotlib", "Seaborn", "Power BI", "Streamlit"],
+    cloud: ["AWS", "Docker"]
   }
 }
