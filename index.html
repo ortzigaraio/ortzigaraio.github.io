@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ortzi Garaio | Data Scientist Portfolio</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --glass: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --text-main: #ffffff;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0f172a; /* Fondo oscuro profundo */
+            color: var(--text-main);
+            overflow-x: hidden;
+        }
+
+        /* Fondo Animado Liquid */
+        .liquid-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            background: linear-gradient(45deg, #0f172a, #1e293b, #334155);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Estilo Glassmorphism */
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* Parallax Image container */
+        .hero-img-container {
+            width: 100%;
+            height: 400px;
+            overflow: hidden;
+            border-radius: 20px;
+        }
+
+        .thumbnail { width: 100%; height: auto; }
+
+        .btn-glass {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(5px);
+            border-radius: 10px;
+            padding: 10px 25px;
+        }
+
+        .btn-glass:hover {
+            background: white;
+            color: #0f172a;
+        }
+
+        .badge-skill {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--glass-border);
+            margin: 5px;
+            padding: 8px 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="liquid-bg"></div>
+
+    <nav class="navbar navbar-expand-lg sticky-top mb-5">
+        <div class="container glass-card py-2 mt-3">
+            <a class="navbar-brand fw-bold text-white" href="#">ORTZI GARAIO</a>
+            <div class="ms-auto">
+                <a href="#contacto" class="btn btn-glass btn-sm">Contacto</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <header class="row align-items-center mb-5 mt-4">
+            <div class="col-md-6 mb-4">
+                <h1 class="display-3 fw-bold">Data Scientist</h1>
+                <p class="lead opacity-75">
+                    AI enthusiast with <strong>pixel perfection</strong>. Construyendo soluciones significativas mediante Machine Learning y Visualización.
+                </p>
+                <div class="mt-4">
+                    <span class="badge badge-skill">Python</span>
+                    <span class="badge badge-skill">SQL</span>
+                    <span class="badge badge-skill">NLP</span>
+                    <span class="badge badge-skill">AWS</span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="hero-img-container shadow-lg">
+                    <img src="foto_perfil_cv.png" class="thumbnail img-parallax" alt="Profile">
+                </div>
+            </div>
+        </header>
+
+        <section class="py-5">
+            <h2 class="text-center mb-5 fw-bold">Proyectos Destacados</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="glass-card h-100">
+                        <h3>🐦 Análisis de Sentimiento</h3>
+                        <p class="opacity-75">NLP con Python y transformers de Hugging Face aplicado a datos de Twitter.</p>
+                        <a href="#" class="text-info text-decoration-none fw-bold">Ver en GitHub →</a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="glass-card h-100">
+                        <h3>🏠 Predicción de Precios</h3>
+                        <p class="opacity-75">Modelos de regresión avanzada con scikit-learn para el mercado inmobiliario.</p>
+                        <a href="#" class="text-info text-decoration-none fw-bold">Ver en GitHub →</a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="glass-card h-100">
+                        <h3>📊 Dashboard Streamlit</h3>
+                        <p class="opacity-75">Visualización interactiva de KPIs en tiempo real para toma de decisiones.</p>
+                        <a href="#" class="text-info text-decoration-none fw-bold">Ver en GitHub →</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer id="contacto" class="py-5 text-center">
+            <div class="glass-card">
+                <h2 class="mb-4">¿Hablamos?</h2>
+                <p>GitHub: @ortzigaraio | LinkedIn: in/ortzi</p>
+                <a href="mailto:Ortzigar@gmail.com" class="btn btn-glass">Enviar Email</a>
+            </div>
+            <p class="mt-5 opacity-50 small">© 2024 Ortzi Garaio - Data Science Portfolio</p>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/simple-parallax-js@5.5.1/dist/simpleParallax.min.js"></script>
+    <script>
+        var images = document.querySelectorAll('.img-parallax');
+        new simpleParallax(images, {
+            scale: 1.5,
+            delay: .6,
+            transition: 'cubic-bezier(0,0,0,1)'
+        });
+    </script>
+</body>
+</html>
