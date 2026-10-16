@@ -30,12 +30,19 @@ const FORM_ENDPOINT = null; // p. ej. "https://formspree.io/f/xxxxxxx"
   root.innerHTML = `
     <div class="contact">
       <header class="sec-head">
-        <p class="label sec-kicker"><span>04 — Let’s talk</span><span>Reply within a day or two</span></p>
-        <h2 class="sec-word display" aria-label="Contact"><span aria-hidden="true">CONTACT</span><sup class="sec-count" aria-hidden="true">(→)</sup></h2>
+        <p class="label sec-kicker"><span>07 — Let’s talk</span><span id="ct-clock">Euskadi, ES</span></p>
+        <h2 class="sec-word display" aria-label="Contact"><span aria-hidden="true">CONTACT</span><sup class="sec-count" aria-hidden="true">@</sup></h2>
       </header>
 
       <div class="ct-grid">
         <div class="ct-mail">
+          <h3 class="ct-lead display">Got a project, a dataset or an idea?</h3>
+          <p class="ct-sub">Tell me what you are building and what is getting in the way. I like problems where a model has to leave the notebook and run on its own.</p>
+          <ul class="ct-chans">
+            <li><span class="label">GitHub</span><a href="${esc(owner.github)}" target="_blank" rel="noopener">${esc(owner.github.replace(/^https?:\/\//, ""))} ↗</a></li>
+            <li><span class="label">Location</span><span>${esc(owner.location)}</span></li>
+            <li><span class="label">Local time</span><span id="ct-time" data-time>--:--</span></li>
+          </ul>
           <p class="label">Direct email</p>
           <p class="ct-email"><span class="ct-email-text" id="ct-email">${esc(owner.email)}</span></p>
           <button type="button" class="btn ct-copy" data-copy="email"><span class="ct-copy-label">Copy</span></button>
@@ -44,6 +51,9 @@ const FORM_ENDPOINT = null; // p. ej. "https://formspree.io/f/xxxxxxx"
 
         <div class="ct-formwrap">
           <form class="cform" novalidate aria-label="Contact form">
+            <fieldset class="cf-topics"><legend class="label">What is it about?</legend>
+              ${["Project", "Collaboration", "Question", "Just saying hi"].map((t) => `<button type="button" class="cf-chip" data-topic="${t}" aria-pressed="false">${t}</button>`).join("")}
+            </fieldset>
             ${field("name", "Name", "text", 'autocomplete="name" required')}
             ${field("email", "Email", "email", 'autocomplete="email" required inputmode="email"')}
             ${field("subject", "Subject (optional)", "text")}
@@ -57,6 +67,19 @@ const FORM_ENDPOINT = null; // p. ej. "https://formspree.io/f/xxxxxxx"
         </div>
       </div>
     </div>`;
+
+  /* ---------- Temas rápidos: rellenan el asunto ---------- */
+  const chips = Array.from(root.querySelectorAll(".cf-chip")), subj = root.querySelector("#f-subject");
+  chips.forEach((c) => c.addEventListener("click", () => {
+    const on = c.getAttribute("aria-pressed") !== "true";
+    chips.forEach((o) => o.setAttribute("aria-pressed", "false"));
+    c.setAttribute("aria-pressed", on ? "true" : "false");
+    if (subj) { subj.value = on ? c.dataset.topic : ""; subj.dispatchEvent(new Event("input", { bubbles: true })); }
+  }));
+  /* ---------- Hora local ---------- */
+  const timeEl = root.querySelector("#ct-time");
+  const tick = () => { try { timeEl.textContent = new Intl.DateTimeFormat("en-GB", { hour: "2-digit", minute: "2-digit", timeZone: "Europe/Madrid", timeZoneName: "short" }).format(new Date()); } catch (e) { timeEl.textContent = "—"; } };
+  tick(); setInterval(tick, 20000);
 
   /* ---------- Copiar correo ---------- */
   const note = root.querySelector("#ct-copy-note");

@@ -87,13 +87,13 @@
     const certs = C.certs || [];
     const using = (name) => P.filter((p) => p.stack.some((s) => s.toLowerCase().includes(name.toLowerCase())));
     certsRoot.innerHTML = head("ACHIEVEMENTS", "04 — Learning", "Certificates and courses", "(" + pad2(certs.length) + ")") + `
-      <ul class="ct-grid">${certs.map((c, i) => {
+      <ul class="ac-grid">${certs.map((c, i) => {
         const u = using(c.title);
-        return `<li class="ct-card">
-          <p class="label ct-top"><span>${pad2(i + 1)}</span><span>${esc(c.issuer)} · ${esc(c.kind)}</span></p>
-          <h3 class="ct-title display">${esc(c.title)}</h3>
-          <p class="ct-note">${esc(c.note)}</p>
-          <p class="label ct-use">${u.length ? "Used in " + u.map((p) => esc(p.title)).join(" · ") : "Next: apply it in a project"}</p>
+        return `<li class="ac-card">
+          <p class="label ac-top"><span>${pad2(i + 1)}</span><span>${esc(c.issuer)} · ${esc(c.kind)}</span></p>
+          <h3 class="ac-title display">${esc(c.title)}</h3>
+          <p class="ac-note">${esc(c.note)}</p>
+          <p class="label ac-use">${u.length ? "Used in " + u.map((p) => esc(p.title)).join(" · ") : "Next: apply it in a project"}</p>
         </li>`;
       }).join("")}</ul>`;
   }
