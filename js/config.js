@@ -148,7 +148,7 @@ window.PORTFOLIO = {
   /* ---------- Ejemplos de dirección visual (seleccionables en "Laboratorio") ---------- */
   palettes: {
     hermes:    { label: "Monocromo", dark: { bg: "#0a0a0a", fg: "#f4f4f4", muted: "#8b8b86", line: "#262624", accent: "#f4f4f4" },
-                                       light: { bg: "#ece8dd", fg: "#14110c", muted: "#6c675a", line: "#cfc9b9", accent: "#14110c" } },
+                                       light: { bg: "#f3f0e8", fg: "#15120d", muted: "#6f6a5e", line: "#d9d3c4", accent: "#15120d" } },
     carbon:    { label: "Charcoal", dark: { bg: "#0a0a0a", fg: "#f4f4f4", muted: "#8b8b86", line: "#262624", accent: "#ff5b23" },
                                       light: { bg: "#f4f4f4", fg: "#0a0a0a", muted: "#6b6b66", line: "#d6d6d2", accent: "#e2440f" } },
     sello:     { label: "Stamp ink", dark: { bg: "#13110f", fg: "#efe8dc", muted: "#948b7d", line: "#2b2723", accent: "#e5322d" },

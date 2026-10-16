@@ -105,7 +105,7 @@
   function colors() {
     const c = PF.colors();
     U.uInk.value.set(c.fg);
-    U.uAlpha.value = PF.state.theme === "light" ? 0.8 : 1.0;
+    U.uAlpha.value = PF.state.theme === "light" ? 0.42 : 1.0;
     canvas.hidden = !PF.state.field;
     dirty = true;
   }
