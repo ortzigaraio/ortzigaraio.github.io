@@ -48,25 +48,25 @@
       vec2 cs = vec2(uCell * 0.6, uCell * 1.18);
       vec2 id = floor(px / cs);
       vec2 lc = fract(px / cs);
-      vec2 p = (id + 0.5) * cs / uRes.y;
+      vec2 p = (id + 0.5) * cs / uRes.y * 0.8;
 
       float t = uTime * 0.035;
       vec2 q = vec2(fbm(p * 1.1 + vec2(0.0, t)), fbm(p * 1.1 + vec2(5.2, -t * 0.8)));
       vec2 r = vec2(fbm(p * 1.4 + 2.2 * q + vec2(1.7, 9.2) + t), fbm(p * 1.4 + 2.2 * q + vec2(8.3, 2.8) - t));
       float f = fbm(p * 1.2 + 2.0 * r);
       float ridge = 1.0 - abs(f * 2.0 - 1.0);
-      float band = pow(ridge, 7.0);
-      float halo = pow(ridge, 2.5) * 0.18;
+      float band = pow(ridge, 4.6);
+      float halo = pow(ridge, 2.0) * 0.22;
 
       float h = hash(id);
       float h2 = hash(id + 17.17);
-      float rate = mix(0.15, 1.2, h) + band * 3.0;
+      float rate = mix(0.05, 0.5, h) + band * 0.8;
       float ci = floor(hash(id + floor(uTime * rate + h * 13.0)) * uGlyphN);
       float g = texture2D(uGlyph, vec2((ci + lc.x) / uGlyphN, lc.y)).r;
 
       float blank = step(h2, 0.18 * (1.0 - band));
       float sparkle = step(0.997, hash(id + floor(uTime * 2.0))) * 0.5;
-      float v = (0.06 + halo * 0.8 + 0.5 * band + sparkle * 0.6) * (1.0 - blank);
+      float v = (0.035 + halo * 0.6 + 0.9 * band + sparkle * 0.6) * (1.0 - blank);
       v += (ringAt(uC0, px) + ringAt(uC1, px)) * (1.0 - 0.45 * blank);
       float a = clamp(g * v * uAlpha, 0.0, 1.0);
       gl_FragColor = vec4(uInk * a, a);
@@ -86,7 +86,7 @@
   const cam = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
 
   function atlas() {
-    const a = PF.fx.atlas(PF.fx.ALNUM, { cw: 24, ch: 40, weight: 600, scale: 0.8 });
+    const a = PF.fx.atlas("d0d0d0P9s8d0P9X8d0s9", { cw: 24, ch: 40, weight: 600, scale: 0.8 });
     const tex = new THREE.CanvasTexture(a.canvas);
     tex.minFilter = THREE.LinearFilter; tex.generateMipmaps = false;
     U.uGlyph.value = tex; U.uGlyphN.value = a.count;
