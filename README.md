@@ -20,8 +20,7 @@ Everything comes from `js/config.js` (`window.PORTFOLIO`):
 
 ## Typography
 
-The main typeface is **Stamp RSPK Three** (commercial), which is not included in the repository.
-Copy your licensed file to `fonts/StampRSPKThree-Regular.woff2` (it is in `.gitignore`). Until it is there, Archivo is used as the fallback.
+The main typeface is **Stamp RSPK Three** (freeware), included as `fonts/StampRSPKThree-Regular.woff2`. If the file is missing, Archivo is used as the fallback.
 
 ## Structure
 
