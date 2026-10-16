@@ -96,12 +96,12 @@
   function colors() {
     const c = PF.colors();
     U.uInk.value.set(c.fg);
-    baseAlpha = PF.state.theme === "light" ? 0.8 : 1.0;
+    U.uAlpha.value = PF.state.theme === "light" ? 0.8 : 1.0;
     canvas.hidden = !PF.state.field;
     dirty = true;
   }
 
-  let last = 0, dirty = true, baseAlpha = 1;
+  let last = 0, dirty = true;
   const t0 = performance.now();
   function frame(now) {
     requestAnimationFrame(frame);
@@ -110,7 +110,6 @@
     if (now - last < 33) return; // ~30 fps es suficiente para un fondo
     last = now;
     U.uTime.value = PF.reducedMotion ? 12.0 : (now - t0) / 1000;
-    U.uAlpha.value = baseAlpha * (1 + 1.2 * (PF.field.boost || 0));
     renderer.render(scene, cam);
     dirty = false;
   }
@@ -121,5 +120,5 @@
   const start = () => { atlas(); resize(); colors(); requestAnimationFrame(frame); };
   (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(start, start);
 
-  PF.field = { canvas, boost: 0, render: () => (dirty = true) };
+  PF.field = { canvas, render: () => (dirty = true) };
 })();

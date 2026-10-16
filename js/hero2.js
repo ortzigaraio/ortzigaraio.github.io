@@ -400,7 +400,6 @@
     if (hub) { place(hub, 0, 0.5); hub.el.style.zIndex = "300"; }
     cards.forEach((o) => place(o, o.start, o.start + 0.5));
     deck.classList.toggle("is-live", p > 0.86);
-    if (PF.field) { PF.field.boost = smooth(0.3, 0.6, p); PF.field.render(); }
     deck.style.visibility = p > 0.26 ? "visible" : "hidden";
     drawLines(p, time);
 

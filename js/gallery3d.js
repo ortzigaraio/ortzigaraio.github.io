@@ -116,7 +116,6 @@
     requestAnimationFrame(frame);
     if (!visible || document.hidden || !items.length) return;
     prog += (target - prog) * (PF.reducedMotion ? 1 : 0.1);
-    if (PF.field) PF.field.boost = -0.45;   // fondo de caracteres más tenue en la galería
     const time = PF.reducedMotion ? 0 : now / 1000, m = PF.mouse;
     W = stage.clientWidth; H = stage.clientHeight;
     const camZ = prog * (zRange() - 100) - 120 + (PF.reducedMotion ? 0 : Math.sin(time * 0.3) * 8);
