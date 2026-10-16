@@ -1,0 +1,156 @@
+/* ==========================================================================
+   BASE — tokens, tipografía, capas fijas (campo + cañón) y hero.
+   Concepto de layout: barra de menú tipo escritorio arriba, escena a pantalla
+   completa, y después secciones editoriales con mucho espacio negativo.
+   ========================================================================== */
+@font-face {
+  font-family: "Stamp RSPK Three";
+  src: url("../fonts/StampRSPKThree-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  /* Oscuro por defecto (Carbón). core.js reescribe estos valores según la paleta. */
+  --bg: #0a0a0a;
+  --fg: #f4f4f4;
+  --muted: #8b8b86;
+  --line: #262624;
+  --accent: #ff5b23;
+  --fg-rgb: 244, 244, 244;
+  --bg-rgb: 10, 10, 10;
+  --accent-rgb: 255, 91, 35;
+
+  --font-display: "Stamp RSPK Three", "Archivo", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --display-stretch: 100%;
+
+  /* Escala tipográfica */
+  --t-xs: 0.6875rem;   /* 11px metadatos */
+  --t-sm: 0.8125rem;   /* 13px */
+  --t-md: 1rem;
+  --t-lg: clamp(1.25rem, 1rem + 1vw, 1.75rem);
+  --t-xl: clamp(2rem, 1.2rem + 3.5vw, 4.5rem);
+  --t-xxl: clamp(3.5rem, 1rem + 11vw, 13rem);
+
+  --menubar-h: 30px;
+  --gutter: max(16px, env(safe-area-inset-left, 0px));
+  --gutter-r: max(16px, env(safe-area-inset-right, 0px));
+  --ease: cubic-bezier(0.2, 0.7, 0.1, 1);
+  --hero-p: 0;
+  color-scheme: dark;
+}
+:root[data-theme="light"] {
+  --bg: #f4f4f4;
+  --fg: #0a0a0a;
+  --muted: #6b6b66;
+  --line: #d6d6d2;
+  --accent: #e2440f;
+  --fg-rgb: 10, 10, 10;
+  --bg-rgb: 244, 244, 244;
+  --accent-rgb: 226, 68, 15;
+  color-scheme: light;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-stopped { overflow: hidden; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-mono);
+  font-size: var(--t-sm);
+  line-height: 1.55;
+  overflow-x: hidden;
+  transition: background-color 0.6s var(--ease), color 0.6s var(--ease);
+  -webkit-font-smoothing: antialiased;
+}
+body.is-locked { overflow: hidden; }
+img { max-width: 100%; display: block; }
+a { color: inherit; }
+button { font: inherit; color: inherit; }
+::selection { background: var(--accent); color: var(--bg); }
+:focus-visible { outline: 1px dashed var(--accent); outline-offset: 3px; }
+
+.display {
+  font-family: var(--font-display);
+  font-stretch: var(--display-stretch);
+  font-weight: 400;
+  line-height: 0.86;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+.label {
+  font-family: var(--font-mono);
+  font-size: var(--t-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.visually-hidden {
+  position: absolute !important; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap;
+}
+
+/* ---------- Capas fijas ---------- */
+#field {
+  position: fixed; inset: 0; width: 100vw; height: 100vh;
+  z-index: 0; pointer-events: none;
+}
+main, .site-footer { position: relative; z-index: 1; }
+
+/* ---------- Hero: cañón estriado (scroll-scrubbing) ---------- */
+#hero { position: relative; height: 460vh; z-index: 2; }
+.hero-stage {
+  position: sticky; top: 0;
+  height: 100vh; height: 100dvh;
+  overflow: hidden;
+}
+#barrel { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.no-webgl .hero-stage { background: radial-gradient(circle at 50% 50%, var(--fg) 0 2%, var(--bg) 40%); }
+
+.hero-hud {
+  position: absolute; inset: 0;
+  padding: calc(var(--menubar-h) + 18px) var(--gutter-r) max(18px, env(safe-area-inset-bottom, 0px)) var(--gutter);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto 1fr auto;
+  pointer-events: none;
+  mix-blend-mode: difference;
+  color: #fff;
+}
+.hero-hud .label { color: inherit; opacity: 0.8; }
+.hud-specs { display: grid; gap: 2px; align-content: start; }
+.hud-readout { display: grid; gap: 2px; justify-items: end; text-align: right; align-content: start; }
+.hud-readout b { font-weight: 500; opacity: 1; }
+.hero-title {
+  grid-column: 1 / -1; align-self: end;
+  display: grid; gap: 14px;
+  opacity: calc(1 - var(--hero-p) * 4);
+  transform: translateY(calc(var(--hero-p) * -60px));
+}
+.hero-title h1 { margin: 0; font-size: var(--t-xxl); }
+.hero-title p { margin: 0; max-width: 46ch; }
+.hud-foot {
+  grid-column: 1 / -1;
+  display: flex; justify-content: space-between; align-items: center; gap: 16px;
+  margin-top: 16px;
+}
+.hud-bar { flex: 1; height: 1px; background: rgba(255, 255, 255, 0.25); position: relative; overflow: hidden; max-width: 340px; }
+.hud-bar i { position: absolute; inset: 0; background: #fff; transform-origin: left; transform: scaleX(0); }
+.scroll-cue { animation: cue 1.8s var(--ease) infinite; }
+@keyframes cue { 0%, 100% { transform: translateY(0); opacity: 0.4; } 50% { transform: translateY(4px); opacity: 1; } }
+
+@media (max-width: 640px) {
+  .hero-hud { grid-template-columns: 1fr; }
+  .hud-readout { justify-items: start; text-align: left; margin-top: 10px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+}

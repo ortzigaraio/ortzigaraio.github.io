@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="es" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ortzi Garaio Portfolio</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Portfolio de Ortzi Garaio, Data Scientist e ingeniero de IA.">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..800&family=Big+Shoulders+Display:wght@400..800&family=IBM+Plex+Mono:wght@400;500&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400..700&family=Space+Mono:wght@400;700&display=swap">
+<!-- @CSS -->
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/ui-menu.css">
+<link rel="stylesheet" href="css/ui-sections.css">
+<!-- /@CSS -->
+</head>
+<body>
+
+<canvas id="field" aria-hidden="true"></canvas>
+
+<!-- ===== MENÚ (barra tipo escritorio + índice grande + ventanas) ===== -->
+<div id="ui-menu"></div>
+
+<main id="top">
+  <!-- ===== HERO: cañón estriado ===== -->
+  <section id="hero" aria-label="Introducción">
+    <div class="hero-stage">
+      <canvas id="barrel" aria-hidden="true"></canvas>
+      <div class="hero-hud">
+        <div class="hud-specs label">
+          <span>Cal. 7.62 × 51 mm</span>
+          <span>6 estrías · dextrógiras</span>
+          <span>Paso 1:10″</span>
+        </div>
+        <div class="hud-readout label">
+          <span>Profundidad <b data-hud="depth">000 mm</b></span>
+          <span>Rotación <b data-hud="rot">00000°</b></span>
+          <span>Recorrido <b data-hud="pct">000%</b></span>
+        </div>
+        <div class="hero-title">
+          <h1 class="display">Ortzi<br>Garaio</h1>
+          <p class="label">Data Scientist · AI Engineer — modelos que salen del notebook y funcionan solos.</p>
+        </div>
+        <div class="hud-foot label">
+          <span class="scroll-cue">Desliza ↓</span>
+          <span class="hud-bar"><i data-hud="bar"></i></span>
+          <span>Euskadi, ES</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== GALERÍA DE PROYECTOS ===== -->
+  <section id="work" aria-label="Proyectos"></section>
+
+  <!-- ===== SOBRE MÍ + HABILIDADES ===== -->
+  <section id="about" aria-label="Sobre mí"></section>
+
+  <!-- ===== CONTACTO ===== -->
+  <section id="contact" aria-label="Contacto"></section>
+</main>
+<footer class="site-footer" id="footer"></footer>
+
+<!-- ===== VISTA DE DETALLE ===== -->
+<div id="detail" hidden></div>
+
+<!-- Librerías (versiones fijadas) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+<!-- @JS -->
+<script src="js/config.js"></script>
+<script src="js/core.js"></script>
+<script src="js/fx.js"></script>
+<script src="js/field.js"></script>
+<script src="js/barrel.js"></script>
+<script src="js/music.js"></script>
+<script src="js/menu.js"></script>
+<script src="js/gallery.js"></script>
+<script src="js/detail.js"></script>
+<script src="js/about.js"></script>
+<script src="js/contact.js"></script>
+<!-- /@JS -->
+</body>
+</html>
