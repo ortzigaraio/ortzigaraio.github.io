@@ -166,6 +166,8 @@
 
   /* El tipo de escena depende del índice del proyecto (y de la captura si es "id-n"). */
   function sceneFor(id) {
+    const themed = PF.scenes && PF.scenes.get(id);
+    if (themed) return themed;
     let pi = projects.findIndex((p) => id === p.id);
     let shot = -1;
     if (pi < 0) {
@@ -313,7 +315,7 @@
   root.innerHTML = `
     <div id="gallery" class="gal">
       ${head("gallery-title", "GALLERY", "01 — Selección de proyectos", "Haz clic en una portada")}
-      <div class="gal-persp"><div class="gal-stage" role="list" aria-labelledby="gallery-title">${cards}</div></div>
+      <div class="g3" id="g3"></div>
     </div>
     <div id="work-index" class="idx">
       ${head("index-title", "WORK", "02 — Índice", "Lista completa")}
@@ -374,7 +376,7 @@
     /* Skew por velocidad + parallax con el cursor (solo con puntero fino). */
     const useMouse = () => fine.matches;
     const opt = { duration: 0.6, ease: "power3" };
-    const rx = gsap.quickTo(stage, "rotationX", opt), ry = gsap.quickTo(stage, "rotationY", opt);
+    const rx = stage ? gsap.quickTo(stage, "rotationX", opt) : () => {}, ry = stage ? gsap.quickTo(stage, "rotationY", opt) : () => {};
     const qs = inEls.map((el) => ({
       skew: gsap.quickTo(el, "skewY", { duration: 0.45, ease: "power3" }),
       sy: gsap.quickTo(el, "scaleY", { duration: 0.45, ease: "power3" }),
