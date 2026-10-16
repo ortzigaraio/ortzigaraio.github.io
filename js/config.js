@@ -128,19 +128,27 @@ window.PORTFOLIO = {
   ],
 
   /* Hard skills: nivel 0–5 (se dibuja como matriz de puntos). */
+  /* Cursos y certificados. Añade `url` o `year` en cada uno si quieres mostrarlos. */
+  certs: [
+    { title: "Kubernetes", issuer: "Udemy", kind: "Course", note: "Container orchestration: deployments, services, scaling and day-to-day cluster operation." },
+    { title: "AWS", issuer: "Udemy", kind: "Course", note: "Cloud fundamentals on Amazon Web Services: compute, storage, networking and managed services." },
+    { title: "Docker", issuer: "Udemy", kind: "Course", note: "Packaging applications in containers, images, volumes and compose; the base of how my projects ship." },
+    { title: "Terraform", issuer: "Udemy", kind: "Course", note: "Infrastructure as code: describing cloud resources in files that can be reviewed and repeated." }
+  ],
+
   skills: [
     { group: "Languages", items: [["Python", 5], ["SQL", 5], ["JavaScript", 4], ["TypeScript", 3], ["React", 3], ["WebGL", 3], ["R", 3], ["Spark", 3]] },
     { group: "IA / LLM", items: [["RAG", 5], ["LangGraph", 4], ["LangChain", 4], ["Ollama", 4], ["Groq", 3], ["RAGAS", 4]] },
     { group: "ML / Vision", items: [["PyTorch", 4], ["YOLO", 4], ["TensorFlow Lite", 3], ["Scikit-Learn", 5]] },
     { group: "Data", items: [["ChromaDB", 4], ["Supabase", 4], ["pgvector", 4], ["Qdrant", 3], ["Neo4j", 3], ["Pandas", 5], ["PostGIS", 3]] },
     { group: "Automation", items: [["n8n", 5], ["WhatsApp Business API", 4], ["Telegram Bot", 4], ["Power Automate", 3]] },
-    { group: "Infra / Apps", items: [["Docker", 4], ["AWS", 3], ["FastAPI", 4], ["Streamlit", 4], ["Git", 5], ["Cloudflare Workers", 4], ["Playwright", 4]] }
+    { group: "Infra / Apps", items: [["Docker", 4], ["AWS", 3], ["FastAPI", 4], ["Streamlit", 4], ["Git", 5], ["Cloudflare Workers", 4], ["Playwright", 4], ["Kubernetes", 3], ["Terraform", 3]] }
   ],
 
   /* ---------- Ejemplos de dirección visual (seleccionables en "Laboratorio") ---------- */
   palettes: {
     hermes:    { label: "Monocromo", dark: { bg: "#0a0a0a", fg: "#f4f4f4", muted: "#8b8b86", line: "#262624", accent: "#f4f4f4" },
-                                       light: { bg: "#f4f4f4", fg: "#0a0a0a", muted: "#6b6b66", line: "#d6d6d2", accent: "#0a0a0a" } },
+                                       light: { bg: "#ece8dd", fg: "#14110c", muted: "#6c675a", line: "#cfc9b9", accent: "#14110c" } },
     carbon:    { label: "Charcoal", dark: { bg: "#0a0a0a", fg: "#f4f4f4", muted: "#8b8b86", line: "#262624", accent: "#ff5b23" },
                                       light: { bg: "#f4f4f4", fg: "#0a0a0a", muted: "#6b6b66", line: "#d6d6d2", accent: "#e2440f" } },
     sello:     { label: "Stamp ink", dark: { bg: "#13110f", fg: "#efe8dc", muted: "#948b7d", line: "#2b2723", accent: "#e5322d" },

@@ -84,7 +84,8 @@
     const fig = root.querySelector(".ab-photo");
     if (!fig || !PF.fx) return;
     const cv = fig.querySelector("canvas"), img = new Image();
-    let ready = false, lastW = 0;
+    let ready = false, lastW = 0, fxOverride = null;
+    const ZONES = ["ascii", "braille", "dither", "halftone", "led"];
     const CROP = 0.72; // cabeza y hombros: deja fuera la esquina inferior derecha
     function paint() {
       if (!ready) return;
@@ -112,9 +113,21 @@
         }
         g.putImageData(d, 0, 0);
         const c = PF.colors();
-        PF.fx.stylize(src, cv, { mode: PF.state.effect, cell: 6 * PF.state.density * s, ink: c.fg, paper: c.bg, accent: c.accent });
+        PF.fx.stylize(src, cv, { mode: fxOverride || PF.state.effect, cell: 6 * PF.state.density * s, ink: c.fg, paper: c.bg, accent: c.accent });
       } catch (e) { fig.hidden = true; }
     }
+    /* El efecto cambia según la zona horizontal bajo el cursor y una retícula sigue al puntero. */
+    const ret = document.createElement("div"); ret.className = "ab-ret"; ret.setAttribute("aria-hidden", "true"); ret.innerHTML = "<i></i><i></i><i></i><i></i><span></span>"; fig.appendChild(ret);
+    let raf = 0;
+    fig.addEventListener("pointermove", (e) => {
+      if (e.pointerType !== "mouse" || PF.reducedMotion) return;
+      const r = fig.getBoundingClientRect(), x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+      const z = ZONES[Math.min(ZONES.length - 1, Math.max(0, Math.floor(x * ZONES.length)))];
+      ret.style.transform = "translate(" + (x * r.width - 36).toFixed(0) + "px," + (y * r.height - 36).toFixed(0) + "px)";
+      ret.classList.add("is-on"); ret.lastChild.textContent = z + " · " + Math.round(x * 100) + "," + Math.round(y * 100);
+      if (z !== fxOverride) { fxOverride = z; if (!raf) raf = requestAnimationFrame(() => { raf = 0; paint(); }); }
+    });
+    fig.addEventListener("pointerleave", () => { ret.classList.remove("is-on"); if (fxOverride) { fxOverride = null; paint(); } });
     let t = 0;
     const later = () => { clearTimeout(t); t = setTimeout(paint, 140); };
     img.onload = () => { ready = true; fig.hidden = false; paint(); };

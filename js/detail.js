@@ -51,7 +51,7 @@
         <section class="dt-solution" data-in><h3 class="label">02 — Technical solution</h3><p>${esc(p.solution)}</p></section>
         <section class="dt-metrics" data-in aria-label="Metrics">
           <h3 class="label">03 — Metrics</h3>
-          <dl>${(p.metrics || []).map((m) => `<div><dt class="label">${esc(m[0])}</dt><dd>${esc(m[1])}</dd></div>`).join("")}</dl>
+          <dl>${(p.metrics || []).map((m) => `<div><dt class="label">${esc(m[0])}</dt><dd data-roll>${esc(m[1])}</dd></div>`).join("")}</dl>
         </section>
         <section class="dt-stack" data-in>
           <h3 class="label">04 — Stack</h3>
@@ -142,6 +142,7 @@
     host.hidden = false;
     host.scrollTop = 0;
     paintCanvases(p);
+    setTimeout(() => PF.roll && PF.roll(host), 450);
     const cover = host.querySelector(".dt-cover");
     const to = cover.getBoundingClientRect();
     const ins = host.querySelectorAll("[data-in], .dt-bar");
