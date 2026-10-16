@@ -323,37 +323,6 @@
     fxCv.width = Math.round(W * dpr); fxCv.height = Math.round(H * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
-  function drawLines(p, time) {
-    ctx.clearRect(0, 0, W, H);
-    const c = PF.colors(), cx = W / 2, cy = H / 2;
-    const ink = "rgba(" + PF.hexToRgb(c.fg).join(",") + ",";
-    ctx.lineWidth = 1; ctx.font = "9px 'JetBrains Mono', ui-monospace, monospace"; ctx.textBaseline = "middle";
-    cards.forEach((o) => {
-      const lt = smooth(0.62, 1, o.t);
-      if (lt <= 0.01) return;
-      // Ancla: borde de la tarjeta más cercano al centro.
-      const hw = (o.w * o.s) / 2, hh = (o.h * o.s) / 2;
-      const dx = cx - o.x, dy = cy - o.y, k = Math.min(hw / Math.max(Math.abs(dx), 1e-3), hh / Math.max(Math.abs(dy), 1e-3), 1);
-      const ax = o.x + dx * k, ay = o.y + dy * k;
-      const hs = hub ? (hub.h * hub.s) / 2 : 0, sx = cx, sy = cy + 0;
-      const len = Math.hypot(ax - sx, ay - sy);
-      const nx = -(ay - sy) / len, ny = (ax - sx) / len, bend = len * 0.18;
-      const mx = (sx + ax) / 2 + nx * bend, my = (sy + ay) / 2 + ny * bend;
-      ctx.strokeStyle = ink + (0.5 * lt) + ")";
-      ctx.beginPath(); ctx.moveTo(sx, sy);
-      const steps = 28, upto = Math.max(1, Math.round(steps * lt));
-      for (let i = 1; i <= upto; i++) { const u = i / steps, a = (1 - u) * (1 - u), b = 2 * (1 - u) * u, d = u * u; ctx.lineTo(a * sx + b * mx + d * ax, a * sy + b * my + d * ay); }
-      ctx.stroke();
-      if (lt > 0.95) {
-        ctx.fillStyle = c.fg; ctx.fillRect(ax - 2.5, ay - 2.5, 5, 5);
-        ctx.fillStyle = ink + "0.85)";
-        const side = ax >= cx ? 1 : -1;
-        ctx.textAlign = side > 0 ? "left" : "right";
-        ctx.fillText(o.tag, ax + side * 8, ay + (ay >= cy ? 8 : -8));
-      }
-    });
-  }
-
   /* ---------------- Bucle ---------------- */
   let target = 0, prog = 0, visible = true, last = 0;
   const t0 = performance.now();
@@ -401,7 +370,6 @@
     cards.forEach((o) => place(o, o.start, o.start + 0.5));
     deck.classList.toggle("is-live", p > 0.86);
     deck.style.visibility = p > 0.26 ? "visible" : "hidden";
-    drawLines(p, time);
 
     if (hudEls.scale) hudEls.scale.textContent = "×" + (A > 0.999 ? "∞" : (mix(0.2, 2.7, Math.pow(A, 2.0)) / 0.2).toFixed(1));
     if (hudEls.regions) hudEls.regions.textContent = pad(arrived, 2);
