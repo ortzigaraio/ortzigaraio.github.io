@@ -1,7 +1,4 @@
 dist/
-# Fuente comercial: no se publica. Coloca aquí StampRSPKThree-Regular.woff2 (ver README).
-fonts/*.woff2
-fonts/*.otf
 __pycache__/
 
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
