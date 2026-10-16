@@ -50,7 +50,7 @@
       float ang = atan(uv.y, uv.x);
 
       // --- esfera
-      float R = mix(0.30, 2.7, pow(uA, 2.0));
+      float R = mix(0.2, 2.7, pow(uA, 2.0));
       float n = noise(uv * 7.0 + uTime * 0.04) * 0.55 + noise(uv * 19.0) * 0.25;
       float edge = R * (1.0 + 0.028 * (n - 0.4));
       float core = 1.0 - smoothstep(edge - 0.012, edge + 0.006, r);
@@ -403,7 +403,7 @@
     deck.style.visibility = p > 0.26 ? "visible" : "hidden";
     drawLines(p, time);
 
-    if (hudEls.scale) hudEls.scale.textContent = "×" + (A > 0.999 ? "∞" : (mix(0.30, 2.7, Math.pow(A, 2.0)) / 0.30).toFixed(1));
+    if (hudEls.scale) hudEls.scale.textContent = "×" + (A > 0.999 ? "∞" : (mix(0.2, 2.7, Math.pow(A, 2.0)) / 0.2).toFixed(1));
     if (hudEls.regions) hudEls.regions.textContent = pad(arrived, 2);
     if (hudEls.pct) hudEls.pct.textContent = pad(p * 100, 3) + "%";
     const bar = hero.querySelector('[data-hud="bar"]'); if (bar) bar.style.transform = "scaleX(" + p.toFixed(4) + ")";
