@@ -28,7 +28,7 @@
   /* ---------------- Esfera: shader ---------------- */
   let renderer = null;
   try {
-    renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: false, powerPreference: "low-power" });
+    renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: true, premultipliedAlpha: true, powerPreference: "low-power" });
   } catch (e) { renderer = null; }
 
   const FRAG = `
@@ -72,12 +72,15 @@
         dust += step(0.991 - k * 0.001, h) * (0.4 + 0.6 * dash) * clamp(r * 3.0, 0.0, 1.0);
       }
       float hub = 0.30 * exp(-r * 4.5) * smoothstep(0.0, 0.5, uB);
-      float tunnel = clamp(dust * 0.9 + hub, 0.0, 1.0) * (1.0 - 0.8 * uDim);
+      float tunnel = clamp(dust * 0.9 + hub, 0.0, 1.0) * (1.0 - 0.55 * uDim);
 
       float lum = mix(orb, tunnel, uB);
       float t = hash(cell + 11.7);
       float on = step(t, lum);
-      gl_FragColor = vec4(mix(uPaper, uInk, on), 1.0);
+      // Tras la inundación el papel se vuelve transparente: se ve el campo de caracteres de fondo.
+      float a = mix(1.0, on, uB);
+      vec3 col = mix(uPaper, uInk, on);
+      gl_FragColor = vec4(col * a, a);
     }
   `;
   const U = {
@@ -100,12 +103,30 @@
   const stage = hero.querySelector(".hero-stage");
   const ctx = fxCv.getContext("2d");
 
+  /* Imágenes de cada proyecto: capturas reales y esquemas propios (sin filtros). */
   function pool() {
-    const urls = [];
-    C.projects.forEach((p) => { if (p.cover) urls.push(p.cover); (p.shots || []).forEach((s) => s && urls.push(s)); });
-    const list = C.projects.map((p) => ({ id: p.id, cover: p.cover, project: p.id }));
-    Array.from(new Set(urls)).forEach((u, i) => list.push({ id: "u" + i, cover: u, project: null }));
-    return list;
+    const per = C.projects.map((p) => {
+      const list = [];
+      (p.shots || []).forEach((sh, k) => { if (sh) list.push({ id: p.id + "~s" + k, cover: sh, kind: "captura", p }); });
+      const n = Math.max(PF.scenes ? PF.scenes.count(p.id) : 0, 2);
+      for (let k = 0; k < n; k++) list.push({ id: p.id + "-" + k, cover: null, kind: "esquema", p });
+      return list.slice(0, 3);
+    });
+    const out = [];
+    for (let k = 0; k < 3; k++) per.forEach((l) => { if (l[k]) out.push(l[k]); });
+    return out;
+  }
+  /* Tarjetas de información del perfil. */
+  function infoCards() {
+    const o = C.owner, ghUser = String(o.github).replace(/^https?:\/\//, "");
+    return [
+      { tag: "perfil", k: "Perfil", v: o.role },
+      { tag: "enfoque", k: "Enfoque", v: "RAG, agentes y memoria para IA con MCP" },
+      { tag: "stack", k: "Stack", v: "Python · SQL · PyTorch · Supabase · n8n" },
+      { tag: "lugar", k: "Ubicación", v: o.location + " · Euskadi, Araba, Bizkaia, Gipuzkoa" },
+      { tag: "proyectos", k: "Proyectos", v: String(C.projects.length).padStart(2, "0") + " en este portfolio" },
+      { tag: "github", k: "GitHub", v: ghUser + " ↗", href: o.github }
+    ];
   }
 
   const hubDims = () => { const hw = Math.round(clamp(Math.min(W, H) * (narrow() ? 0.3 : 0.31), 120, 250)); return [hw, Math.round(hw * 1.2)]; };
@@ -133,44 +154,49 @@
     cards = []; hub = null;
     W = stage.clientWidth || window.innerWidth; H = stage.clientHeight || window.innerHeight;
     const rng = mulberry(20261016);
-    const N = narrow() ? 12 : 20;
-    const base = clamp(Math.min(W, H) * (narrow() ? 0.2 : 0.2), 76, 180);
-    const asp = [1.5, 1.33, 0.78, 1.0, 1.78, 0.9, 1.25];
-    const src = pool();
-    for (let i = src.length; i < N; i++) src.push({ id: "hx" + i, cover: null, project: null });
-    // Orden pseudoaleatorio estable.
-    src.sort((a, b) => mulberry(a.id.length * 977 + a.id.charCodeAt(a.id.length - 1))() - mulberry(b.id.length * 977 + b.id.charCodeAt(b.id.length - 1))());
-    const list = src.slice(0, N);
+    const nImg = narrow() ? 9 : 15, nInfo = narrow() ? 3 : 6;
+    const base = clamp(Math.min(W, H) * 0.2, 80, 190);
+    const asp = [1.5, 1.33, 1.78, 1.25, 0.9];
+    const imgs = pool().slice(0, nImg), infos = infoCards().slice(0, nInfo);
+    const list = [];
+    for (let i = 0, a = 0, b = 0; a < imgs.length || b < infos.length; i++) {
+      if (b < infos.length && (i % 3 === 2 || a >= imgs.length)) list.push({ info: infos[b++] });
+      else if (a < imgs.length) list.push({ img: imgs[a++] });
+    }
+    const N = list.length;
     list.forEach((it, i) => {
+      const isInfo = !!it.info;
       const ar = asp[Math.floor(rng() * asp.length)];
-      const w = Math.round(base * (0.72 + rng() * 0.55));
-      const h = Math.round(w / ar);
+      const w = isInfo ? (narrow() ? 150 : 196) : Math.round(base * (0.8 + rng() * 0.5));
+      const h = isInfo ? (narrow() ? 76 : 86) : Math.round(w / ar);
       const ang = i * 2.39996 + (rng() - 0.5) * 0.5;
       const rad = 0.45 + 0.55 * Math.sqrt((i + 0.5) / N);
-      const tx = Math.cos(ang) * rad * W * 0.44;
-      const ty = Math.sin(ang) * rad * H * 0.42;
+      const tx = Math.cos(ang) * rad * W * 0.44, ty = Math.sin(ang) * rad * H * 0.42;
       const el = document.createElement("div");
-      el.className = "dk-card" + (it.project ? " is-link" : "");
       el.style.width = w + "px"; el.style.height = h + "px";
-      el.innerHTML = '<canvas class="dk-img"></canvas><canvas class="dk-ov"></canvas>';
-      if (it.project) {
-        el.tabIndex = -1; el.setAttribute("role", "button");
-        const pr = C.projects.find((p) => p.id === it.project);
-        el.setAttribute("aria-label", "Abrir " + pr.title);
-        el.addEventListener("click", () => PF.detail && PF.detail.open(it.project, el));
+      let tag;
+      if (isInfo) {
+        el.className = "dk-card dk-info";
+        const v = it.info.href ? '<a href="' + it.info.href + '" target="_blank" rel="noopener">' + it.info.v + "</a>" : "<b>" + it.info.v + "</b>";
+        el.innerHTML = '<span class="label">' + it.info.k + "</span>" + v;
+        tag = it.info.tag;
+      } else {
+        const pr = it.img.p;
+        el.className = "dk-card is-link";
+        el.innerHTML = '<canvas class="dk-img"></canvas><canvas class="dk-ov"></canvas>';
+        el.tabIndex = -1; el.setAttribute("role", "button"); el.setAttribute("aria-label", "Abrir " + pr.title);
+        el.addEventListener("click", () => PF.detail && PF.detail.open(pr.id, el));
         el.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); el.click(); } });
-      } else el.setAttribute("aria-hidden", "true");
+        tag = pr.title.toLowerCase();
+      }
       deck.appendChild(el);
       const o = {
-        el, w, h, tx, ty, rad, sc: 0.8 + rng() * 0.4, rot: (rng() - 0.5) * 8, spin: (rng() - 0.5) * 70,
-        start: 0.42 * rad + rng() * 0.12, ph: rng() * 6.28, label: LABELS[Math.floor(rng() * LABELS.length)],
-        box: [0.12 + rng() * 0.2, 0.14 + rng() * 0.2, 0.36 + rng() * 0.3, 0.34 + rng() * 0.3],
-        conf: (0.82 + rng() * 0.17).toFixed(2), cross: Array.from({ length: 4 + Math.floor(rng() * 4) }, () => [rng(), rng()]),
-        cv: rng() < 0.7, coord: [Math.floor(300 + rng() * 3300), Math.floor(100 + rng() * 2400)], id: it.id,
+        el, w, h, tx, ty, rad, sc: isInfo ? 0.95 + rng() * 0.15 : 0.8 + rng() * 0.4, rot: (rng() - 0.5) * (isInfo ? 3 : 8), spin: (rng() - 0.5) * 70,
+        start: 0.42 * rad + rng() * 0.12, ph: rng() * 6.28, tag, title: isInfo ? "" : it.img.p.title, kind: isInfo ? "" : it.img.kind, info: isInfo,
         t: 0, e: 0, x: 0, y: 0, s: 1
       };
       cards.push(o);
-      PF.covers && PF.covers.track(el.querySelector(".dk-img"), { id: it.id, cover: it.cover }, w, h);
+      if (!isInfo && PF.covers) PF.covers.track(el.querySelector(".dk-img"), { id: it.img.id, cover: it.img.cover, plain: true }, w, h);
     });
     relax(hubR());
     // Tarjeta central (foto con segmentación).
@@ -182,7 +208,7 @@
     deck.appendChild(hel);
     hub = { el: hel, w: hw, h: hh, tx: 0, ty: 0, sc: 1, rot: 0, spin: 0, start: 0, ph: 1.3, t: 0, e: 0, x: 0, y: 0, s: 1, hub: true };
     const photo = C.owner.photo;
-    if (photo && PF.covers) PF.covers.track(hel.querySelector(".dk-img"), { id: "hub", cover: photo }, hw, hh);
+    if (photo && PF.covers) PF.covers.track(hel.querySelector(".dk-img"), { id: "hub", cover: photo, plain: true }, hw, hh);
     drawOverlays();
   }
 
@@ -204,15 +230,11 @@
   function drawOverlays() {
     const c = PF.colors();
     cards.forEach((o) => {
+      if (o.info) return;
       const cv = o.el.querySelector(".dk-ov"), g = setupOv(cv, o.w, o.h);
-      g.strokeStyle = "rgba(" + PF.hexToRgb(c.fg).join(",") + ",0.35)"; g.lineWidth = 1; g.strokeRect(0.5, 0.5, o.w - 1, o.h - 1);
-      if (!o.cv) return;
-      const bx = o.box[0] * o.w, by = o.box[1] * o.h, bw = o.box[2] * o.w, bh = o.box[3] * o.h;
-      g.strokeStyle = c.accent; g.lineWidth = 1.4; g.strokeRect(bx, by, bw, bh);
-      g.lineWidth = 2.4; brackets(g, bx - 2, by - 2, bw + 4, bh + 4, 6);
-      chip(g, bx - 1, by - 2, o.label + " " + o.conf, c.accent, c.bg);
-      g.strokeStyle = c.fg; g.lineWidth = 1;
-      o.cross.forEach(([u, v]) => { const x = bx + u * bw, y = by + v * bh; g.beginPath(); g.moveTo(x - 3, y); g.lineTo(x + 3, y); g.moveTo(x, y - 3); g.lineTo(x, y + 3); g.stroke(); });
+      g.strokeStyle = "rgba(" + PF.hexToRgb(c.fg).join(",") + ",0.4)"; g.lineWidth = 1; g.strokeRect(0.5, 0.5, o.w - 1, o.h - 1);
+      g.strokeStyle = "#fff"; g.lineWidth = 2; brackets(g, 3, 3, o.w - 6, o.h - 6, 7);
+      chip(g, 0, o.h, o.title.toUpperCase() + " · " + o.kind, c.accent, "#fff");
     });
     if (hub) drawHubOverlay();
   }
@@ -278,11 +300,11 @@
         g.setLineDash([2, 2]); g.beginPath(); pts.forEach(([x, y], i) => (i ? g.lineTo(x, y) : g.moveTo(x, y))); g.stroke(); g.setLineDash([]);
         const f0 = P(258, 250), f1 = P(495, 548);
         g.strokeStyle = c.fg; g.lineWidth = 1.2; g.strokeRect(f0[0], f0[1], f1[0] - f0[0], f1[1] - f0[1]);
-        chip(g, f0[0], f0[1], "rostro 0.99", c.fg, c.bg);
+        chip(g, f0[0], f0[1], "rostro", c.fg, c.bg);
       }
     }
     g.strokeStyle = c.accent; g.lineWidth = 1.5; g.strokeRect(0.75, 0.75, w - 1.5, h - 1.5);
-    chip(g, 0.75, h - 1, "persona 0.98 · máscara", c.accent, c.bg);
+    chip(g, 0.75, h - 1, "ortzi garaio · máscara", c.accent, "#fff");
   }
 
   /* ---------------- Fondo (líneas de conexión) ---------------- */
@@ -317,7 +339,7 @@
         ctx.fillStyle = ink + "0.85)";
         const side = ax >= cx ? 1 : -1;
         ctx.textAlign = side > 0 ? "left" : "right";
-        ctx.fillText("x:" + o.coord[0] + " y:" + o.coord[1], ax + side * 8, ay + (ay >= cy ? 8 : -8));
+        ctx.fillText(o.tag, ax + side * 8, ay + (ay >= cy ? 8 : -8));
       }
     });
   }

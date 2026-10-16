@@ -14,7 +14,7 @@
 (function () {
   const PF = (window.PF = window.PF || {});
   const C = (PF.config = window.PORTFOLIO);
-  const KEY = "pf-settings-v1";
+  const KEY = "pf-settings-v2";
   const root = document.documentElement;
 
   let saved = {};

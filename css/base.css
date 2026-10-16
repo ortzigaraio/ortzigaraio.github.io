@@ -178,3 +178,13 @@ html[data-hero="orb"] .hero-title { opacity: calc(1 - var(--hero-p) * 9); transf
 html[data-hero="orb"] .hero-hud { mix-blend-mode: normal; color: var(--fg); }
 html[data-hero="orb"] .hud-bar { background: rgba(var(--fg-rgb), 0.25); }
 html[data-hero="orb"] .hud-bar i { background: var(--fg); }
+
+/* Tarjetas de información del perfil (constelación) */
+.dk-info {
+  background: var(--bg); border: 1px solid rgba(var(--fg-rgb), 0.35); padding: 10px 12px; display: grid; align-content: start; gap: 6px;
+  color: var(--fg); font-family: var(--font-mono); font-size: 11.5px; line-height: 1.35; overflow: hidden;
+}
+.dk-info .label { color: var(--accent); }
+.dk-info b { font-weight: 500; }
+.dk-info a { color: var(--fg); text-underline-offset: 3px; }
+#deck.is-live .dk-info a { pointer-events: auto; }

@@ -180,11 +180,12 @@
 
   /* ---------- Portadas con imagen real ---------- */
   const imgs = new Map();
-  function grayImage(rec, g, w, h) {
+  function grayImage(rec, g, w, h, keepColor) {
     const img = rec.img, k = Math.max(w / img.naturalWidth, h / img.naturalHeight);
     const dw = img.naturalWidth * k, dh = img.naturalHeight * k;
     g.fillStyle = "#000"; g.fillRect(0, 0, w, h);
     g.drawImage(img, (w - dw) / 2, (h - dh) / 2, dw, dh);
+    if (keepColor) return;
     const d = g.getImageData(0, 0, w, h), a = d.data;
     for (let i = 0; i < a.length; i += 4) { const v = a[i] * 0.299 + a[i + 1] * 0.587 + a[i + 2] * 0.114; a[i] = a[i + 1] = a[i + 2] = v; }
     g.putImageData(d, 0, 0);
@@ -216,7 +217,7 @@
         rec.img.src = project.cover;
       }
       if (rec.ok) {
-        try { grayImage(rec, g, src.width, src.height); done = true; } catch (e) { rec.ok = false; rec.failed = true; }
+        try { grayImage(rec, g, src.width, src.height, project.plain); done = true; } catch (e) { rec.ok = false; rec.failed = true; }
       }
     }
     if (!done) {
@@ -225,6 +226,7 @@
       sceneFor(project.id)(g, w, h, r, u);
       g.restore();
     }
+    if (project.plain) { canvas.width = src.width; canvas.height = src.height; canvas.getContext("2d").drawImage(src, 0, 0); return; }
     const c = PF.colors();
     if (PF.fx && PF.fx.stylize) {
       PF.fx.stylize(src, canvas, { mode: PF.state.effect, cell: 8 * PF.state.density * s, ink: c.fg, paper: c.bg, accent: c.accent });
