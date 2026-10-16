@@ -297,6 +297,7 @@
           '<fieldset><legend class="label">Densidad</legend><div class="lab-row"><input type="range" id="lab-density" min="0.6" max="1.6" step="0.1" aria-label="Densidad"><output class="lab-out" for="lab-density"></output></div></fieldset>' +
           '<fieldset><legend class="label">Fondo animado</legend><label class="chk"><input type="checkbox" id="lab-field"><span class="chk-box" aria-hidden="true"></span><span class="chk-txt">Caracteres</span><span class="chk-state label" aria-hidden="true"></span></label></fieldset>' +
         "</div>" +
+        '<fieldset><legend class="label">Efecto del clic</legend>' + seg("lab-click", [["mix", "Mezcla"], ["wave", "Onda"], ["detect", "Detección"], ["burst", "Puntos"], ["cross", "Mira"], ["off", "Ninguno"]], "seg-3") + "</fieldset>" +
         '<fieldset><legend class="label">Fondo del cañón</legend>' + seg("lab-bg", Object.keys(C.barrelBackgrounds).map((k) => [k, C.barrelBackgrounds[k].label]), "seg-2x2") + "</fieldset>" +
         '<div class="lab-actions"><button type="button" class="win-btn" data-lab="intro">Ver la intro</button><button type="button" class="win-btn" data-lab="reset">Restablecer</button></div>' +
       "</form>";
@@ -306,6 +307,7 @@
     on('input[name="lab-palette"]', (e) => PF.set("palette", e.target.value));
     on('input[name="lab-font"]', (e) => PF.set("font", e.target.value));
     on('input[name="lab-effect"]', (e) => PF.set("effect", e.target.value));
+    on('input[name="lab-click"]', (e) => PF.set("click", e.target.value));
     on('input[name="lab-hero"]', (e) => PF.set("hero", e.target.value));
     on('input[name="lab-bullet"]', (e) => PF.set("bullet", e.target.value === "1"));
     on('input[name="lab-bg"]', (e) => PF.set("barrelBg", e.target.value));
@@ -327,6 +329,7 @@
     setRadio("lab-font", st.font);
     setRadio("lab-effect", st.effect);
     setRadio("lab-hero", st.hero);
+    setRadio("lab-click", st.click);
     setRadio("lab-bullet", st.bullet ? "1" : "0");
     setRadio("lab-bg", st.barrelBg);
     const f = b.querySelector("#lab-field");

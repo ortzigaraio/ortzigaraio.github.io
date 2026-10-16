@@ -22,6 +22,7 @@
     uniform vec2 uRes;
     uniform float uTime, uCell, uGlyphN, uAlpha;
     uniform vec3 uInk;
+    uniform vec3 uC0, uC1;   // clic: x, y (px) y segundos desde el clic (<0 = ninguno)
     uniform sampler2D uGlyph;
 
     float hash(vec2 p){ p = fract(p * vec2(234.34, 435.345)); p += dot(p, p + 34.23); return fract(p.x * p.y); }
@@ -36,6 +37,12 @@
       return v;
     }
 
+    float ringAt(vec3 c, vec2 p){
+      if (c.z < 0.0) return 0.0;
+      float R = c.z * uRes.y * 0.5, w = uCell * 2.6;
+      float d = length(p - c.xy);
+      return exp(-pow((d - R) / w, 2.0)) * exp(-c.z * 1.5) * 2.2;
+    }
     void main(){
       vec2 px = vUv * uRes;
       vec2 cs = vec2(uCell * 0.6, uCell * 1.18);
@@ -60,12 +67,14 @@
       float blank = step(h2, 0.18 * (1.0 - band));
       float sparkle = step(0.997, hash(id + floor(uTime * 2.0))) * 0.5;
       float v = (0.06 + halo * 0.8 + 0.5 * band + sparkle * 0.6) * (1.0 - blank);
+      v += (ringAt(uC0, px) + ringAt(uC1, px)) * (1.0 - 0.45 * blank);
       float a = clamp(g * v * uAlpha, 0.0, 1.0);
       gl_FragColor = vec4(uInk * a, a);
     }
   `;
 
   const U = {
+    uC0: { value: new THREE.Vector3(0, 0, -1) }, uC1: { value: new THREE.Vector3(0, 0, -1) },
     uRes: { value: new THREE.Vector2(1, 1) }, uTime: { value: 0 }, uCell: { value: 13 },
     uGlyph: { value: null }, uGlyphN: { value: 1 }, uAlpha: { value: 1 }, uInk: { value: new THREE.Color("#fff") }
   };
@@ -102,14 +111,17 @@
   }
 
   let last = 0, dirty = true;
+  const clicks = [{ v: U.uC0.value, t0: null }, { v: U.uC1.value, t0: null }];
+  let slot = 0;
   const t0 = performance.now();
   function frame(now) {
     requestAnimationFrame(frame);
     if (document.hidden || canvas.hidden) return;
-    if (PF.reducedMotion && !dirty) return;
+    if (PF.reducedMotion && !dirty && !clicks[0].t0 && !clicks[1].t0) return;
     if (now - last < 33) return; // ~30 fps es suficiente para un fondo
     last = now;
     U.uTime.value = PF.reducedMotion ? 12.0 : (now - t0) / 1000;
+    for (let i = 0; i < 2; i++) { const c = clicks[i]; if (c.t0 !== null) { const dt = (now - c.t0) / 1000; if (dt > 3) { c.t0 = null; c.v.z = -1; } else c.v.z = dt; } }
     renderer.render(scene, cam);
     dirty = false;
   }
@@ -120,5 +132,12 @@
   const start = () => { atlas(); resize(); colors(); requestAnimationFrame(frame); };
   (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(start, start);
 
-  PF.field = { canvas, render: () => (dirty = true) };
+  PF.field = {
+    canvas, render: () => (dirty = true),
+    /* Onda de caracteres: x, y en px CSS de la ventana. */
+    ripple(x, y) {
+      const d = Math.min(window.devicePixelRatio || 1, 1.5), c = clicks[slot]; slot = 1 - slot;
+      c.v.set(x * d, U.uRes.value.y - y * d, 0); c.t0 = performance.now(); dirty = true;
+    }
+  };
 })();

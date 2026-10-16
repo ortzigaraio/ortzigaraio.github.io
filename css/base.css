@@ -188,3 +188,5 @@ html[data-hero="orb"] .hud-bar i { background: var(--fg); }
 .dk-info b { font-weight: 500; }
 .dk-info a { color: var(--fg); text-underline-offset: 3px; }
 #deck.is-live .dk-info a { pointer-events: auto; }
+
+#clickfx { position: fixed; inset: 0; width: 100vw; height: 100vh; z-index: 5; pointer-events: none; }
