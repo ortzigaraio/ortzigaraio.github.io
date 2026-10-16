@@ -176,6 +176,7 @@ html { scrollbar-gutter: stable; }
 .dt-shot { margin: 0; flex: 0 0 auto; width: min(78vw, 680px); scroll-snap-align: start; display: grid; gap: 8px; }
 .dt-shot-img { position: relative; aspect-ratio: 16 / 10; border: 1px solid var(--line); background: var(--bg); }
 .dt-shot-img canvas, .dt-shot-img img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; object-fit: cover; }
+.dt-shot-img img { object-fit: contain; padding: 8px; }
 .dt-links { display: flex; flex-wrap: wrap; gap: 12px; }
 .btn {
   display: inline-flex; align-items: center; gap: 10px; cursor: pointer; text-decoration: none;
