@@ -27,47 +27,47 @@
     const shots = p.shots || [];
     const shotHtml = shots.map((s, k) => `
         <figure class="dt-shot">
-          <div class="dt-shot-img">${s ? `<img src="${esc(s)}" alt="Captura ${k + 1} de ${esc(p.title)}" loading="lazy">` : `<canvas data-shot="${k}" role="img" aria-label="Captura ilustrativa ${k + 1} de ${esc(p.title)}"></canvas>`}</div>
-          <figcaption class="label">Captura ${pad2(k + 1)} / ${pad2(shots.length)}</figcaption>
+          <div class="dt-shot-img">${s ? `<img src="${esc(s)}" alt="Screenshot ${k + 1} of ${esc(p.title)}" loading="lazy">` : `<canvas data-shot="${k}" role="img" aria-label="Illustrative screenshot ${k + 1} of ${esc(p.title)}"></canvas>`}</div>
+          <figcaption class="label">Screenshot ${pad2(k + 1)} / ${pad2(shots.length)}</figcaption>
         </figure>`).join("");
     const prev = projects[(i - 1 + n) % n], next = projects[(i + 1) % n];
     return `
       <div class="dt-bar">
-        <button type="button" class="dt-back" data-act="close"><span aria-hidden="true">←</span> Volver a la galería</button>
-        <span class="label">Proyecto ${pad2(i + 1)} / ${pad2(n)}</span>
+        <button type="button" class="dt-back" data-act="close"><span aria-hidden="true">←</span> Back to gallery</button>
+        <span class="label">Project ${pad2(i + 1)} / ${pad2(n)}</span>
       </div>
       <article class="dt-page">
         <header class="dt-head" data-in>
           <h2 class="display dt-title" id="detail-title" tabindex="-1">${esc(p.title)}</h2>
           <dl class="dt-meta">
-            <div><dt class="label">Año</dt><dd>${p.year}</dd></div>
-            <div><dt class="label">Rol</dt><dd>${esc(p.role)}</dd></div>
+            <div><dt class="label">Year</dt><dd>${p.year}</dd></div>
+            <div><dt class="label">Role</dt><dd>${esc(p.role)}</dd></div>
             <div><dt class="label">Stack</dt><dd>${esc(p.stack.join(" · "))}</dd></div>
           </dl>
         </header>
-        <figure class="dt-cover"><canvas role="img" aria-label="Portada de ${esc(p.title)}"></canvas></figure>
+        <figure class="dt-cover"><canvas role="img" aria-label="Cover of ${esc(p.title)}"></canvas></figure>
         <p class="dt-summary" data-in>${esc(p.summary)}</p>
-        <section class="dt-problem" data-in><h3 class="label">01 — Problema</h3><p>${esc(p.problem)}</p></section>
-        <section class="dt-solution" data-in><h3 class="label">02 — Solución técnica</h3><p>${esc(p.solution)}</p></section>
-        <section class="dt-metrics" data-in aria-label="Métricas">
-          <h3 class="label">03 — Métricas</h3>
-          <dl>${(p.metrics || []).map((m) => `<div><dt class="label">${esc(m[0])}</dt><dd>${esc(m[1])}</dd></div>`).join("")}</dl>
+        <section class="dt-problem" data-in><h3 class="label">01 — Problem</h3><p>${esc(p.problem)}</p></section>
+        <section class="dt-solution" data-in><h3 class="label">02 — Technical solution</h3><p>${esc(p.solution)}</p></section>
+        <section class="dt-metrics" data-in aria-label="Metrics">
+          <h3 class="label">03 — Metrics</h3>
+          <dl>${(p.metrics || []).map((m) => `<div><dt class="label">${esc(m[0])}</dt><dd data-roll>${esc(m[1])}</dd></div>`).join("")}</dl>
         </section>
         <section class="dt-stack" data-in>
           <h3 class="label">04 — Stack</h3>
           <ul class="chips">${p.stack.map((t) => `<li class="chip">${esc(t)}</li>`).join("")}</ul>
         </section>
         ${shots.length ? `<section class="dt-shots" data-in>
-          <h3 class="label">05 — Capturas</h3>
-          <div class="dt-strip" tabindex="0" role="region" aria-label="Capturas de ${esc(p.title)} (desplazamiento horizontal)">${shotHtml}</div>
+          <h3 class="label">05 — Screenshots</h3>
+          <div class="dt-strip" tabindex="0" role="region" aria-label="Screenshots of ${esc(p.title)} (horizontal scroll)">${shotHtml}</div>
         </section>` : ""}
         <div class="dt-links" data-in>
-          <a class="btn" href="${esc(p.repo)}" target="_blank" rel="noopener">Repositorio en GitHub ↗</a>
-          ${p.live ? `<a class="btn" href="${esc(p.live)}" target="_blank" rel="noopener">Ver en vivo ↗</a>` : `<button type="button" class="btn" disabled>Sin demo pública</button>`}
+          <a class="btn" href="${esc(p.repo)}" target="_blank" rel="noopener">Repository on GitHub ↗</a>
+          ${p.live ? `<a class="btn" href="${esc(p.live)}" target="_blank" rel="noopener">View live ↗</a>` : `<button type="button" class="btn" disabled>No public demo</button>`}
         </div>
-        <nav class="dt-nav" data-in aria-label="Otros proyectos">
-          <button type="button" data-act="prev"><span class="label">← Anterior · ${pad2(((i - 1 + n) % n) + 1)}</span><span class="display">${esc(prev.title)}</span></button>
-          <button type="button" data-act="next"><span class="label">Siguiente · ${pad2(((i + 1) % n) + 1)} →</span><span class="display">${esc(next.title)}</span></button>
+        <nav class="dt-nav" data-in aria-label="Other projects">
+          <button type="button" data-act="prev"><span class="label">← Previous · ${pad2(((i - 1 + n) % n) + 1)}</span><span class="display">${esc(prev.title)}</span></button>
+          <button type="button" data-act="next"><span class="label">Next · ${pad2(((i + 1) % n) + 1)} →</span><span class="display">${esc(next.title)}</span></button>
         </nav>
       </article>`;
   }
@@ -142,6 +142,7 @@
     host.hidden = false;
     host.scrollTop = 0;
     paintCanvases(p);
+    setTimeout(() => PF.roll && PF.roll(host), 450);
     const cover = host.querySelector(".dt-cover");
     const to = cover.getBoundingClientRect();
     const ins = host.querySelectorAll("[data-in], .dt-bar");

@@ -232,7 +232,7 @@
   /* ---------- Las cuatro pistas ---------- */
   const SYNTH = [
     {
-      title: "Ánima", style: "lo-fi", bpm: 82, swing: 0.17, seed: 11, lp: 6200,
+      title: "Bore", style: "lo-fi", bpm: 82, swing: 0.17, seed: 11, lp: 6200,
       // Dm9 · Bbmaj7 · Gm9 · A7b9
       chords: [{ r: 38, q: [0, 3, 7, 10, 14] }, { r: 34, q: [0, 4, 7, 11, 14] }, { r: 43, q: [0, 3, 7, 10, 14] }, { r: 45, q: [0, 4, 7, 10, 13] }],
       step(S, n, t, sd) {
@@ -260,7 +260,7 @@
       }
     },
     {
-      title: "Paso 1:10", style: "minimal techno", bpm: 118, swing: 0, seed: 23, lp: 16000,
+      title: "Twist 1:10", style: "minimal techno", bpm: 118, swing: 0, seed: 23, lp: 16000,
       // Am · Am · F · G
       chords: [{ r: 33, q: [0, 3, 7, 10] }, { r: 33, q: [0, 3, 7, 10] }, { r: 29, q: [0, 4, 7, 11] }, { r: 31, q: [0, 4, 7, 10] }],
       step(S, n, t, sd) {
@@ -288,7 +288,7 @@
       }
     },
     {
-      title: "Mareas", style: "balearic house", bpm: 108, swing: 0.06, seed: 37, lp: 17000,
+      title: "Tides", style: "balearic house", bpm: 108, swing: 0.06, seed: 37, lp: 17000,
       // Fmaj7 · Dm7 · Bbmaj7 · Cadd9
       chords: [{ r: 41, q: [0, 4, 7, 11] }, { r: 38, q: [0, 3, 7, 10] }, { r: 34, q: [0, 4, 7, 11] }, { r: 36, q: [0, 4, 7, 14] }],
       step(S, n, t, sd) {
@@ -316,7 +316,7 @@
       }
     },
     {
-      title: "Estría", style: "ambient", bpm: 64, swing: 0, seed: 53, lp: 14000,
+      title: "Rifling", style: "ambient", bpm: 64, swing: 0, seed: 53, lp: 14000,
       // Em9 · Cmaj7 · Am9 · Dsus2 (cambia cada 2 compases)
       chords: [{ r: 40, q: [0, 3, 7, 14] }, { r: 36, q: [0, 4, 7, 11] }, { r: 33, q: [0, 3, 7, 10] }, { r: 38, q: [0, 2, 7, 12] }],
       step(S, n, t, sd) {
@@ -344,7 +344,7 @@
   const tracks = SYNTH.map((s) => ({ title: s.title, artist: "OG Radio", style: s.style + " · " + s.bpm + " bpm", bpm: s.bpm, kind: "synth" }));
   const files = Array.isArray(PF.config.music) ? PF.config.music : [];
   files.forEach((f) => {
-    if (f && f.src) tracks.push({ title: f.title || "Sin título", artist: f.artist || "OG Radio", style: "archivo", kind: "file", src: f.src });
+    if (f && f.src) tracks.push({ title: f.title || "Untitled", artist: f.artist || "OG Radio", style: "file", kind: "file", src: f.src });
   });
 
   /* ---------- Estado y API ---------- */

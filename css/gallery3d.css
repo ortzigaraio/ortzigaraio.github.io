@@ -1,0 +1,45 @@
+/* ==========================================================================
+   GALERÍA 3D — campo de color saturado + túnel de imágenes
+   ========================================================================== */
+.g3 { position: relative; height: 440vh; margin-top: clamp(24px, 4vw, 64px); }
+.g3-stage {
+  position: sticky; top: 0; height: 100vh; height: 100dvh; overflow: hidden;
+  background: transparent; color: #fff; --g3-ink: #000;
+}
+.g3-bg { display: none !important; position: absolute; inset: -4%; width: 108%; height: 108%; display: block; image-rendering: auto; will-change: transform; }
+.g3-world { position: absolute; inset: 0; perspective: none; }
+.g3-card {
+  position: absolute; left: 50%; top: 50%; padding: 0; margin: 0; border: 0; cursor: pointer;
+  background: var(--g3-ink); transform-origin: 50% 50%; will-change: transform, opacity; visibility: hidden;
+  outline-offset: 4px;
+}
+.g3-card canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.g3-card { box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.18); }
+.g3-card:hover, .g3-card:focus-visible { outline: 1px solid #fff; }
+.g3-lab {
+  position: absolute; left: 0; top: 100%; margin-top: 8px; white-space: nowrap; color: #fff;
+  opacity: 0; transition: opacity 0.2s; text-shadow: 0 0 8px #000;
+}
+.g3-card:hover .g3-lab, .g3-card:focus-visible .g3-lab { opacity: 1; }
+.g3-list {
+  position: absolute; left: var(--gutter); top: 50%; transform: translateY(-50%); z-index: 6000;
+  margin: 0; padding: 0; list-style: none; display: grid; gap: 4px; max-width: 28vw;
+}
+.g3-li {
+  all: unset; box-sizing: border-box; cursor: pointer; display: block; padding: 3px 0;
+  font-family: var(--font-mono); font-size: var(--t-xs); letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255, 255, 255, 0.7);
+  transition: color 0.2s, transform 0.2s;
+}
+.g3-li .label { color: inherit; opacity: 0.6; margin-right: 8px; }
+.g3-li:hover, .g3-li:focus-visible, .g3-li.is-on { color: #fff; transform: translateX(6px); }
+.g3-li:focus-visible { outline: 1px dashed #fff; outline-offset: 3px; }
+.g3-hint {
+  position: absolute; left: var(--gutter); right: var(--gutter-r); bottom: max(16px, env(safe-area-inset-bottom, 0px)); z-index: 6000;
+  display: flex; justify-content: space-between; gap: 16px; color: rgba(255, 255, 255, 0.8); margin: 0;
+}
+@media (max-width: 720px) {
+  .g3-list { top: auto; bottom: 52px; transform: none; max-width: 70vw; gap: 0; }
+  .g3-li { padding: 2px 0; font-size: 10px; }
+  .g3-hint span:last-child { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { .g3-li, .g3-lab { transition: none; } }

@@ -26,7 +26,7 @@
       <div class="sk-group" data-group="${gi}">
         <p class="label sk-group-name"><span>${esc(gr.group)}</span><span>${pad2(gr.items.length)}</span></p>
         ${gr.items.map(([name, lv]) => `
-          <button type="button" class="sk-row" data-name="${esc(name)}" data-level="${lv}" aria-label="${esc(name)}, nivel ${lv} de ${MAX}">
+          <button type="button" class="sk-row" data-name="${esc(name)}" data-level="${lv}" aria-label="${esc(name)}, level ${lv} of ${MAX}">
             <span class="sk-name">${esc(name)}</span>
             <span class="sk-leds" aria-hidden="true">${leds(lv)}</span>
             <span class="sk-lv label" aria-hidden="true">${lv}/${MAX}</span>
@@ -38,17 +38,17 @@
   root.innerHTML = `
     <div class="about">
       <header class="sec-head">
-        <p class="label sec-kicker"><span>03 — Perfil</span><span>${esc(owner.role)}</span></p>
-        <h2 class="sec-word display" aria-label="Sobre mí"><span aria-hidden="true">ABOUT</span><sup class="sec-count" aria-hidden="true">(${pad2(groups.length)})</sup></h2>
+        <p class="label sec-kicker"><span>03 — Profile</span><span>${esc(owner.role)}</span></p>
+        <h2 class="sec-word display" aria-label="About me"><span aria-hidden="true">ABOUT</span><sup class="sec-count" aria-hidden="true">(${pad2(groups.length)})</sup></h2>
       </header>
 
       <div class="ab-grid">
         <div class="ab-side">
-          ${owner.photo ? `<figure class="ab-photo" hidden><canvas role="img" aria-label="Retrato de ${esc(owner.name)}"></canvas></figure>` : ""}
+          ${owner.photo ? `<figure class="ab-photo" hidden><canvas role="img" aria-label="Portrait of ${esc(owner.name)}"></canvas></figure>` : ""}
         <dl class="ab-facts">
-          <div><dt class="label">Nombre</dt><dd>${esc(owner.name)}</dd></div>
-          <div><dt class="label">Rol</dt><dd>${esc(owner.role)}</dd></div>
-          <div><dt class="label">Ubicación</dt><dd>${esc(owner.location)}</dd></div>
+          <div><dt class="label">Name</dt><dd>${esc(owner.name)}</dd></div>
+          <div><dt class="label">Role</dt><dd>${esc(owner.role)}</dd></div>
+          <div><dt class="label">Location</dt><dd>${esc(owner.location)}</dd></div>
         </dl>
         </div>
         <div class="ab-bio">${owner.bio.map((t) => `<p>${esc(t)}</p>`).join("")}</div>
@@ -56,24 +56,24 @@
 
       <div class="sk" aria-labelledby="sk-title">
         <div class="sk-bar">
-          <h3 class="label" id="sk-title">Hard skills · matriz de nivel</h3>
-          <div class="sk-filters" role="group" aria-label="Filtrar por grupo">
-            <button type="button" class="sk-tab" data-filter="all" aria-pressed="true">Todo</button>
+          <h3 class="label" id="sk-title">Hard skills · level matrix</h3>
+          <div class="sk-filters" role="group" aria-label="Filter by group">
+            <button type="button" class="sk-tab" data-filter="all" aria-pressed="true">All</button>
             ${groups.map((gr, gi) => `<button type="button" class="sk-tab" data-filter="${gi}" aria-pressed="false">${esc(gr.group)}</button>`).join("")}
           </div>
         </div>
         <div class="sk-body">
           <div class="sk-list">${rowsHtml}</div>
-          <aside class="sk-read" aria-live="polite" aria-label="Uso de la skill en proyectos">
-            <p class="label">Lectura</p>
-            <div class="sk-read-body"><p class="sk-hint">Pasa el cursor, enfoca o toca una skill para ver en qué proyectos publicados se usa.</p></div>
+          <aside class="sk-read" aria-live="polite" aria-label="Skill usage across projects">
+            <p class="label">Readout</p>
+            <div class="sk-read-body"><p class="sk-hint">Hover, focus or tap a skill to see which published projects use it.</p></div>
           </aside>
         </div>
-        <p class="label sk-legend"><span><i class="led is-on"></i> nivel adquirido</span><span><i class="led"></i> por alcanzar</span><span>escala 0–${MAX}</span></p>
+        <p class="label sk-legend"><span><i class="led is-on"></i> level reached</span><span><i class="led"></i> still to reach</span><span>scale 0–${MAX}</span></p>
       </div>
 
-      <a class="gh-block" href="${esc(owner.github)}" target="_blank" rel="noopener" aria-label="GitHub de ${esc(owner.name)} (se abre en una pestaña nueva)">
-        <span class="label">Código abierto · repositorios</span>
+      <a class="gh-block" href="${esc(owner.github)}" target="_blank" rel="noopener" aria-label="GitHub of ${esc(owner.name)} (opens in a new tab)">
+        <span class="label">Open source · repositories</span>
         <span class="gh-word display">GitHub ↗</span>
         <span class="gh-user">@${esc(ghUser)}</span>
       </a>
@@ -84,7 +84,8 @@
     const fig = root.querySelector(".ab-photo");
     if (!fig || !PF.fx) return;
     const cv = fig.querySelector("canvas"), img = new Image();
-    let ready = false, lastW = 0;
+    let ready = false, lastW = 0, fxOverride = null;
+    const ZONES = ["ascii", "braille", "dither", "halftone", "led"];
     const CROP = 0.72; // cabeza y hombros: deja fuera la esquina inferior derecha
     function paint() {
       if (!ready) return;
@@ -112,9 +113,21 @@
         }
         g.putImageData(d, 0, 0);
         const c = PF.colors();
-        PF.fx.stylize(src, cv, { mode: PF.state.effect, cell: 6 * PF.state.density * s, ink: c.fg, paper: c.bg, accent: c.accent });
+        PF.fx.stylize(src, cv, { mode: fxOverride || PF.state.effect, cell: 6 * PF.state.density * s, ink: c.fg, paper: c.bg, accent: c.accent });
       } catch (e) { fig.hidden = true; }
     }
+    /* El efecto cambia según la zona horizontal bajo el cursor y una retícula sigue al puntero. */
+    const ret = document.createElement("div"); ret.className = "ab-ret"; ret.setAttribute("aria-hidden", "true"); ret.innerHTML = "<i></i><i></i><i></i><i></i><span></span>"; fig.appendChild(ret);
+    let raf = 0;
+    fig.addEventListener("pointermove", (e) => {
+      if (e.pointerType !== "mouse" || PF.reducedMotion) return;
+      const r = fig.getBoundingClientRect(), x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+      const z = ZONES[Math.min(ZONES.length - 1, Math.max(0, Math.floor(x * ZONES.length)))];
+      ret.style.transform = "translate(" + (x * r.width - 36).toFixed(0) + "px," + (y * r.height - 36).toFixed(0) + "px)";
+      ret.classList.add("is-on"); ret.lastChild.textContent = z + " · " + Math.round(x * 100) + "," + Math.round(y * 100);
+      if (z !== fxOverride) { fxOverride = z; if (!raf) raf = requestAnimationFrame(() => { raf = 0; paint(); }); }
+    });
+    fig.addEventListener("pointerleave", () => { ret.classList.remove("is-on"); if (fxOverride) { fxOverride = null; paint(); } });
     let t = 0;
     const later = () => { clearTimeout(t); t = setTimeout(paint, 140); };
     img.onload = () => { ready = true; fig.hidden = false; paint(); };
@@ -133,11 +146,11 @@
     const name = row.dataset.name, lv = row.dataset.level, list = usedIn(name);
     readBody.innerHTML = `
       <p class="sk-read-name display">${esc(name)}</p>
-      <p class="label">Nivel ${lv} de ${MAX}</p>
+      <p class="label">Level ${lv} of ${MAX}</p>
       ${list.length
-        ? `<p class="sk-count">${list.length} ${list.length === 1 ? "proyecto lo usa" : "proyectos lo usan"}</p>
+        ? `<p class="sk-count">${list.length} ${list.length === 1 ? "project uses it" : "projects use it"}</p>
            <ul class="sk-used">${list.map((p) => `<li><button type="button" class="sk-proj" data-id="${esc(p.id)}">${esc(p.title)} <span class="label">${p.year}</span></button></li>`).join("")}</ul>`
-        : `<p class="sk-count">Sin proyecto publicado aún</p>`}`;
+        : `<p class="sk-count">No published project yet</p>`}`;
   };
   rows.forEach((row) => {
     /* Con táctil solo el clic: si no, el panel cambia de altura antes del clic y el toque cae en otro elemento. */

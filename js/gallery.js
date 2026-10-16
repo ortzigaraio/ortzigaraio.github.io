@@ -166,6 +166,8 @@
 
   /* El tipo de escena depende del índice del proyecto (y de la captura si es "id-n"). */
   function sceneFor(id) {
+    const themed = PF.scenes && PF.scenes.get(id);
+    if (themed) return themed;
     let pi = projects.findIndex((p) => id === p.id);
     let shot = -1;
     if (pi < 0) {
@@ -178,11 +180,12 @@
 
   /* ---------- Portadas con imagen real ---------- */
   const imgs = new Map();
-  function grayImage(rec, g, w, h) {
+  function grayImage(rec, g, w, h, keepColor) {
     const img = rec.img, k = Math.max(w / img.naturalWidth, h / img.naturalHeight);
     const dw = img.naturalWidth * k, dh = img.naturalHeight * k;
     g.fillStyle = "#000"; g.fillRect(0, 0, w, h);
     g.drawImage(img, (w - dw) / 2, (h - dh) / 2, dw, dh);
+    if (keepColor) return;
     const d = g.getImageData(0, 0, w, h), a = d.data;
     for (let i = 0; i < a.length; i += 4) { const v = a[i] * 0.299 + a[i + 1] * 0.587 + a[i + 2] * 0.114; a[i] = a[i + 1] = a[i + 2] = v; }
     g.putImageData(d, 0, 0);
@@ -214,7 +217,7 @@
         rec.img.src = project.cover;
       }
       if (rec.ok) {
-        try { grayImage(rec, g, src.width, src.height); done = true; } catch (e) { rec.ok = false; rec.failed = true; }
+        try { grayImage(rec, g, src.width, src.height, project.plain); done = true; } catch (e) { rec.ok = false; rec.failed = true; }
       }
     }
     if (!done) {
@@ -223,6 +226,7 @@
       sceneFor(project.id)(g, w, h, r, u);
       g.restore();
     }
+    if (project.plain) { canvas.width = src.width; canvas.height = src.height; canvas.getContext("2d").drawImage(src, 0, 0); return; }
     const c = PF.colors();
     if (PF.fx && PF.fx.stylize) {
       PF.fx.stylize(src, canvas, { mode: PF.state.effect, cell: 8 * PF.state.density * s, ink: c.fg, paper: c.bg, accent: c.accent });
@@ -278,7 +282,7 @@
   const head = (id, word, kicker, hint) => `
     <header class="sec-head">
       <p class="label sec-kicker"><span>${kicker}</span><span>${hint}</span></p>
-      <h2 class="sec-word display" id="${id}" aria-label="${word === "GALLERY" ? "Galería de proyectos" : "Índice de proyectos"}"><span aria-hidden="true">${word}</span><sup class="sec-count" aria-hidden="true">(${pad2(total)})</sup></h2>
+      <h2 class="sec-word display" id="${id}" aria-label="${word === "GALLERY" ? "Project gallery" : "Project index"}"><span aria-hidden="true">${word}</span><sup class="sec-count" aria-hidden="true">(${pad2(total)})</sup></h2>
     </header>`;
 
   const cards = projects.map((p, i) => {
@@ -287,7 +291,7 @@
     return `
       <div class="gal-card" role="listitem" data-id="${esc(p.id)}" style="--c:${L.s} / span ${L.n};--cm:${cm};--r:${Math.floor(i / 2) + 1};--mt:${L.mt}vh;--ar:${L.ar}">
         <div class="gal-in" data-z="${L.z}">
-          <button type="button" class="gal-link" data-id="${esc(p.id)}" aria-label="${esc(p.title)}, ${p.year}. Abrir el proyecto">
+          <button type="button" class="gal-link" data-id="${esc(p.id)}" aria-label="${esc(p.title)}, ${p.year}. Open project">
             <span class="gal-cover"><canvas class="gal-canvas" aria-hidden="true"></canvas><span class="gal-num label">${pad2(i + 1)}</span></span>
             <span class="gal-meta">
               <span class="gal-title display">${esc(p.title)}</span>
@@ -301,7 +305,7 @@
 
   const rows = projects.map((p, i) => `
       <li>
-        <button type="button" class="idx-row" data-id="${esc(p.id)}" data-i="${i}" aria-label="${esc(p.title)}, ${p.year}. Abrir el proyecto">
+        <button type="button" class="idx-row" data-id="${esc(p.id)}" data-i="${i}" aria-label="${esc(p.title)}, ${p.year}. Open project">
           <span class="idx-num label">${pad2(i + 1)}</span>
           <span class="idx-title display">${esc(p.title)}</span>
           <span class="idx-year label">${p.year}</span>
@@ -312,11 +316,11 @@
 
   root.innerHTML = `
     <div id="gallery" class="gal">
-      ${head("gallery-title", "GALLERY", "01 — Selección de proyectos", "Haz clic en una portada")}
-      <div class="gal-persp"><div class="gal-stage" role="list" aria-labelledby="gallery-title">${cards}</div></div>
+      ${head("gallery-title", "GALLERY", "01 — Selected projects", "Click a cover")}
+      <div class="g3" id="g3"></div>
     </div>
     <div id="work-index" class="idx">
-      ${head("index-title", "WORK", "02 — Índice", "Lista completa")}
+      ${head("index-title", "WORK", "02 — Index", "Full list")}
       <ul class="idx-list" aria-labelledby="index-title">${rows}</ul>
       <div class="idx-thumb" aria-hidden="true"></div>
     </div>`;
@@ -374,7 +378,7 @@
     /* Skew por velocidad + parallax con el cursor (solo con puntero fino). */
     const useMouse = () => fine.matches;
     const opt = { duration: 0.6, ease: "power3" };
-    const rx = gsap.quickTo(stage, "rotationX", opt), ry = gsap.quickTo(stage, "rotationY", opt);
+    const rx = stage ? gsap.quickTo(stage, "rotationX", opt) : () => {}, ry = stage ? gsap.quickTo(stage, "rotationY", opt) : () => {};
     const qs = inEls.map((el) => ({
       skew: gsap.quickTo(el, "skewY", { duration: 0.45, ease: "power3" }),
       sy: gsap.quickTo(el, "scaleY", { duration: 0.45, ease: "power3" }),

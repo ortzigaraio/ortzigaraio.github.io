@@ -1,11 +1,11 @@
 <!doctype html>
-<html lang="es" data-theme="dark">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Ortzi Garaio Portfolio</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="Portfolio de Ortzi Garaio, Data Scientist e ingeniero de IA.">
+<meta name="description" content="Portfolio of Ortzi Garaio, Data Scientist and AI engineer.">
 <meta name="theme-color" content="#0a0a0a">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,37 +14,52 @@
 <link rel="stylesheet" href="css/base.css">
 <link rel="stylesheet" href="css/ui-menu.css">
 <link rel="stylesheet" href="css/ui-sections.css">
+<link rel="stylesheet" href="css/gallery3d.css">
+<link rel="stylesheet" href="css/lab.css">
 <!-- /@CSS -->
 </head>
 <body>
 
 <canvas id="field" aria-hidden="true"></canvas>
+<canvas id="clickfx" aria-hidden="true"></canvas>
 
-<!-- ===== MENÚ (barra tipo escritorio + índice grande + ventanas) ===== -->
+<!-- ===== MENU (barra tipo escritorio + índice grande + ventanas) ===== -->
 <div id="ui-menu"></div>
 
 <main id="top">
   <!-- ===== HERO: cañón estriado ===== -->
-  <section id="hero" aria-label="Introducción">
+  <section id="hero" aria-label="Introduction">
     <div class="hero-stage">
       <canvas id="barrel" aria-hidden="true"></canvas>
+      <canvas id="orb" aria-hidden="true"></canvas>
+      <div id="deck" aria-label="Project constellation"><canvas id="deckfx" aria-hidden="true"></canvas></div>
       <div class="hero-hud">
-        <div class="hud-specs label">
+        <div class="hud-specs label only-barrel">
           <span>Cal. 7.62 × 51 mm</span>
-          <span>6 estrías · dextrógiras</span>
-          <span>Paso 1:10″</span>
+          <span>6 grooves · right-hand twist</span>
+          <span>Twist 1:10″</span>
         </div>
-        <div class="hud-readout label">
-          <span>Profundidad <b data-hud="depth">000 mm</b></span>
-          <span>Rotación <b data-hud="rot">00000°</b></span>
-          <span>Recorrido <b data-hud="pct">000%</b></span>
+        <div class="hud-readout label only-barrel">
+          <span>Depth <b data-hud="depth">000 mm</b></span>
+          <span>Rotation <b data-hud="rot">00000°</b></span>
+          <span>Travel <b data-hud="pct">000%</b></span>
+        </div>
+        <div class="hud-specs label only-orb">
+          <span>Render · stochastic dithering</span>
+          <span>Segmentation · 1-bit mask</span>
+          <span>Detection · regions with confidence</span>
+        </div>
+        <div class="hud-readout label only-orb">
+          <span>Scale <b data-ohud="scale">×1.0</b></span>
+          <span>Regions <b data-ohud="regions">00</b></span>
+          <span>Travel <b data-ohud="pct">000%</b></span>
         </div>
         <div class="hero-title">
           <h1 class="display">Ortzi<br>Garaio</h1>
-          <p class="label">Data Scientist · AI Engineer — modelos que salen del notebook y funcionan solos.</p>
+          <p class="label">Data Scientist · AI Engineer — models that leave the notebook and run on their own.</p>
         </div>
         <div class="hud-foot label">
-          <span class="scroll-cue">Desliza ↓</span>
+          <span class="scroll-cue">Scroll ↓</span>
           <span class="hud-bar"><i data-hud="bar"></i></span>
           <span>Euskadi, ES</span>
         </div>
@@ -52,18 +67,22 @@
     </div>
   </section>
 
-  <!-- ===== GALERÍA DE PROYECTOS ===== -->
-  <section id="work" aria-label="Proyectos"></section>
+  <!-- ===== PROJECT GALLERY ===== -->
+  <section id="work" aria-label="Projects"></section>
 
   <!-- ===== SOBRE MÍ + HABILIDADES ===== -->
-  <section id="about" aria-label="Sobre mí"></section>
+  <section id="about" aria-label="About me"></section>
+
+  <section id="certs" aria-label="Achievements"></section>
+  <section id="demo" aria-label="Live demo"></section>
+  <section id="terminal" aria-label="Terminal"></section>
 
   <!-- ===== CONTACTO ===== -->
-  <section id="contact" aria-label="Contacto"></section>
+  <section id="contact" aria-label="Contact"></section>
 </main>
 <footer class="site-footer" id="footer"></footer>
 
-<!-- ===== VISTA DE DETALLE ===== -->
+<!-- ===== DETAIL VIEW ===== -->
 <div id="detail" hidden></div>
 
 <!-- Librerías (versiones fijadas) -->
@@ -76,13 +95,19 @@
 <script src="js/core.js"></script>
 <script src="js/fx.js"></script>
 <script src="js/field.js"></script>
+<script src="js/clickfx.js"></script>
 <script src="js/barrel.js"></script>
+<script src="js/hero2.js"></script>
 <script src="js/music.js"></script>
 <script src="js/menu.js"></script>
+<script src="js/scenes.js"></script>
 <script src="js/gallery.js"></script>
+<script src="js/gallery3d.js"></script>
 <script src="js/detail.js"></script>
 <script src="js/about.js"></script>
+<script src="js/lab.js"></script>
 <script src="js/contact.js"></script>
+<script src="js/ui-fx.js"></script>
 <!-- /@JS -->
 </body>
 </html>
