@@ -72,7 +72,7 @@
         dust += step(0.991 - k * 0.001, h) * (0.4 + 0.6 * dash) * clamp(r * 3.0, 0.0, 1.0);
       }
       float hub = 0.30 * exp(-r * 4.5) * smoothstep(0.0, 0.5, uB);
-      float tunnel = clamp(dust * 0.9 + hub, 0.0, 1.0) * (1.0 - 0.55 * uDim);
+      float tunnel = clamp(dust * 0.9 + hub, 0.0, 1.0) * (1.0 - uDim);
 
       float lum = mix(orb, tunnel, uB);
       float t = hash(cell + 11.7);
@@ -119,13 +119,22 @@
   /* Tarjetas de información del perfil. */
   function infoCards() {
     const o = C.owner, ghUser = String(o.github).replace(/^https?:\/\//, "");
+    const metric = (pid, label) => { const p = C.projects.find((x) => x.id === pid); const m = p && p.metrics.find((x) => x[0] === label); return m ? m[1] : null; };
+    const cifras = [["dither", "Estilos", " estilos de render"], ["yolo-mushrooms", "Imágenes etiquetadas", " imágenes etiquetadas"], ["rag-boe", "Hit Rate @3", " de Hit Rate@3 en el BOE"]]
+      .map(([pid, l, suf]) => { const v = metric(pid, l); return v ? v + suf : null; }).filter(Boolean).join(" · ");
+    const live = C.projects.filter((p) => p.live);
     return [
       { tag: "perfil", k: "Perfil", v: o.role },
-      { tag: "enfoque", k: "Enfoque", v: "RAG, agentes y memoria para IA con MCP" },
-      { tag: "stack", k: "Stack", v: "Python · SQL · PyTorch · Supabase · n8n" },
-      { tag: "lugar", k: "Ubicación", v: o.location + " · Euskadi, Araba, Bizkaia, Gipuzkoa" },
-      { tag: "proyectos", k: "Proyectos", v: String(C.projects.length).padStart(2, "0") + " en este portfolio" },
-      { tag: "github", k: "GitHub", v: ghUser + " ↗", href: o.github }
+      { tag: "bio", k: "Quién soy", v: (o.bio[0] || "").split(". ").slice(1).join(". ") || o.bio[0] },
+      { tag: "enfoque", k: "Ahora", v: "Memoria para agentes: RAG híbrido, grafos de conocimiento y bases vectoriales conectados por MCP" },
+      { tag: "stack", k: "Stack", v: "Python · SQL · PyTorch · Supabase · n8n · Docker" },
+      { tag: "cifras", k: "Cifras", v: cifras },
+      { tag: "lugar", k: "Ubicación", v: o.location },
+      { tag: "proyectos", k: "Proyectos", v: String(C.projects.length).padStart(2, "0") + " proyectos, del notebook a producción" },
+      { tag: "en vivo", k: "En producción", v: live.map((p) => p.title).join(" · ") || "—", href: live[0] && live[0].live },
+      { tag: "método", k: "Método", v: "Si algo se puede medir, lo mido antes de optimizarlo" },
+      { tag: "github", k: "GitHub", v: ghUser + " ↗", href: o.github },
+      { tag: "contacto", k: "Contacto", v: o.email, href: "mailto:" + o.email }
     ];
   }
 
@@ -154,21 +163,22 @@
     cards = []; hub = null;
     W = stage.clientWidth || window.innerWidth; H = stage.clientHeight || window.innerHeight;
     const rng = mulberry(20261016);
-    const nImg = narrow() ? 9 : 15, nInfo = narrow() ? 3 : 6;
+    const nImg = narrow() ? 7 : 12, nInfo = narrow() ? 5 : 11;
     const base = clamp(Math.min(W, H) * 0.2, 80, 190);
     const asp = [1.5, 1.33, 1.78, 1.25, 0.9];
     const imgs = pool().slice(0, nImg), infos = infoCards().slice(0, nInfo);
     const list = [];
     for (let i = 0, a = 0, b = 0; a < imgs.length || b < infos.length; i++) {
-      if (b < infos.length && (i % 3 === 2 || a >= imgs.length)) list.push({ info: infos[b++] });
+      if (b < infos.length && (i % 2 === 1 || a >= imgs.length)) list.push({ info: infos[b++] });
       else if (a < imgs.length) list.push({ img: imgs[a++] });
     }
     const N = list.length;
     list.forEach((it, i) => {
       const isInfo = !!it.info;
       const ar = asp[Math.floor(rng() * asp.length)];
-      const w = isInfo ? (narrow() ? 150 : 196) : Math.round(base * (0.8 + rng() * 0.5));
-      const h = isInfo ? (narrow() ? 76 : 86) : Math.round(w / ar);
+      const txt = isInfo ? (it.info.v || "").length : 0;
+      const w = isInfo ? (narrow() ? 160 : txt > 60 ? 260 : 200) : Math.round(base * (0.8 + rng() * 0.5));
+      const h = isInfo ? Math.round(44 + Math.ceil(txt / ((w - 24) / 7.2)) * 16) : Math.round(w / ar);
       const ang = i * 2.39996 + (rng() - 0.5) * 0.5;
       const rad = 0.45 + 0.55 * Math.sqrt((i + 0.5) / N);
       const tx = Math.cos(ang) * rad * W * 0.44, ty = Math.sin(ang) * rad * H * 0.42;
@@ -196,7 +206,7 @@
         t: 0, e: 0, x: 0, y: 0, s: 1
       };
       cards.push(o);
-      if (!isInfo && PF.covers) PF.covers.track(el.querySelector(".dk-img"), { id: it.img.id, cover: it.img.cover, plain: true }, w, h);
+      if (!isInfo && PF.covers) PF.covers.track(el.querySelector(".dk-img"), { id: it.img.id, cover: it.img.cover }, w, h);
     });
     relax(hubR());
     // Tarjeta central (foto con segmentación).
@@ -208,7 +218,7 @@
     deck.appendChild(hel);
     hub = { el: hel, w: hw, h: hh, tx: 0, ty: 0, sc: 1, rot: 0, spin: 0, start: 0, ph: 1.3, t: 0, e: 0, x: 0, y: 0, s: 1, hub: true };
     const photo = C.owner.photo;
-    if (photo && PF.covers) PF.covers.track(hel.querySelector(".dk-img"), { id: "hub", cover: photo, plain: true }, hw, hh);
+    if (photo && PF.covers) PF.covers.track(hel.querySelector(".dk-img"), { id: "hub", cover: photo }, hw, hh);
     drawOverlays();
   }
 
@@ -234,7 +244,7 @@
       const cv = o.el.querySelector(".dk-ov"), g = setupOv(cv, o.w, o.h);
       g.strokeStyle = "rgba(" + PF.hexToRgb(c.fg).join(",") + ",0.4)"; g.lineWidth = 1; g.strokeRect(0.5, 0.5, o.w - 1, o.h - 1);
       g.strokeStyle = "#fff"; g.lineWidth = 2; brackets(g, 3, 3, o.w - 6, o.h - 6, 7);
-      chip(g, 0, o.h, o.title.toUpperCase() + " · " + o.kind, c.accent, "#fff");
+      chip(g, 0, o.h, o.title.toUpperCase() + " · " + o.kind, c.fg, c.bg);
     });
     if (hub) drawHubOverlay();
   }
@@ -285,9 +295,9 @@
       const mk = hubMask;
       if (mk) {
         const m = mk.m;
-        g.fillStyle = "rgba(" + PF.hexToRgb(c.accent).join(",") + ",0.20)";
+        g.fillStyle = "rgba(" + PF.hexToRgb(c.fg).join(",") + ",0.22)";
         for (let y = 0; y < h; y += 2) for (let x = 0; x < w; x += 2) if (m[y * w + x] && ((x + y) & 7) === 0) g.fillRect(x, y, 2, 2);
-        g.fillStyle = c.accent;
+        g.fillStyle = c.fg;
         for (let y = 1; y < h - 1; y++) for (let x = 1; x < w - 1; x++) {
           if (!m[y * w + x]) continue;
           if (!m[y * w + x - 1] || !m[y * w + x + 1] || !m[(y - 1) * w + x] || !m[(y + 1) * w + x]) g.fillRect(x, y, 1.4, 1.4);
@@ -303,8 +313,8 @@
         chip(g, f0[0], f0[1], "rostro", c.fg, c.bg);
       }
     }
-    g.strokeStyle = c.accent; g.lineWidth = 1.5; g.strokeRect(0.75, 0.75, w - 1.5, h - 1.5);
-    chip(g, 0.75, h - 1, "ortzi garaio · máscara", c.accent, "#fff");
+    g.strokeStyle = c.fg; g.lineWidth = 1.5; g.strokeRect(0.75, 0.75, w - 1.5, h - 1.5);
+    chip(g, 0.75, h - 1, "ortzi garaio · máscara", c.fg, c.bg);
   }
 
   /* ---------------- Fondo (líneas de conexión) ---------------- */
@@ -335,7 +345,7 @@
       for (let i = 1; i <= upto; i++) { const u = i / steps, a = (1 - u) * (1 - u), b = 2 * (1 - u) * u, d = u * u; ctx.lineTo(a * sx + b * mx + d * ax, a * sy + b * my + d * ay); }
       ctx.stroke();
       if (lt > 0.95) {
-        ctx.fillStyle = c.accent; ctx.fillRect(ax - 2.5, ay - 2.5, 5, 5);
+        ctx.fillStyle = c.fg; ctx.fillRect(ax - 2.5, ay - 2.5, 5, 5);
         ctx.fillStyle = ink + "0.85)";
         const side = ax >= cx ? 1 : -1;
         ctx.textAlign = side > 0 ? "left" : "right";
@@ -390,6 +400,7 @@
     if (hub) { place(hub, 0, 0.5); hub.el.style.zIndex = "300"; }
     cards.forEach((o) => place(o, o.start, o.start + 0.5));
     deck.classList.toggle("is-live", p > 0.86);
+    if (PF.field) { PF.field.boost = smooth(0.3, 0.6, p); PF.field.render(); }
     deck.style.visibility = p > 0.26 ? "visible" : "hidden";
     drawLines(p, time);
 

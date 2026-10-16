@@ -164,9 +164,9 @@ main, .site-footer { position: relative; z-index: 1; }
   background: var(--bg); transform-origin: 50% 50%;
 }
 .dk-card canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
-.dk-hub { box-shadow: 0 0 0 1px var(--accent); }
+.dk-hub { box-shadow: 0 0 0 1px var(--fg); }
 #deck.is-live .dk-card.is-link { pointer-events: auto; cursor: pointer; }
-#deck.is-live .dk-card.is-link:hover { outline: 1px solid var(--accent); outline-offset: 3px; }
+#deck.is-live .dk-card.is-link:hover { outline: 1px solid var(--fg); outline-offset: 3px; }
 
 html[data-hero="orb"] #barrel,
 html[data-hero="orb"] .only-barrel { display: none; }
@@ -184,7 +184,7 @@ html[data-hero="orb"] .hud-bar i { background: var(--fg); }
   background: var(--bg); border: 1px solid rgba(var(--fg-rgb), 0.35); padding: 10px 12px; display: grid; align-content: start; gap: 6px;
   color: var(--fg); font-family: var(--font-mono); font-size: 11.5px; line-height: 1.35; overflow: hidden;
 }
-.dk-info .label { color: var(--accent); }
+.dk-info .label { color: var(--muted); }
 .dk-info b { font-weight: 500; }
 .dk-info a { color: var(--fg); text-underline-offset: 3px; }
 #deck.is-live .dk-info a { pointer-events: auto; }

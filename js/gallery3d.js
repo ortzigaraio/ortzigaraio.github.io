@@ -79,7 +79,7 @@
       el.addEventListener("pointerleave", () => setActive(null));
       el.addEventListener("focus", () => setActive(o.p.id));
       el.addEventListener("blur", () => setActive(null));
-      PF.covers.track(el.querySelector("canvas"), { id: o.it.id, cover: o.it.cover }, w, h);
+      PF.covers.track(el.querySelector("canvas"), { id: o.it.id, cover: o.it.cover, plain: true }, w, h);
       const t = i / total;
       items.push({
         el, pid: o.p.id, w, h, z: i * (narrow() ? 230 : 250),
