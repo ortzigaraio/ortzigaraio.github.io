@@ -3,14 +3,6 @@
    Concepto de layout: barra de menú tipo escritorio arriba, escena a pantalla
    completa, y después secciones editoriales con mucho espacio negativo.
    ========================================================================== */
-@font-face {
-  font-family: "Stamp RSPK Three";
-  src: url("../fonts/StampRSPKThree-Regular.woff2") format("woff2");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
 :root {
   /* Oscuro por defecto (Carbón). core.js reescribe estos valores según la paleta. */
   --bg: #0a0a0a;
@@ -22,7 +14,7 @@
   --bg-rgb: 10, 10, 10;
   --accent-rgb: 255, 91, 35;
 
-  --font-display: "Stamp RSPK Three", "Archivo", system-ui, sans-serif;
+  --font-display: "Special Elite", "Archivo", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
   --display-stretch: 100%;
 

@@ -162,7 +162,7 @@ window.PORTFOLIO = {
   },
 
   fonts: {
-    stamp:     { label: "Stamp RSPK Three", display: "'Stamp RSPK Three', 'Archivo', system-ui, sans-serif", mono: "'JetBrains Mono', ui-monospace, monospace" },
+    stamp:     { label: "Special Elite", display: "'Special Elite', 'Archivo', system-ui, sans-serif", mono: "'JetBrains Mono', ui-monospace, monospace" },
     tecnica:   { label: "Space Grotesk",    display: "'Space Grotesk', system-ui, sans-serif",              mono: "'JetBrains Mono', ui-monospace, monospace" },
     archivo:   { label: "Archivo Expanded", display: "'Archivo', system-ui, sans-serif",                    mono: "'IBM Plex Mono', ui-monospace, monospace", displayStretch: "125%" },
     shoulders: { label: "Big Shoulders",    display: "'Big Shoulders Display', system-ui, sans-serif",      mono: "'Space Mono', ui-monospace, monospace" }

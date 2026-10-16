@@ -20,7 +20,7 @@ Everything comes from `js/config.js` (`window.PORTFOLIO`):
 
 ## Typography
 
-The main typeface is **Stamp RSPK Three** (freeware), included as `fonts/StampRSPKThree-Regular.woff2`. If the file is missing, Archivo is used as the fallback.
+The display typeface is **Special Elite** (Apache 2.0, Google Fonts), loaded from Google Fonts. Archivo is the fallback.
 
 ## Structure
 
