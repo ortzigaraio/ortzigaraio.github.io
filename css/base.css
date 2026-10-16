@@ -154,3 +154,27 @@ main, .site-footer { position: relative; z-index: 1; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
 }
+
+/* ---------- Intro "esfera": lienzo, constelación de imágenes y modos ---------- */
+#orb { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+#deck { position: absolute; inset: 0; overflow: hidden; pointer-events: none; visibility: hidden; }
+#deckfx { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.dk-card {
+  position: absolute; left: 50%; top: 50%; opacity: 0; will-change: transform, opacity;
+  background: var(--bg); transform-origin: 50% 50%;
+}
+.dk-card canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.dk-hub { box-shadow: 0 0 0 1px var(--accent); }
+#deck.is-live .dk-card.is-link { pointer-events: auto; cursor: pointer; }
+#deck.is-live .dk-card.is-link:hover { outline: 1px solid var(--accent); outline-offset: 3px; }
+
+html[data-hero="orb"] #barrel,
+html[data-hero="orb"] .only-barrel { display: none; }
+html[data-hero="barrel"] #orb,
+html[data-hero="barrel"] #deck,
+html[data-hero="barrel"] .only-orb { display: none; }
+html[data-hero="orb"] #hero { height: 560vh; }
+html[data-hero="orb"] .hero-title { opacity: calc(1 - var(--hero-p) * 9); transform: translateY(calc(var(--hero-p) * -90px)); }
+html[data-hero="orb"] .hero-hud { mix-blend-mode: normal; color: var(--fg); }
+html[data-hero="orb"] .hud-bar { background: rgba(var(--fg-rgb), 0.25); }
+html[data-hero="orb"] .hud-bar i { background: var(--fg); }

@@ -24,6 +24,7 @@
   if (!C.palettes[state.palette]) state.palette = C.defaults.palette;
   if (!C.fonts[state.font]) state.font = C.defaults.font;
   if (!C.effects[state.effect]) state.effect = C.defaults.effect;
+  if (state.hero !== "orb" && state.hero !== "barrel") state.hero = C.defaults.hero;
   if (!C.barrelBackgrounds[state.barrelBg]) state.barrelBg = C.defaults.barrelBg;
 
   const listeners = {};
@@ -57,6 +58,7 @@
     root.style.setProperty("--display-stretch", f.displayStretch || "100%");
     root.dataset.font = state.font;
     root.dataset.effect = state.effect;
+    root.dataset.hero = state.hero;
     const meta = document.querySelector('meta[name="theme-color"]');
     if (meta) meta.setAttribute("content", c.bg);
     PF.emit("theme", { colors: c, state });
@@ -67,7 +69,7 @@
     if (state[key] === value) return;
     state[key] = value;
     try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { /* almacenamiento no disponible */ }
-    if (["theme", "palette", "font", "effect"].includes(key)) applyTheme();
+    if (["theme", "palette", "font", "effect", "hero"].includes(key)) applyTheme();
     PF.emit("change", { key, value, state });
   };
 

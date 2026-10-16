@@ -16,7 +16,8 @@
   if (!canvas || !window.THREE) return;
 
   const L = 40.0;      // longitud del ánima (unidades = radio del ánima)
-  const PITCH = 5.5;   // avance por vuelta completa de la estría
+  const PITCH = 5.5;
+  const CAM0 = -12.0;  // cámara inicial: más lejos = cañón más pequeño en pantalla   // avance por vuelta completa de la estría
   const MODES = { raw: 0, ascii: 1, braille: 2, dither: 3, halftone: 4, led: 5 };
 
   let renderer;
@@ -49,7 +50,7 @@
     const float RO = 2.75;
     const float NG = 6.0;
     const float PITCH = ${PITCH.toFixed(1)};
-    const float GDEPTH = 0.09;
+    const float GDEPTH = 0.05;
     const float RB = 0.74;
     const float LN = 1.15;
     const float LB = 0.95;
@@ -276,7 +277,7 @@
   const sceneU = {
     uRes: { value: new THREE.Vector2(1, 1) }, uTime: { value: 0 }, uSpin: { value: 0 },
     uBulletZ: { value: -3 }, uBullet: { value: 1 }, uExit: { value: 0 }, uBulletRot: { value: 0 },
-    uFov: { value: 0.52 }, uTilt: { value: new THREE.Matrix3() }, uCam: { value: new THREE.Vector3(0, 0, -7) }, uLook: { value: new THREE.Vector2(0, 0) }
+    uFov: { value: 0.52 }, uTilt: { value: new THREE.Matrix3() }, uCam: { value: new THREE.Vector3(0, 0, -12) }, uLook: { value: new THREE.Vector2(0, 0) }
   };
   const postU = {
     uScene: { value: null }, uGlyph: { value: null }, uRes: { value: new THREE.Vector2(1, 1) },
@@ -360,14 +361,14 @@
 
   function frame(now) {
     requestAnimationFrame(frame);
-    if (!visible || document.hidden) return;
+    if (!visible || document.hidden || PF.state.hero !== "barrel") return;
     const moving = Math.abs(target - prog) > 1e-4;
     prog += (target - prog) * (PF.reducedMotion ? 1 : 0.14);
     const time = PF.reducedMotion ? 0 : (now - t0) / 1000;
     if (PF.reducedMotion && !moving && !dirty) return;
 
     const p = prog;
-    const camZ = -7.0 + (L - 0.35 + 7.0) * Math.pow(p, 1.12);
+    const camZ = CAM0 + (L - 0.35 - CAM0) * Math.pow(p, 1.12);
     const m = PF.mouse;
     const inside = camZ > 0 ? 0.35 : 1;
     sceneU.uCam.value.set(-m.x * 0.35 * inside, m.y * 0.35 * inside, camZ);

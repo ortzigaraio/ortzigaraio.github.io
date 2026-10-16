@@ -181,7 +181,8 @@ window.PORTFOLIO = {
     font: "stamp",
     effect: "ascii",
     density: 1,          // multiplicador del tamaño de celda (0.6 – 1.6)
-    bullet: true,        // bala sí / no
+    hero: "orb",         // intro: "orb" (esfera + constelación) o "barrel" (cañón)
+    bullet: false,       // bala sí / no (solo cañón)
     barrelBg: "black",
     field: true,         // fondo animado de caracteres
     music: 0             // pista inicial del reproductor

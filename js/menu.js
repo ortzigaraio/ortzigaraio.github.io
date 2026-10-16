@@ -287,11 +287,12 @@
         '<p class="lab-help">Cambia el cañón y la paleta en directo. Se guarda en este navegador.</p>' +
         '<div class="lab-pair">' +
           '<fieldset><legend class="label">Tema</legend>' + seg("lab-theme", [["dark", "Oscuro"], ["light", "Claro"]]) + "</fieldset>" +
-          '<fieldset><legend class="label">Bala</legend>' + seg("lab-bullet", [["1", "Con"], ["0", "Sin"]]) + "</fieldset>" +
+          '<fieldset><legend class="label">Intro</legend>' + seg("lab-hero", [["orb", "Esfera"], ["barrel", "Cañón"]]) + "</fieldset>" +
         "</div>" +
         '<fieldset><legend class="label">Paleta</legend><div class="sw-grid">' + pal + "</div></fieldset>" +
         '<fieldset><legend class="label">Tipografía</legend><div class="fnt-grid">' + fnt + "</div></fieldset>" +
-        '<fieldset><legend class="label">Efecto del cañón</legend>' + seg("lab-effect", Object.keys(C.effects).map((k) => [k, C.effects[k].label]), "seg-3") + "</fieldset>" +
+        '<fieldset><legend class="label">Bala (solo cañón)</legend>' + seg("lab-bullet", [["1", "Con"], ["0", "Sin"]]) + "</fieldset>" +
+        '<fieldset><legend class="label">Efecto del cañón y portadas</legend>' + seg("lab-effect", Object.keys(C.effects).map((k) => [k, C.effects[k].label]), "seg-3") + "</fieldset>" +
         '<div class="lab-pair">' +
           '<fieldset><legend class="label">Densidad</legend><div class="lab-row"><input type="range" id="lab-density" min="0.6" max="1.6" step="0.1" aria-label="Densidad"><output class="lab-out" for="lab-density"></output></div></fieldset>' +
           '<fieldset><legend class="label">Fondo animado</legend><label class="chk"><input type="checkbox" id="lab-field"><span class="chk-box" aria-hidden="true"></span><span class="chk-txt">Caracteres</span><span class="chk-state label" aria-hidden="true"></span></label></fieldset>' +
@@ -305,6 +306,7 @@
     on('input[name="lab-palette"]', (e) => PF.set("palette", e.target.value));
     on('input[name="lab-font"]', (e) => PF.set("font", e.target.value));
     on('input[name="lab-effect"]', (e) => PF.set("effect", e.target.value));
+    on('input[name="lab-hero"]', (e) => PF.set("hero", e.target.value));
     on('input[name="lab-bullet"]', (e) => PF.set("bullet", e.target.value === "1"));
     on('input[name="lab-bg"]', (e) => PF.set("barrelBg", e.target.value));
     on("#lab-field", (e) => PF.set("field", e.target.checked));
@@ -324,6 +326,7 @@
     setRadio("lab-palette", st.palette);
     setRadio("lab-font", st.font);
     setRadio("lab-effect", st.effect);
+    setRadio("lab-hero", st.hero);
     setRadio("lab-bullet", st.bullet ? "1" : "0");
     setRadio("lab-bg", st.barrelBg);
     const f = b.querySelector("#lab-field");
