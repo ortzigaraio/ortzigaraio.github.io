@@ -8,7 +8,7 @@ window.PORTFOLIO = {
     role: "Data Scientist · AI Engineer",
     location: "Euskadi, ES",
     github: "https://github.com/ortzigaraio",
-    email: "hola@ortzigaraio.dev", // cámbialo por tu correo real
+    email: "ortzigar@gmail.com",
     photo: "foto_perfil_cv.png", // retrato; se muestra con el efecto activo
     bio: [
       "Soy científico de datos. Me gusta llevar un modelo desde el notebook hasta un servicio que funcione solo, con datos reales, alertas y métricas que alguien consulta cada mañana.",
@@ -21,89 +21,75 @@ window.PORTFOLIO = {
      se genera una portada procedural con el efecto activo. */
   projects: [
     {
+      id: "rag-boe",
+      title: "RAG BOE España",
+      year: 2026,
+      role: "Autor · RAG · Evaluación",
+      summary: "RAG multimodal para consultar el BOE: conserva las tablas, lee imágenes con LLaVA y lleva las preguntas de RR. HH. a datos estructurados.",
+      problem: "Los códigos del BOE son PDFs de cientos de páginas llenos de tablas. Buscar un artículo concreto a mano es lento, y un RAG que corta el texto en trozos fijos rompe las tablas y pierde números de artículo.",
+      solution: "La ingesta convierte cada PDF a Markdown con PyMuPDF4LLM conservando tablas, trocea por cambio de tema (chunking semántico) y añade la categoría de la carpeta al contexto en ChromaDB. La búsqueda combina BM25 y vectores con Reciprocal Rank Fusion y reordena con un cross-encoder BGE. Un router con LangGraph manda las preguntas sobre leyes al RAG y las de empleados a Pandas, y LLaVA comprueba si una imagen candidata contiene la respuesta. Todo corre en local con Ollama (Llama 3), con API en FastAPI, chat en Streamlit y bot de Telegram. Evaluado con RAGAS y métricas de recuperación.",
+      stack: ["Python", "LangGraph", "Ollama · Llama 3", "LLaVA", "ChromaDB", "BM25 + RRF", "BGE Reranker", "FastAPI", "Streamlit", "RAGAS", "Telegram Bot"],
+      metrics: [["Hit Rate @3", "0.80"], ["MRR @10", "0.74"], ["Faithfulness (RAGAS)", "0.88"], ["Códigos BOE indexados", "25"]],
+      repo: "https://github.com/ortzigaraio/RAG-BOE-ESPANA",
+      live: null,
+      cover: null,
+      shots: ["img/projects/rag-boe-retrieval.png", "img/projects/rag-boe-ragas.png"]
+    },
+    {
+      id: "whatsapp-rag",
+      title: "WhatsApp Chatbot RAG",
+      year: 2026,
+      role: "Autor · Automatización · IA",
+      summary: "Chatbot de WhatsApp en n8n que responde con RAG sobre la documentación de la empresa y pasa la conversación a una persona cuando hace falta.",
+      problem: "Los clientes escriben por WhatsApp a cualquier hora y en ráfagas de varios mensajes. Contestar a mano no escala, y un bot simple responde a cada mensaje suelto sin contexto ni forma de escalar a soporte.",
+      solution: "Un webhook recibe los mensajes, valida si son texto o documento y registra el lead en Supabase. Un buffer espera 3 s para agrupar los mensajes seguidos en una sola consulta. El agente (Groq + memoria de ventana) recupera contexto de Supabase pgvector con embeddings y reranking de Cohere, y un switch decide: responder en varios mensajes, transferir a modo humano o avisar a soporte si no hay información. Los administradores amplían la base de conocimiento enviando PDF, XLSX o TXT por el propio WhatsApp. Un cron reactiva el bot en chats inactivos y los errores llegan por correo.",
+      stack: ["n8n", "WhatsApp Business API", "Supabase", "pgvector", "Groq", "Cohere Embed + Rerank", "LangChain"],
+      metrics: [["Nodos del flujo", "58"], ["Buffer de agrupación", "3 s"], ["Modos", "Bot / Humano"]],
+      repo: "https://github.com/ortzigaraio/N8N-Whatapp-chatbot",
+      live: null,
+      cover: null,
+      shots: ["img/projects/n8n-workflow.png"]
+    },
+    {
+      id: "yolo-mushrooms",
+      title: "YOLO Mushrooms",
+      year: 2026,
+      role: "Autor · Visión por computador",
+      summary: "Detector de setas en tiempo real con YOLO y TensorFlow Lite: 32 clases, con aviso de las especies tóxicas y mortales.",
+      problem: "Confundir una seta comestible con una mortal es fácil y grave. Las guías en papel no ayudan en el monte y los modelos de detección grandes no caben en un móvil.",
+      solution: "Dataset de 32 clases con bounding boxes (19 comestibles, 2 tóxicas, 7 mortales y 4 Pleurotus) entrenado con YOLOv8/v10 en PyTorch. El modelo se exporta a ONNX, luego a SavedModel y a TFLite con cuantización int8 para inferencia en el móvil. Cada detección indica comestibilidad y síndrome tóxico, y un mapa interactivo con Leaflet marca zonas de setas en España. Es un proyecto educativo: nunca sustituye a un micólogo.",
+      stack: ["Python", "PyTorch", "YOLOv8 / v10", "ONNX", "TensorFlow Lite", "Leaflet"],
+      metrics: [["Clases", "32"], ["Imágenes etiquetadas", "12.817"], ["Peso del modelo", "−75 % (int8)"]],
+      repo: "https://github.com/ortzigaraio/Yolo_mushrooms",
+      live: null,
+      cover: null,
+      shots: [null, null]
+    },
+    {
       id: "wallapop-bot",
       title: "Wallapop Bot",
       year: 2026,
       role: "Autor · Backend · Datos",
       summary: "Bot 24/7 que detecta chollos reales en Wallapop comparando cada anuncio con su precio de mercado.",
       problem: "Las gangas de verdad duran minutos y los filtros de la app solo ordenan por precio: no saben si 300 € por una PS5 es barato o un timo.",
-      solution: "Un escáner por categorías calcula el precio de mercado con la mediana de anuncios comparables, filtra outliers y avisa por Discord, Telegram o push con el descuento y el número de comparables usados. Rotación de peticiones, backoff y redundancia para no ser bloqueado ni caerse.",
-      stack: ["Python 3.12", "requests", "PyYAML", "Docker", "Telegram API", "Discord Webhooks"],
-      metrics: [["Categorías", "12"], ["Latencia de aviso", "< 60 s"], ["Versión", "2.0.0"]],
+      solution: "Vigila productos concretos y escanea categorías enteras. El precio de mercado es la mediana de al menos 6 anuncios comparables; un anuncio es chollo si está un 25 % o más por debajo, y si baja más de un 65 % se avisa de posible estafa. Las alertas llegan por Discord, Telegram o push con el descuento y los comparables usados, también cuando un anuncio ya visto baja de precio. Intervalos con aleatoriedad, backoff y redundancia para no ser bloqueado ni caerse; se controla desde Telegram.",
+      stack: ["Python", "requests", "PyYAML", "Docker", "Telegram Bot", "Discord Webhooks"],
+      metrics: [["Productos vigilados", "14"], ["Categorías escaneadas", "7"], ["Umbral de chollo", "−25 %"]],
       repo: "https://github.com/ortzigaraio/Wallapop_bot",
       live: null,
       cover: null,
-      shots: [null, null, null]
-    },
-    {
-      id: "hybrid-rag",
-      title: "Memoria Híbrida",
-      year: 2026,
-      role: "Investigación · Arquitectura",
-      summary: "Memoria compartida para agentes que combina grafo de conocimiento, búsqueda vectorial y caché de contexto.",
-      problem: "Los agentes olvidan entre sesiones y el RAG vectorial puro falla con preguntas que cruzan entidades y fechas.",
-      solution: "Grafo temporal (Graphiti + Neo4j) para hechos y relaciones, Qdrant para pasajes, y un router que decide entre RAG, KAG o CAG según la consulta. Expuesto como servidor MCP con FastMCP.",
-      stack: ["Python", "FastMCP", "Neo4j", "Qdrant", "pgvector", "OpenAI Agents SDK"],
-      metrics: [["Recall@10", "0.91"], ["Latencia p95", "420 ms"], ["Fuentes", "3"]],
-      repo: "https://github.com/ortzigaraio",
-      live: null,
-      cover: null,
       shots: [null, null]
-    },
-    {
-      id: "ocr-facturas",
-      title: "OCR de Facturas",
-      year: 2025,
-      role: "ML Engineer",
-      summary: "Extracción estructurada de facturas escaneadas con OCR y un modelo de layout.",
-      problem: "Cientos de PDFs al mes con plantillas distintas se transcribían a mano, con errores en NIF e importes.",
-      solution: "Pipeline OCR + modelo de layout que localiza campos, valida NIF e IVA con reglas y deja en revisión solo los casos de baja confianza.",
-      stack: ["Python", "PyTorch", "Tesseract", "LayoutLM", "FastAPI", "AWS Lambda"],
-      metrics: [["Precisión campo", "97.4 %"], ["Revisión manual", "−82 %"], ["Docs/mes", "1.200"]],
-      repo: "https://github.com/ortzigaraio",
-      live: null,
-      cover: null,
-      shots: [null, null, null]
-    },
-    {
-      id: "demanda-energia",
-      title: "Previsión de Demanda",
-      year: 2025,
-      role: "Data Scientist",
-      summary: "Modelo de previsión horaria de demanda eléctrica con variables meteorológicas.",
-      problem: "La planificación usaba la media de semanas anteriores y fallaba en festivos y olas de calor.",
-      solution: "Gradient boosting con calendario, temperatura y lags, validado con backtesting por ventanas. Seguimiento de experimentos en MLflow y panel en Streamlit.",
-      stack: ["Python", "LightGBM", "Pandas", "MLflow", "Streamlit", "Plotly"],
-      metrics: [["MAPE", "3.1 %"], ["Horizonte", "72 h"], ["Mejora vs. base", "−41 %"]],
-      repo: "https://github.com/ortzigaraio",
-      live: null,
-      cover: null,
-      shots: [null, null]
-    },
-    {
-      id: "nlp-resenas",
-      title: "Lector de Reseñas",
-      year: 2024,
-      role: "NLP · Visualización",
-      summary: "Clasificación de temas y sentimiento en reseñas de clientes, en castellano y euskera.",
-      problem: "Miles de reseñas al mes sin leer: nadie sabía qué quejas crecían.",
-      solution: "Transformer multilingüe ajustado para aspecto + sentimiento y un panel en Power BI con tendencias semanales por tema.",
-      stack: ["Python", "Transformers", "Scikit-Learn", "spaCy", "Power BI"],
-      metrics: [["F1 macro", "0.87"], ["Idiomas", "2"], ["Reseñas", "48k"]],
-      repo: "https://github.com/ortzigaraio",
-      live: null,
-      cover: null,
-      shots: [null, null, null]
     }
   ],
 
   /* Hard skills: nivel 0–5 (se dibuja como matriz de puntos). */
   skills: [
     { group: "Lenguajes", items: [["Python", 5], ["SQL", 5], ["JavaScript", 3], ["R", 3], ["Spark", 3]] },
-    { group: "ML / IA", items: [["PyTorch", 4], ["Scikit-Learn", 5], ["Transformers", 4], ["LangChain", 4], ["RAG / KAG", 4]] },
-    { group: "Datos", items: [["Neo4j", 3], ["Qdrant", 4], ["pgvector", 4], ["Pandas", 5], ["MLflow", 4]] },
-    { group: "Infra", items: [["Docker", 4], ["AWS", 3], ["Git", 5], ["FastAPI", 4], ["MCP", 4]] },
-    { group: "Visualización", items: [["Streamlit", 4], ["Power BI", 4], ["Plotly", 4]] }
+    { group: "IA / LLM", items: [["RAG", 5], ["LangGraph", 4], ["LangChain", 4], ["Ollama", 4], ["Groq", 3], ["RAGAS", 4]] },
+    { group: "ML / Visión", items: [["PyTorch", 4], ["YOLO", 4], ["TensorFlow Lite", 3], ["Scikit-Learn", 5]] },
+    { group: "Datos", items: [["ChromaDB", 4], ["Supabase", 4], ["pgvector", 4], ["Qdrant", 3], ["Neo4j", 3], ["Pandas", 5]] },
+    { group: "Automatización", items: [["n8n", 5], ["WhatsApp Business API", 4], ["Telegram Bot", 4], ["Power Automate", 3]] },
+    { group: "Infra / Apps", items: [["Docker", 4], ["AWS", 3], ["FastAPI", 4], ["Streamlit", 4], ["Git", 5]] }
   ],
 
   /* ---------- Ejemplos de dirección visual (seleccionables en "Laboratorio") ---------- */
