@@ -59,7 +59,7 @@
 
       float blank = step(h2, 0.18 * (1.0 - band));
       float sparkle = step(0.997, hash(id + floor(uTime * 2.0))) * 0.5;
-      float v = (0.06 + halo * 0.8 + 0.5 * band + sparkle * 0.6) * (1.0 - blank);
+      float v = (0.02 + halo * 0.5 + 1.15 * band + sparkle * 0.9) * (1.0 - blank);
       float a = clamp(g * v * uAlpha, 0.0, 1.0);
       gl_FragColor = vec4(uInk * a, a);
     }
@@ -96,7 +96,7 @@
   function colors() {
     const c = PF.colors();
     U.uInk.value.set(c.fg);
-    U.uAlpha.value = PF.state.theme === "light" ? 0.8 : 1.0;
+    U.uAlpha.value = PF.state.theme === "light" ? 0.9 : 1.25;
     canvas.hidden = !PF.state.field;
     dirty = true;
   }
