@@ -4,9 +4,9 @@
 .g3 { position: relative; height: 440vh; margin-top: clamp(24px, 4vw, 64px); }
 .g3-stage {
   position: sticky; top: 0; height: 100vh; height: 100dvh; overflow: hidden;
-  background: var(--accent); color: #fff; --g3-ink: #05070d;
+  background: transparent; color: #fff; --g3-ink: #000;
 }
-.g3-bg { position: absolute; inset: -4%; width: 108%; height: 108%; display: block; image-rendering: auto; will-change: transform; }
+.g3-bg { display: none !important; position: absolute; inset: -4%; width: 108%; height: 108%; display: block; image-rendering: auto; will-change: transform; }
 .g3-world { position: absolute; inset: 0; perspective: none; }
 .g3-card {
   position: absolute; left: 50%; top: 50%; padding: 0; margin: 0; border: 0; cursor: pointer;
@@ -14,10 +14,11 @@
   outline-offset: 4px;
 }
 .g3-card canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
-.g3-card:hover, .g3-card:focus-visible { outline: 2px solid #fff; }
+.g3-card { box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.18); }
+.g3-card:hover, .g3-card:focus-visible { outline: 1px solid #fff; }
 .g3-lab {
   position: absolute; left: 0; top: 100%; margin-top: 8px; white-space: nowrap; color: #fff;
-  opacity: 0; transition: opacity 0.2s; text-shadow: 0 0 8px rgba(0, 0, 40, 0.6);
+  opacity: 0; transition: opacity 0.2s; text-shadow: 0 0 8px #000;
 }
 .g3-card:hover .g3-lab, .g3-card:focus-visible .g3-lab { opacity: 1; }
 .g3-list {
