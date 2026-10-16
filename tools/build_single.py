@@ -23,10 +23,20 @@ def inline_css(path: pathlib.Path) -> str:
         ref = (path.parent / m.group(1)).resolve()
         if not ref.exists():
             return m.group(0)
-        b64 = base64.b64encode(ref.read_bytes()).decode()
-        return f'url("data:font/otf;base64,{b64}")'
+        data, mime = ref.read_bytes(), "font/otf"
+        if ref.suffix == ".otf":
+            # Los visores sandboxed cargan mejor woff2: se convierte solo para el HTML empaquetado.
+            try:
+                import io
+                from fontTools.ttLib import TTFont
+                f = TTFont(io.BytesIO(data)); f.flavor = "woff2"
+                buf = io.BytesIO(); f.save(buf); data, mime = buf.getvalue(), "font/woff2"
+            except Exception:
+                pass
+        b64 = base64.b64encode(data).decode()
+        return f'url("data:{mime};base64,{b64}") format("{"woff2" if mime == "font/woff2" else "opentype"}")'
 
-    return re.sub(r'url\("(\.\./fonts/[^"]+)"\)', font, css)
+    return re.sub(r'url\("(\.\./fonts/[^"]+)"\)\s*format\("[^"]+"\)', font, css)
 
 
 def build(fragment: bool) -> str:
