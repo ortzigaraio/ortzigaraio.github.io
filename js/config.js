@@ -139,7 +139,7 @@ window.PORTFOLIO = {
 
   /* ---------- Ejemplos de dirección visual (seleccionables en "Laboratorio") ---------- */
   palettes: {
-    hermes:    { label: "Monocromo", dark: { bg: "#060606", fg: "#f4f4f4", muted: "#8b8b86", line: "#262624", accent: "#f4f4f4" },
+    hermes:    { label: "Monocromo", dark: { bg: "#0a0a0a", fg: "#f4f4f4", muted: "#8b8b86", line: "#262624", accent: "#f4f4f4" },
                                        light: { bg: "#f4f4f4", fg: "#0a0a0a", muted: "#6b6b66", line: "#d6d6d2", accent: "#0a0a0a" } },
     carbon:    { label: "Carbón",    dark: { bg: "#0a0a0a", fg: "#f4f4f4", muted: "#8b8b86", line: "#262624", accent: "#ff5b23" },
                                       light: { bg: "#f4f4f4", fg: "#0a0a0a", muted: "#6b6b66", line: "#d6d6d2", accent: "#e2440f" } },
