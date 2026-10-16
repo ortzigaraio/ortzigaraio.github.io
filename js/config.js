@@ -189,7 +189,7 @@ window.PORTFOLIO = {
     theme: "dark",
     palette: "hermes",
     font: "stamp",
-    effect: "ascii",
+    effect: "dither",
     density: 1,          // multiplicador del tamaño de celda (0.6 – 1.6)
     hero: "orb",         // intro: "orb" (esfera + constelación) o "barrel" (cañón)
     click: "wave",       // efecto del clic sobre el fondo: wave | mix | detect | burst | cross | off
