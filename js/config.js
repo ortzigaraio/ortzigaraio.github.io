@@ -21,6 +21,51 @@ window.PORTFOLIO = {
      se genera una portada procedural con el efecto activo. */
   projects: [
     {
+      id: "horain",
+      title: "Horain",
+      year: 2026,
+      role: "Autor · Full-stack · Producto",
+      summary: "Marketplace hiperlocal de Euskadi con stock real: los vecinos reservan 15 minutos y los comercios suben su stock con una foto del albarán.",
+      problem: "El comercio local no tiene escaparate digital ni tiempo para mantener un catálogo. Los vecinos no saben si el producto está en la tienda del pueblo antes de ir, y las plataformas grandes no distinguen por cercanía.",
+      solution: "App TanStack Start (React 19, SSR) desplegada como Cloudflare Worker sobre Supabase (Postgres con PostGIS y pgvector, Auth y Storage con RLS). El buscador combina palabras, embeddings de Gemini y distancia en una sola función SQL. Reserva Express con código de recogida y cuenta atrás de 15 minutos. El comercio fotografía el albarán y Gemini devuelve líneas con producto, cantidad, precio e IVA, que se revisan antes de publicar. Mapa propio de Euskadi con MapLibre y vista 3D, y personalización «Para ti» que se calcula solo en el navegador. PWA instalable y en euskera y castellano.",
+      stack: ["TanStack Start", "React 19", "Cloudflare Workers", "Supabase", "PostGIS", "pgvector", "Gemini", "Tailwind v4", "MapLibre GL"],
+      metrics: [["Migraciones SQL", "32"], ["Rutas de la app", "28"], ["CLS escritorio", "0,24 → 0,002"], ["Ámbito", "Euskadi"]],
+      repo: "https://github.com/ortzigaraio/horain",
+      live: "https://horain.ortzigar.org",
+      cover: null,
+      shots: ["img/projects/horain-home.webp"]
+    },
+    {
+      id: "dither",
+      title: "Dither",
+      year: 2026,
+      role: "Autor · Gráficos · Frontend",
+      summary: "Convierte imágenes, vídeo y webcam en arte generativo con 26 estilos, todo en el navegador y sin subir nada.",
+      problem: "Las herramientas de ASCII, tramado o halftone suelen ser una sola técnica, suben tus archivos a un servidor o no exportan en formatos útiles para plotter, impresión o vídeo.",
+      solution: "Sitio estático sin framework ni build: ES modules, WebGL2, Canvas2D y Web Workers. 26 estilos en cinco familias (texto, píxel, vectorial, 3D y simulación), cada uno como un módulo con su esquema de parámetros y controles generados. Recorte inteligente del sujeto, reducción de ruido, post-efectos CRT y exportación a PNG, SVG para plotter (A4/A3 con capas de Inkscape), TXT, ANSI, PLY y vídeo con sonido. Seis temas con contraste WCAG AA, ES/EN y atajos de teclado. Cerca de 460 tests con Playwright y axe-core sin violaciones.",
+      stack: ["JavaScript (ES modules)", "WebGL2", "Canvas2D", "Web Workers", "Playwright", "GitHub Pages"],
+      metrics: [["Estilos", "26"], ["Tests", "≈ 460"], ["Subidas a servidor", "0"], ["Idiomas", "ES / EN"]],
+      repo: "https://github.com/ortzigaraio/Dither-art",
+      live: "https://dither.ortzigar.org",
+      cover: null,
+      shots: ["img/projects/dither-studio-ascii.webp", "img/projects/dither-halftone-light.webp", "img/projects/dither-crt.webp"]
+    },
+    {
+      id: "pdf-creator",
+      title: "IA PDF Creator",
+      year: 2026,
+      role: "Autor · IA · Automatización",
+      summary: "Motor que genera informes ejecutivos en PDF y Excel de evaluación de talento, con la narrativa escrita por un LLM a partir de datos.",
+      problem: "Preparar un informe de talento por persona exige redactar fortalezas, riesgos y recomendaciones a mano, y mantener coherentes el PDF, el Excel y las observaciones del evaluador.",
+      solution: "Un único JSON define empresas, pesos del perfil objetivo en 7 dimensiones y personas evaluadas, validado con Pydantic v2. El motor calcula la compatibilidad y los percentiles frente al equipo, lanza 6 peticiones asíncronas a Groq (Llama 3.3 70B) para fortalezas, liderazgo, puntos críticos, catalizadores y alerta de riesgo, y usa las frases del evaluador como ancla para que la narrativa no se contradiga. Matplotlib dibuja radar, barras y dispersión, Jinja2 + Playwright producen un PDF de alta fidelidad y openpyxl rellena una plantilla Excel con marcadores. Incluye proceso por lotes y servidor de webhook.",
+      stack: ["Python", "Groq · Llama 3.3 70B", "Pydantic v2", "Playwright", "Jinja2", "Matplotlib", "openpyxl"],
+      metrics: [["Peticiones IA por informe", "6"], ["Dimensiones evaluadas", "7"], ["Salidas", "PDF + Excel"]],
+      repo: "https://github.com/ortzigaraio/IA-PDF_creator",
+      live: null,
+      cover: null,
+      shots: [null, null]
+    },
+    {
       id: "rag-boe",
       title: "RAG BOE España",
       year: 2026,
@@ -84,12 +129,12 @@ window.PORTFOLIO = {
 
   /* Hard skills: nivel 0–5 (se dibuja como matriz de puntos). */
   skills: [
-    { group: "Lenguajes", items: [["Python", 5], ["SQL", 5], ["JavaScript", 3], ["R", 3], ["Spark", 3]] },
+    { group: "Lenguajes", items: [["Python", 5], ["SQL", 5], ["JavaScript", 4], ["TypeScript", 3], ["React", 3], ["WebGL", 3], ["R", 3], ["Spark", 3]] },
     { group: "IA / LLM", items: [["RAG", 5], ["LangGraph", 4], ["LangChain", 4], ["Ollama", 4], ["Groq", 3], ["RAGAS", 4]] },
     { group: "ML / Visión", items: [["PyTorch", 4], ["YOLO", 4], ["TensorFlow Lite", 3], ["Scikit-Learn", 5]] },
-    { group: "Datos", items: [["ChromaDB", 4], ["Supabase", 4], ["pgvector", 4], ["Qdrant", 3], ["Neo4j", 3], ["Pandas", 5]] },
+    { group: "Datos", items: [["ChromaDB", 4], ["Supabase", 4], ["pgvector", 4], ["Qdrant", 3], ["Neo4j", 3], ["Pandas", 5], ["PostGIS", 3]] },
     { group: "Automatización", items: [["n8n", 5], ["WhatsApp Business API", 4], ["Telegram Bot", 4], ["Power Automate", 3]] },
-    { group: "Infra / Apps", items: [["Docker", 4], ["AWS", 3], ["FastAPI", 4], ["Streamlit", 4], ["Git", 5]] }
+    { group: "Infra / Apps", items: [["Docker", 4], ["AWS", 3], ["FastAPI", 4], ["Streamlit", 4], ["Git", 5], ["Cloudflare Workers", 4], ["Playwright", 4]] }
   ],
 
   /* ---------- Ejemplos de dirección visual (seleccionables en "Laboratorio") ---------- */
