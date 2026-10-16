@@ -1,5 +1,7 @@
 # Portfolio — Ortzi Garaio
 
+Portfolio.ortzigar.org
+
 Static site with no build: HTML + CSS + JS, with Three.js, GSAP + ScrollTrigger and Lenis from a CDN.
 
 ```bash
@@ -20,7 +22,7 @@ Everything comes from `js/config.js` (`window.PORTFOLIO`):
 
 ## Typography
 
-The display typeface is **Special Elite** (Apache 2.0, Google Fonts), loaded from Google Fonts. Archivo is the fallback.
+The display typeface is `fonts/Print_max.otf` (Stamp RSPK Three by Carl Seal / LRC Type Foundry, freeware; see its license terms before redistributing). If the file is missing, Special Elite (Google Fonts) and then Archivo are used as fallbacks.
 
 ## Structure
 

@@ -24,7 +24,7 @@ def inline_css(path: pathlib.Path) -> str:
         if not ref.exists():
             return m.group(0)
         b64 = base64.b64encode(ref.read_bytes()).decode()
-        return f'url("data:font/woff2;base64,{b64}")'
+        return f'url("data:font/otf;base64,{b64}")'
 
     return re.sub(r'url\("(\.\./fonts/[^"]+)"\)', font, css)
 
