@@ -282,7 +282,7 @@
   const head = (id, word, kicker, hint) => `
     <header class="sec-head">
       <p class="label sec-kicker"><span>${kicker}</span><span>${hint}</span></p>
-      <h2 class="sec-word display" id="${id}" aria-label="${word === "GALLERY" ? "Galería de proyectos" : "Índice de proyectos"}"><span aria-hidden="true">${word}</span><sup class="sec-count" aria-hidden="true">(${pad2(total)})</sup></h2>
+      <h2 class="sec-word display" id="${id}" aria-label="${word === "GALLERY" ? "Project gallery" : "Project index"}"><span aria-hidden="true">${word}</span><sup class="sec-count" aria-hidden="true">(${pad2(total)})</sup></h2>
     </header>`;
 
   const cards = projects.map((p, i) => {
@@ -291,7 +291,7 @@
     return `
       <div class="gal-card" role="listitem" data-id="${esc(p.id)}" style="--c:${L.s} / span ${L.n};--cm:${cm};--r:${Math.floor(i / 2) + 1};--mt:${L.mt}vh;--ar:${L.ar}">
         <div class="gal-in" data-z="${L.z}">
-          <button type="button" class="gal-link" data-id="${esc(p.id)}" aria-label="${esc(p.title)}, ${p.year}. Abrir el proyecto">
+          <button type="button" class="gal-link" data-id="${esc(p.id)}" aria-label="${esc(p.title)}, ${p.year}. Open project">
             <span class="gal-cover"><canvas class="gal-canvas" aria-hidden="true"></canvas><span class="gal-num label">${pad2(i + 1)}</span></span>
             <span class="gal-meta">
               <span class="gal-title display">${esc(p.title)}</span>
@@ -305,7 +305,7 @@
 
   const rows = projects.map((p, i) => `
       <li>
-        <button type="button" class="idx-row" data-id="${esc(p.id)}" data-i="${i}" aria-label="${esc(p.title)}, ${p.year}. Abrir el proyecto">
+        <button type="button" class="idx-row" data-id="${esc(p.id)}" data-i="${i}" aria-label="${esc(p.title)}, ${p.year}. Open project">
           <span class="idx-num label">${pad2(i + 1)}</span>
           <span class="idx-title display">${esc(p.title)}</span>
           <span class="idx-year label">${p.year}</span>
@@ -316,11 +316,11 @@
 
   root.innerHTML = `
     <div id="gallery" class="gal">
-      ${head("gallery-title", "GALLERY", "01 — Selección de proyectos", "Haz clic en una portada")}
+      ${head("gallery-title", "GALLERY", "01 — Selected projects", "Click a cover")}
       <div class="g3" id="g3"></div>
     </div>
     <div id="work-index" class="idx">
-      ${head("index-title", "WORK", "02 — Índice", "Lista completa")}
+      ${head("index-title", "WORK", "02 — Index", "Full list")}
       <ul class="idx-list" aria-labelledby="index-title">${rows}</ul>
       <div class="idx-thumb" aria-hidden="true"></div>
     </div>`;

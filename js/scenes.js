@@ -93,7 +93,7 @@
     for (let i = 0; i < n; i++) {
       const x = w * (0.14 + (i * 0.72) / (n - 1)) + (r() - 0.5) * w * 0.05, y = h * (0.5 + (r() - 0.5) * 0.14), s = w * (0.18 + r() * 0.1);
       mush(g, x, y, s, i === bad ? 255 : 150 + r() * 60, r);
-      box(g, x - s * 0.55, y - s * 0.4, x + s * 0.55, y + s * 0.6, u, i === bad, (i === bad ? "mortal " : "comest. ") + (0.88 + r() * 0.1).toFixed(2));
+      box(g, x - s * 0.55, y - s * 0.4, x + s * 0.55, y + s * 0.6, u, i === bad, (i === bad ? "deadly " : "edible ") + (0.88 + r() * 0.1).toFixed(2));
     }
   }
   function yoloMacro(g, w, h, r, u) {
@@ -157,7 +157,7 @@
     g.strokeStyle = gr(70); g.lineWidth = 12 * u; g.beginPath(); g.arc(cx, cy, rad, 0, TAU); g.stroke();
     g.strokeStyle = gr(255); g.beginPath(); g.arc(cx, cy, rad, -Math.PI / 2, -Math.PI / 2 + TAU * 0.72); g.stroke();
     mono(g, rad * 0.5, 800); g.textAlign = "center"; g.fillStyle = gr(255); g.fillText("11:24", cx, cy);
-    mono(g, h * 0.045, 600); g.fillStyle = gr(170); g.fillText("RESERVA · 15 MIN", cx, cy + rad * 1.55);
+    mono(g, h * 0.045, 600); g.fillStyle = gr(170); g.fillText("BOOKING · 15 MIN", cx, cy + rad * 1.55);
     for (let i = 0; i < 3; i++) { g.fillStyle = gr(90 + i * 40); g.fillRect(w * (0.1 + i * 0.3), h * 0.9, w * 0.24, h * 0.04); }
   }
 

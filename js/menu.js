@@ -1,9 +1,9 @@
 /* ==========================================================================
-   MENÚ — barra de escritorio, índice grande y ventanas retro (Radio, Laboratorio).
+   MENU — desktop bar, big index and retro windows (Radio, Lab).
    API pública:
      PF.windows = { open(id), close(id), toggle(id), isOpen(id) }   ids: 'radio' | 'lab'
      PF.menu    = { openIndex(), closeIndex(), toggleIndex() }
-   Atajos: I (índice) · T (tema) · L (laboratorio) · Espacio (reproducir/pausa)
+   Shortcuts: I (index) · T (theme) · L (lab) · Space (play/pause)
    ========================================================================== */
 (function () {
   const PF = window.PF;
@@ -78,7 +78,7 @@
     el.setAttribute("role", "dialog");
     el.setAttribute("aria-label", title);
     el.innerHTML =
-      '<div class="win-bar"><button type="button" class="win-close" aria-label="Cerrar ' + title + '"></button>' +
+      '<div class="win-bar"><button type="button" class="win-close" aria-label="Close ' + title + '"></button>' +
       '<span class="win-title">' + title + '</span></div><div class="win-body" data-lenis-prevent></div>';
     host.appendChild(el);
     const w = (W[id] = { id, el, title, build, onOpen, onClose, built: false, open: false, opener: null, pos: null, body: el.querySelector(".win-body") });
@@ -176,10 +176,10 @@
         '</div>' +
         '<canvas class="rd-vis" data-rd="vis" aria-hidden="true"></canvas>' +
         '<div class="rd-ctl">' +
-          '<button type="button" class="rd-btn" data-rd="prev" aria-label="Pista anterior">' + ICON.prev + '</button>' +
-          '<button type="button" class="rd-btn rd-play" data-rd="play" aria-label="Reproducir">' + ICON.play + '</button>' +
-          '<button type="button" class="rd-btn" data-rd="next" aria-label="Pista siguiente">' + ICON.next + '</button>' +
-          '<label class="rd-vol"><span class="visually-hidden">Volumen</span><input type="range" min="0" max="1" step="0.01" data-rd="vol"></label>' +
+          '<button type="button" class="rd-btn" data-rd="prev" aria-label="Previous track">' + ICON.prev + '</button>' +
+          '<button type="button" class="rd-btn rd-play" data-rd="play" aria-label="Play">' + ICON.play + '</button>' +
+          '<button type="button" class="rd-btn" data-rd="next" aria-label="Next track">' + ICON.next + '</button>' +
+          '<label class="rd-vol"><span class="visually-hidden">Volume</span><input type="range" min="0" max="1" step="0.01" data-rd="vol"></label>' +
         '</div>' +
         '<ol class="rd-list" data-rd="list"></ol>' +
       '</div>';
@@ -211,7 +211,7 @@
     q("artist").textContent = t.artist + " · " + t.style;
     const p = q("play");
     p.innerHTML = M.playing ? ICON.pause : ICON.play;
-    p.setAttribute("aria-label", M.playing ? "Pausar" : "Reproducir");
+    p.setAttribute("aria-label", M.playing ? "Pause" : "Play");
     w.body.querySelectorAll(".rd-row").forEach((b, i) => {
       if (i === M.current) b.setAttribute("aria-current", "true"); else b.removeAttribute("aria-current");
     });
@@ -284,22 +284,22 @@
 
     body.innerHTML =
       '<form class="lab" onsubmit="return false">' +
-        '<p class="lab-help">Cambia el cañón y la paleta en directo. Se guarda en este navegador.</p>' +
+        '<p class="lab-help">Change the barrel and palette live. Saved in this browser.</p>' +
         '<div class="lab-pair">' +
-          '<fieldset><legend class="label">Tema</legend>' + seg("lab-theme", [["dark", "Oscuro"], ["light", "Claro"]]) + "</fieldset>" +
-          '<fieldset><legend class="label">Intro</legend>' + seg("lab-hero", [["orb", "Esfera"], ["barrel", "Cañón"]]) + "</fieldset>" +
+          '<fieldset><legend class="label">Theme</legend>' + seg("lab-theme", [["dark", "Dark"], ["light", "Light"]]) + "</fieldset>" +
+          '<fieldset><legend class="label">Intro</legend>' + seg("lab-hero", [["orb", "Sphere"], ["barrel", "Barrel"]]) + "</fieldset>" +
         "</div>" +
-        '<fieldset><legend class="label">Paleta</legend><div class="sw-grid">' + pal + "</div></fieldset>" +
-        '<fieldset><legend class="label">Tipografía</legend><div class="fnt-grid">' + fnt + "</div></fieldset>" +
-        '<fieldset><legend class="label">Bala (solo cañón)</legend>' + seg("lab-bullet", [["1", "Con"], ["0", "Sin"]]) + "</fieldset>" +
-        '<fieldset><legend class="label">Efecto del cañón y portadas</legend>' + seg("lab-effect", Object.keys(C.effects).map((k) => [k, C.effects[k].label]), "seg-3") + "</fieldset>" +
+        '<fieldset><legend class="label">Palette</legend><div class="sw-grid">' + pal + "</div></fieldset>" +
+        '<fieldset><legend class="label">Typeface</legend><div class="fnt-grid">' + fnt + "</div></fieldset>" +
+        '<fieldset><legend class="label">Bullet (barrel only)</legend>' + seg("lab-bullet", [["1", "On"], ["0", "Off"]]) + "</fieldset>" +
+        '<fieldset><legend class="label">Barrel and cover effect</legend>' + seg("lab-effect", Object.keys(C.effects).map((k) => [k, C.effects[k].label]), "seg-3") + "</fieldset>" +
         '<div class="lab-pair">' +
-          '<fieldset><legend class="label">Densidad</legend><div class="lab-row"><input type="range" id="lab-density" min="0.6" max="1.6" step="0.1" aria-label="Densidad"><output class="lab-out" for="lab-density"></output></div></fieldset>' +
-          '<fieldset><legend class="label">Fondo animado</legend><label class="chk"><input type="checkbox" id="lab-field"><span class="chk-box" aria-hidden="true"></span><span class="chk-txt">Caracteres</span><span class="chk-state label" aria-hidden="true"></span></label></fieldset>' +
+          '<fieldset><legend class="label">Density</legend><div class="lab-row"><input type="range" id="lab-density" min="0.6" max="1.6" step="0.1" aria-label="Density"><output class="lab-out" for="lab-density"></output></div></fieldset>' +
+          '<fieldset><legend class="label">Animated background</legend><label class="chk"><input type="checkbox" id="lab-field"><span class="chk-box" aria-hidden="true"></span><span class="chk-txt">Characters</span><span class="chk-state label" aria-hidden="true"></span></label></fieldset>' +
         "</div>" +
-        '<fieldset><legend class="label">Efecto del clic</legend>' + seg("lab-click", [["mix", "Mezcla"], ["wave", "Onda"], ["detect", "Detección"], ["burst", "Puntos"], ["cross", "Mira"], ["off", "Ninguno"]], "seg-3") + "</fieldset>" +
-        '<fieldset><legend class="label">Fondo del cañón</legend>' + seg("lab-bg", Object.keys(C.barrelBackgrounds).map((k) => [k, C.barrelBackgrounds[k].label]), "seg-2x2") + "</fieldset>" +
-        '<div class="lab-actions"><button type="button" class="win-btn" data-lab="intro">Ver la intro</button><button type="button" class="win-btn" data-lab="reset">Restablecer</button></div>' +
+        '<fieldset><legend class="label">Click effect</legend>' + seg("lab-click", [["mix", "Mix"], ["wave", "Wave"], ["detect", "Detect"], ["burst", "Dots"], ["cross", "Crosshair"], ["off", "None"]], "seg-3") + "</fieldset>" +
+        '<fieldset><legend class="label">Barrel background</legend>' + seg("lab-bg", Object.keys(C.barrelBackgrounds).map((k) => [k, C.barrelBackgrounds[k].label]), "seg-2x2") + "</fieldset>" +
+        '<div class="lab-actions"><button type="button" class="win-btn" data-lab="intro">Replay intro</button><button type="button" class="win-btn" data-lab="reset">Reset</button></div>' +
       "</form>";
 
     const on = (sel, fn) => body.querySelectorAll(sel).forEach((el) => el.addEventListener("change", fn));
@@ -334,7 +334,7 @@
     setRadio("lab-bg", st.barrelBg);
     const f = b.querySelector("#lab-field");
     f.checked = !!st.field;
-    b.querySelector(".chk-state").textContent = st.field ? "Sí" : "No";
+    b.querySelector(".chk-state").textContent = st.field ? "Yes" : "No";
     const d = b.querySelector("#lab-density");
     d.value = st.density;
     b.querySelector(".lab-out").textContent = Number(st.density).toFixed(1) + "×";
@@ -347,7 +347,7 @@
     });
   }
 
-  defWindow("lab", "Laboratorio", "win-lab", buildLab, () => syncLab());
+  defWindow("lab", "Lab", "win-lab", buildLab, () => syncLab());
 
   /* ======================================================================
      BARRA DE MENÚ
@@ -357,13 +357,13 @@
   bar.innerHTML =
     '<div class="mb-left">' +
       '<button type="button" class="mb-logo" aria-label="Ortzi Garaio, ir al inicio">OG</button>' +
-      '<ul class="mb-menus" role="menubar" aria-label="Menú principal"></ul>' +
-      '<button type="button" class="mb-btn mb-compact" aria-haspopup="dialog">Menú</button>' +
+      '<ul class="mb-menus" role="menubar" aria-label="Main menu"></ul>' +
+      '<button type="button" class="mb-btn mb-compact" aria-haspopup="dialog">Menu</button>' +
     "</div>" +
     '<div class="mb-right">' +
       '<div class="mb-now">' +
-        '<button type="button" class="mb-np-play" aria-label="Reproducir"></button>' +
-        '<button type="button" class="mb-np-txt" aria-label="Mostrar reproductor"><span class="mb-marq"><span class="mb-marq-in"></span></span></button>' +
+        '<button type="button" class="mb-np-play" aria-label="Play"></button>' +
+        '<button type="button" class="mb-np-txt" aria-label="Show player"><span class="mb-marq"><span class="mb-marq-in"></span></span></button>' +
       "</div>" +
       '<button type="button" class="mb-theme"><span class="mb-theme-ico" aria-hidden="true">◐</span><span class="mb-theme-txt"></span></button>' +
       '<time class="mb-clock" title="Hora en Euskadi (Europe/Madrid)"></time>' +
@@ -374,28 +374,28 @@
   const toggleTheme = () => PF.set("theme", PF.state.theme === "light" ? "dark" : "light");
 
   const defs = [
-    { id: "indice", label: "Índice", items: [
+    { id: "indice", label: "Index", items: [
       { label: "Work", act: () => go("#work-index", "#work") },
       { label: "Gallery", act: () => go("#gallery", "#work") },
       { label: "About", act: () => go("#about") },
       { label: "Contact", act: () => go("#contact") },
       "sep",
-      { label: "Abrir índice grande", key: "I", act: () => openIndex() },
-      { label: "Volver a la intro", act: () => PF.scrollTo(0) }
+      { label: "Open big index", key: "I", act: () => openIndex() },
+      { label: "Back to intro", act: () => PF.scrollTo(0) }
     ] },
-    { id: "ver", label: "Ver", check: true, items: [
-      { label: () => (PF.state.theme === "light" ? "Modo oscuro" : "Modo claro"), key: "T", act: toggleTheme },
-      { label: "Laboratorio…", key: "L", act: () => openWin("lab") },
+    { id: "ver", label: "View", check: true, items: [
+      { label: () => (PF.state.theme === "light" ? "Dark mode" : "Light mode"), key: "T", act: toggleTheme },
+      { label: "Lab…", key: "L", act: () => openWin("lab") },
       "sep",
-      { label: "Fondo animado", checked: () => !!PF.state.field, act: () => PF.set("field", !PF.state.field) },
-      { label: "Con bala", checked: () => !!PF.state.bullet, act: () => PF.set("bullet", !PF.state.bullet) }
+      { label: "Animated background", checked: () => !!PF.state.field, act: () => PF.set("field", !PF.state.field) },
+      { label: "Bullet", checked: () => !!PF.state.bullet, act: () => PF.set("bullet", !PF.state.bullet) }
     ] },
     { id: "radio", label: "Radio", items: [
-      { label: () => (M.playing ? "Pausa" : "Reproducir"), key: "Espacio", act: () => M.toggle() },
-      { label: "Siguiente", act: () => M.next() },
-      { label: "Anterior", act: () => M.prev() },
+      { label: () => (M.playing ? "Pause" : "Play"), key: "Space", act: () => M.toggle() },
+      { label: "Next", act: () => M.next() },
+      { label: "Previous", act: () => M.prev() },
       "sep",
-      { label: "Mostrar reproductor", act: () => openWin("radio") }
+      { label: "Show player", act: () => openWin("radio") }
     ] }
   ];
 
@@ -425,7 +425,7 @@
         const kb = e.detail === 0;
         closeMenu(false);
         it.act();
-        if (kb && !document.querySelector(".bx.is-open") && !(W.lab && W.lab.open && it.label === "Laboratorio…")) m.btn.focus({ preventScroll: true });
+        if (kb && !document.querySelector(".bx.is-open") && !(W.lab && W.lab.open && it.label === "Lab…")) m.btn.focus({ preventScroll: true });
         refreshMenus();
       });
       it.el.addEventListener("pointerenter", (e) => { if (e.pointerType === "mouse") it.el.focus({ preventScroll: true }); });
@@ -446,8 +446,8 @@
     }));
     const light = PF.state.theme === "light";
     const tb = bar.querySelector(".mb-theme");
-    tb.querySelector(".mb-theme-txt").textContent = light ? "Claro" : "Oscuro";
-    tb.setAttribute("aria-label", "Tema " + (light ? "claro" : "oscuro") + ". Cambiar a " + (light ? "oscuro" : "claro"));
+    tb.querySelector(".mb-theme-txt").textContent = light ? "Light" : "Dark";
+    tb.setAttribute("aria-label", "Theme " + (light ? "light" : "dark") + ". Switch to " + (light ? "dark" : "light"));
   }
 
   /* Comportamiento de menú de escritorio */
@@ -531,8 +531,8 @@
     marq.style.setProperty("--marq-d", Math.max(8, txt.length * 0.55) + "s");
     now.classList.toggle("is-playing", M.playing);
     npPlay.innerHTML = M.playing ? ICON.pause : ICON.play;
-    npPlay.setAttribute("aria-label", M.playing ? "Pausar" : "Reproducir");
-    bar.querySelector(".mb-np-txt").setAttribute("aria-label", "Mostrar reproductor. Pista: " + txt);
+    npPlay.setAttribute("aria-label", M.playing ? "Pause" : "Play");
+    bar.querySelector(".mb-np-txt").setAttribute("aria-label", "Show player. Track: " + txt);
   }
   M.on("state", () => { syncNow(); syncRadio(); refreshMenus(); });
   M.on("track", () => { syncNow(); syncRadio(); });
@@ -540,7 +540,7 @@
   /* Reloj en Europe/Madrid */
   const clock = bar.querySelector(".mb-clock");
   let fmt;
-  try { fmt = new Intl.DateTimeFormat("es-ES", { timeZone: "Europe/Madrid", hour: "2-digit", minute: "2-digit", hour12: false }); } catch (e) { fmt = null; }
+  try { fmt = new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/Madrid", hour: "2-digit", minute: "2-digit", hour12: false }); } catch (e) { fmt = null; }
   function tickClock() {
     const d = new Date();
     const txt = fmt ? fmt.format(d) : pad2(d.getHours()) + ":" + pad2(d.getMinutes());
@@ -557,7 +557,7 @@
     lsSet(HINT_KEY, "1");
     const compact = mobileMQ.matches;
     const anchor = compact ? bar.querySelector(".mb-compact") : defs[1].btn;
-    hint.textContent = compact ? "Prueba combinaciones en Menú → Laboratorio" : "Prueba combinaciones en Ver → Laboratorio";
+    hint.textContent = compact ? "Try combinations in Menu → Lab" : "Try combinations in View → Lab";
     hint.hidden = false;
     const r = anchor.getBoundingClientRect();
     hint.style.left = Math.max(8, Math.min(r.left, window.innerWidth - hint.offsetWidth - 8)) + "px";
@@ -589,17 +589,17 @@
   idx.hidden = true;
   idx.setAttribute("role", "dialog");
   idx.setAttribute("aria-modal", "true");
-  idx.setAttribute("aria-label", "Índice");
+  idx.setAttribute("aria-label", "Index");
   idx.setAttribute("data-lenis-prevent", "");
   idx.innerHTML =
-    '<div class="bx-top"><span class="label">Índice</span><button type="button" class="bx-close">Cerrar <span aria-hidden="true">✕</span></button></div>' +
-    '<nav class="bx-list" aria-label="Secciones">' +
+    '<div class="bx-top"><span class="label">Index</span><button type="button" class="bx-close">Close <span aria-hidden="true">✕</span></button></div>' +
+    '<nav class="bx-list" aria-label="Sections">' +
       words.map((w) => '<div class="bx-row"><a class="bx-link" href="' + w.href + '"><span class="bx-word display">' + w.word + '</span><sup class="bx-sup" aria-hidden="true">' + w.sup + "</sup></a></div>").join("") +
     "</nav>" +
     '<div class="bx-foot label">' +
       (owner.email ? '<a href="mailto:' + owner.email + '">' + owner.email + "</a>" : "") +
       (owner.github ? '<a href="' + owner.github + '" target="_blank" rel="noopener">' + gh + "</a>" : "") +
-      '<span class="bx-tools"><button type="button" data-tool="lab">Laboratorio</button><button type="button" data-tool="radio">Radio</button></span>' +
+      '<span class="bx-tools"><button type="button" data-tool="lab">Lab</button><button type="button" data-tool="radio">Radio</button></span>' +
     "</div>";
   host.appendChild(idx);
 

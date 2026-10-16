@@ -30,26 +30,26 @@ const FORM_ENDPOINT = null; // p. ej. "https://formspree.io/f/xxxxxxx"
   root.innerHTML = `
     <div class="contact">
       <header class="sec-head">
-        <p class="label sec-kicker"><span>04 — Hablemos</span><span>Respuesta en uno o dos días</span></p>
-        <h2 class="sec-word display" aria-label="Contacto"><span aria-hidden="true">CONTACT</span><sup class="sec-count" aria-hidden="true">(→)</sup></h2>
+        <p class="label sec-kicker"><span>04 — Let’s talk</span><span>Reply within a day or two</span></p>
+        <h2 class="sec-word display" aria-label="Contact"><span aria-hidden="true">CONTACT</span><sup class="sec-count" aria-hidden="true">(→)</sup></h2>
       </header>
 
       <div class="ct-grid">
         <div class="ct-mail">
-          <p class="label">Correo directo</p>
+          <p class="label">Direct email</p>
           <p class="ct-email"><span class="ct-email-text" id="ct-email">${esc(owner.email)}</span></p>
-          <button type="button" class="btn ct-copy" data-copy="email"><span class="ct-copy-label">Copiar</span></button>
+          <button type="button" class="btn ct-copy" data-copy="email"><span class="ct-copy-label">Copy</span></button>
           <p class="label ct-note" aria-live="polite" id="ct-copy-note"></p>
         </div>
 
         <div class="ct-formwrap">
-          <form class="cform" novalidate aria-label="Formulario de contacto">
-            ${field("name", "Nombre", "text", 'autocomplete="name" required')}
+          <form class="cform" novalidate aria-label="Contact form">
+            ${field("name", "Name", "text", 'autocomplete="name" required')}
             ${field("email", "Email", "email", 'autocomplete="email" required inputmode="email"')}
-            ${field("subject", "Asunto (opcional)", "text")}
-            ${field("message", "Mensaje", "textarea", "required")}
+            ${field("subject", "Subject (optional)", "text")}
+            ${field("message", "Message", "textarea", "required")}
             <div class="cform-foot">
-              <button type="submit" class="btn btn-send"><span class="btn-label">Preparar mensaje</span><span class="btn-arrow" aria-hidden="true">→</span></button>
+              <button type="submit" class="btn btn-send"><span class="btn-label">Prepare message</span><span class="btn-arrow" aria-hidden="true">→</span></button>
               <p class="label cform-status" role="status" aria-live="polite"></p>
             </div>
           </form>
@@ -69,7 +69,7 @@ const FORM_ENDPOINT = null; // p. ej. "https://formspree.io/f/xxxxxxx"
     const l = btn.querySelector(".ct-copy-label") || btn;
     const old = btn.dataset.label || l.textContent;
     btn.dataset.label = old;
-    l.textContent = ok ? "Copiado" : "Selecciónalo y copia";
+    l.textContent = ok ? "Copied" : "Select it and copy";
     btn.classList.toggle("is-ok", ok);
     clearTimeout(btn._t);
     btn._t = setTimeout(() => { l.textContent = old; btn.classList.remove("is-ok"); }, 2200);
@@ -80,11 +80,11 @@ const FORM_ENDPOINT = null; // p. ej. "https://formspree.io/f/xxxxxxx"
       if (target) selectText(target);
       try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
       flashCopied(btn, ok);
-      note.textContent = ok ? "Copiado al portapapeles." : "No se pudo copiar solo: el texto está seleccionado, usa Ctrl+C.";
+      note.textContent = ok ? "Copied to clipboard." : "Could not copy automatically: the text is selected, press Ctrl+C.";
     };
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(text).then(() => {
-        flashCopied(btn, true); note.textContent = "Copiado al portapapeles.";
+        flashCopied(btn, true); note.textContent = "Copied to clipboard.";
       }, fallback);
     } else fallback();
   }
@@ -96,10 +96,10 @@ const FORM_ENDPOINT = null; // p. ej. "https://formspree.io/f/xxxxxxx"
   const status = root.querySelector(".cform-status");
   const inputs = { name: form.name, email: form.email, subject: form.subject, message: form.message };
   const RULES = {
-    name: (v) => (v.trim().length < 2 ? "Escribe tu nombre" : ""),
-    email: (v) => (/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim()) ? "" : "Ese email no parece válido: falta la @ o el dominio"),
+    name: (v) => (v.trim().length < 2 ? "Enter your name" : ""),
+    email: (v) => (/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim()) ? "" : "That email does not look valid: the @ or the domain is missing"),
     subject: () => "",
-    message: (v) => (v.trim().length < MINMSG ? "Cuéntame algo más (mínimo " + MINMSG + " caracteres)" : "")
+    message: (v) => (v.trim().length < MINMSG ? "Tell me a bit more (minimum " + MINMSG + " characters)" : "")
   };
   function validate(key, silent) {
     const el = inputs[key], msg = RULES[key](el.value), box = el.closest(".f"), err = box.querySelector(".f-err");
@@ -123,26 +123,26 @@ const FORM_ENDPOINT = null; // p. ej. "https://formspree.io/f/xxxxxxx"
 
   /* ---------- Envío ---------- */
   const mailto = (d) => {
-    const body = "De: " + d.name + " <" + d.email + ">\n\n" + d.message;
-    return "mailto:" + owner.email + "?subject=" + encodeURIComponent(d.subject || "Contacto desde el portfolio") + "&body=" + encodeURIComponent(body);
+    const body = "From: " + d.name + " <" + d.email + ">\n\n" + d.message;
+    return "mailto:" + owner.email + "?subject=" + encodeURIComponent(d.subject || "Message from the portfolio") + "&body=" + encodeURIComponent(body);
   };
   const data = () => ({ name: inputs.name.value.trim(), email: inputs.email.value.trim(), subject: inputs.subject.value.trim(), message: inputs.message.value.trim() });
 
   function showResult(kind, d, errorText) {
     const sent = kind === "sent";
-    const text = (d.subject ? "Asunto: " + d.subject + "\n" : "") + "De: " + d.name + " <" + d.email + ">\n\n" + d.message;
+    const text = (d.subject ? "Subject: " + d.subject + "\n" : "") + "From: " + d.name + " <" + d.email + ">\n\n" + d.message;
     result.innerHTML = `
-      <p class="label">${sent ? "Estado · enviado por el servicio de formularios" : "Estado · pendiente de tu confirmación"}</p>
-      <h3 class="display cr-title" tabindex="-1">${sent ? "Mensaje enviado" : kind === "error" ? "No se pudo enviar" : "Tu mensaje está listo"}</h3>
+      <p class="label">${sent ? "Status · sent via the form service" : "Status · awaiting your confirmation"}</p>
+      <h3 class="display cr-title" tabindex="-1">${sent ? "Message sent" : kind === "error" ? "Could not send" : "Your message is ready"}</h3>
       <p class="cr-text">${sent
-        ? "Gracias, " + esc(d.name) + ". Te responderé a " + esc(d.email) + "."
-        : (kind === "error" ? esc(errorText) + " " : "") + "Esta web no tiene servidor propio, así que el mensaje todavía no ha salido. Ábrelo en tu app de correo o cópialo y envíalo a <strong>" + esc(owner.email) + "</strong>."}</p>
+        ? "Thanks, " + esc(d.name) + ". I will reply to " + esc(d.email) + "."
+        : (kind === "error" ? esc(errorText) + " " : "") + "This site has no server of its own, so the message has not been sent yet. Open it in your email app, or copy it and send it to <strong>" + esc(owner.email) + "</strong>."}</p>
       ${sent ? "" : `<div class="cr-actions">
-        <a class="btn" href="${esc(mailto(d))}">Abrir en tu app de correo <span aria-hidden="true">↗</span></a>
-        <button type="button" class="btn" data-copy="msg"><span class="ct-copy-label">Copiar mensaje</span></button>
-        <button type="button" class="cr-edit" data-edit>Editar mensaje</button>
+        <a class="btn" href="${esc(mailto(d))}">Open in your email app <span aria-hidden="true">↗</span></a>
+        <button type="button" class="btn" data-copy="msg"><span class="ct-copy-label">Copy message</span></button>
+        <button type="button" class="cr-edit" data-edit>Edit message</button>
       </div>
-      <label class="label" for="cr-msg">Texto del mensaje</label>
+      <label class="label" for="cr-msg">Message text</label>
       <textarea id="cr-msg" class="cr-msg" readonly rows="7">${esc(text)}</textarea>`}`;
     form.hidden = true; result.hidden = false;
     const t = result.querySelector(".cr-title");
@@ -159,21 +159,21 @@ const FORM_ENDPOINT = null; // p. ej. "https://formspree.io/f/xxxxxxx"
     const keys = Object.keys(inputs);
     const bad = keys.filter((k) => !validate(k));
     if (bad.length) {
-      status.textContent = bad.length === 1 ? "Revisa 1 campo." : "Revisa " + bad.length + " campos.";
+      status.textContent = bad.length === 1 ? "Check 1 field." : "Check " + bad.length + " fields.";
       inputs[bad[0]].focus();
       return;
     }
     status.textContent = "";
     const d = data();
-    btn.disabled = true; btn.classList.add("is-busy"); btnLabel.textContent = "Preparando…";
+    btn.disabled = true; btn.classList.add("is-busy"); btnLabel.textContent = "Preparing…";
     const done = (kind, errText) => {
-      btn.disabled = false; btn.classList.remove("is-busy"); btnLabel.textContent = "Preparar mensaje";
+      btn.disabled = false; btn.classList.remove("is-busy"); btnLabel.textContent = "Prepare message";
       showResult(kind, d, errText);
     };
     if (FORM_ENDPOINT) {
       fetch(FORM_ENDPOINT, { method: "POST", headers: { "Content-Type": "application/json", Accept: "application/json" }, body: JSON.stringify(d) })
-        .then((r) => (r.ok ? done("sent") : done("error", "El servicio respondió con el error " + r.status + ".")))
-        .catch(() => done("error", "No hubo conexión con el servicio de formularios."));
+        .then((r) => (r.ok ? done("sent") : done("error", "The service responded with error " + r.status + ".")))
+        .catch(() => done("error", "Could not reach the form service."));
     } else {
       setTimeout(() => done("ready"), PF.reducedMotion ? 0 : 700);
     }
@@ -201,10 +201,10 @@ const FORM_ENDPOINT = null; // p. ej. "https://formspree.io/f/xxxxxxx"
     foot.innerHTML = `
       <div class="foot">
         <p>© ${new Date().getFullYear()} ${esc(owner.name)}</p>
-        <p>Tipografías: Stamp RSPK Three · JetBrains Mono</p>
-        <p>Hecho con Three.js, GSAP y Lenis</p>
+        <p>Typefaces: Stamp RSPK Three · JetBrains Mono</p>
+        <p>Built with Three.js, GSAP and Lenis</p>
         <p><a href="${esc(owner.github)}" target="_blank" rel="noopener">GitHub ↗</a></p>
-        <p><button type="button" class="foot-top">Volver arriba ↑</button></p>
+        <p><button type="button" class="foot-top">Back to top ↑</button></p>
       </div>`;
     foot.querySelector(".foot-top").addEventListener("click", () => PF.scrollTo(0));
   }

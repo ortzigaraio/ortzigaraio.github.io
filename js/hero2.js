@@ -98,7 +98,7 @@
 
   /* ---------------- Constelación: datos de las tarjetas ---------------- */
   const narrow = () => window.innerWidth < 700;
-  const LABELS = ["dato", "modelo", "grafo", "señal", "gráfica", "flujo", "región", "objeto", "patrón", "nodo"];
+  const LABELS = ["data", "model", "graph", "signal", "chart", "flow", "region", "object", "pattern", "node"];
   let cards = [], hub = null, W = 0, H = 0, dpr = 1;
   const stage = hero.querySelector(".hero-stage");
   const ctx = fxCv.getContext("2d");
@@ -107,9 +107,9 @@
   function pool() {
     const per = C.projects.map((p) => {
       const list = [];
-      (p.shots || []).forEach((sh, k) => { if (sh) list.push({ id: p.id + "~s" + k, cover: sh, kind: "captura", p }); });
+      (p.shots || []).forEach((sh, k) => { if (sh) list.push({ id: p.id + "~s" + k, cover: sh, kind: "screenshot", p }); });
       const n = Math.max(PF.scenes ? PF.scenes.count(p.id) : 0, 2);
-      for (let k = 0; k < n; k++) list.push({ id: p.id + "-" + k, cover: null, kind: "esquema", p });
+      for (let k = 0; k < n; k++) list.push({ id: p.id + "-" + k, cover: null, kind: "diagram", p });
       return list.slice(0, 3);
     });
     const out = [];
@@ -120,21 +120,21 @@
   function infoCards() {
     const o = C.owner, ghUser = String(o.github).replace(/^https?:\/\//, "");
     const metric = (pid, label) => { const p = C.projects.find((x) => x.id === pid); const m = p && p.metrics.find((x) => x[0] === label); return m ? m[1] : null; };
-    const cifras = [["dither", "Estilos", " estilos de render"], ["yolo-mushrooms", "Imágenes etiquetadas", " imágenes etiquetadas"], ["rag-boe", "Hit Rate @3", " de Hit Rate@3 en el BOE"]]
+    const cifras = [["dither", "Styles", " render styles"], ["yolo-mushrooms", "Labelled images", " labelled images"], ["rag-boe", "Hit Rate @3", " Hit Rate@3 on the BOE"]]
       .map(([pid, l, suf]) => { const v = metric(pid, l); return v ? v + suf : null; }).filter(Boolean).join(" · ");
     const live = C.projects.filter((p) => p.live);
     return [
-      { tag: "perfil", k: "Perfil", v: o.role },
-      { tag: "bio", k: "Quién soy", v: (o.bio[0] || "").split(". ").slice(1).join(". ") || o.bio[0] },
-      { tag: "enfoque", k: "Ahora", v: "Memoria para agentes: RAG híbrido, grafos de conocimiento y bases vectoriales conectados por MCP" },
+      { tag: "profile", k: "Profile", v: o.role },
+      { tag: "bio", k: "Who I am", v: (o.bio[0] || "").split(". ").slice(1).join(". ") || o.bio[0] },
+      { tag: "focus", k: "Now", v: "Memory for agents: hybrid RAG, knowledge graphs and vector databases connected through MCP" },
       { tag: "stack", k: "Stack", v: "Python · SQL · PyTorch · Supabase · n8n · Docker" },
-      { tag: "cifras", k: "Cifras", v: cifras },
-      { tag: "lugar", k: "Ubicación", v: o.location },
-      { tag: "proyectos", k: "Proyectos", v: String(C.projects.length).padStart(2, "0") + " proyectos, del notebook a producción" },
-      { tag: "en vivo", k: "En producción", v: live.map((p) => p.title).join(" · ") || "—", href: live[0] && live[0].live },
-      { tag: "método", k: "Método", v: "Si algo se puede medir, lo mido antes de optimizarlo" },
+      { tag: "figures", k: "Figures", v: cifras },
+      { tag: "location", k: "Location", v: o.location },
+      { tag: "projects", k: "Projects", v: String(C.projects.length).padStart(2, "0") + " projects, from notebook to production" },
+      { tag: "live", k: "In production", v: live.map((p) => p.title).join(" · ") || "—", href: live[0] && live[0].live },
+      { tag: "method", k: "Method", v: "If something can be measured, I measure it before optimising it" },
       { tag: "github", k: "GitHub", v: ghUser + " ↗", href: o.github },
-      { tag: "contacto", k: "Contacto", v: o.email, href: "mailto:" + o.email }
+      { tag: "contact", k: "Contact", v: o.email, href: "mailto:" + o.email }
     ];
   }
 
@@ -194,7 +194,7 @@
         const pr = it.img.p;
         el.className = "dk-card is-link";
         el.innerHTML = '<canvas class="dk-img"></canvas><canvas class="dk-ov"></canvas>';
-        el.tabIndex = -1; el.setAttribute("role", "button"); el.setAttribute("aria-label", "Abrir " + pr.title);
+        el.tabIndex = -1; el.setAttribute("role", "button"); el.setAttribute("aria-label", "Open " + pr.title);
         el.addEventListener("click", () => PF.detail && PF.detail.open(pr.id, el));
         el.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); el.click(); } });
         tag = pr.title.toLowerCase();
@@ -310,11 +310,11 @@
         g.setLineDash([2, 2]); g.beginPath(); pts.forEach(([x, y], i) => (i ? g.lineTo(x, y) : g.moveTo(x, y))); g.stroke(); g.setLineDash([]);
         const f0 = P(258, 250), f1 = P(495, 548);
         g.strokeStyle = c.fg; g.lineWidth = 1.2; g.strokeRect(f0[0], f0[1], f1[0] - f0[0], f1[1] - f0[1]);
-        chip(g, f0[0], f0[1], "rostro", c.fg, c.bg);
+        chip(g, f0[0], f0[1], "face", c.fg, c.bg);
       }
     }
     g.strokeStyle = c.fg; g.lineWidth = 1.5; g.strokeRect(0.75, 0.75, w - 1.5, h - 1.5);
-    chip(g, 0.75, h - 1, "ortzi garaio · máscara", c.fg, c.bg);
+    chip(g, 0.75, h - 1, "ortzi garaio · mask", c.fg, c.bg);
   }
 
   /* ---------------- Fondo (líneas de conexión) ---------------- */

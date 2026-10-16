@@ -46,7 +46,7 @@
       g.strokeStyle = color(0.35 * a); g.lineWidth = 1; g.strokeRect(x, y, bw, bh);
       g.beginPath(); g.moveTo(f.x - 4, f.y); g.lineTo(f.x + 4, f.y); g.moveTo(f.x, f.y - 4); g.lineTo(f.x, f.y + 4); g.stroke();
       if (k > 0.8) {
-        const text = "región " + f.conf; g.font = "500 10px 'JetBrains Mono', ui-monospace, monospace"; g.textBaseline = "middle";
+        const text = "region " + f.conf; g.font = "500 10px 'JetBrains Mono', ui-monospace, monospace"; g.textBaseline = "middle";
         const tw = Math.ceil(g.measureText(text).width) + 10;
         g.fillStyle = color(0.92 * a); g.fillRect(x, y - 15, tw, 15);
         const bg = PF.colors().bg; g.fillStyle = bg; g.fillText(text, x + 5, y - 7.5);

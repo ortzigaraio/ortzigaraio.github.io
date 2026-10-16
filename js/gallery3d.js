@@ -19,11 +19,11 @@
   host.innerHTML = `
     <div class="g3-stage">
       <canvas class="g3-bg" aria-hidden="true"></canvas>
-      <ul class="g3-list" aria-label="Proyectos">
+      <ul class="g3-list" aria-label="Projects">
         ${projects.map((p, i) => `<li><button type="button" class="g3-li" data-p="${esc(p.id)}"><span class="label">${pad2(i + 1)}</span> ${esc(p.title)}</button></li>`).join("")}
       </ul>
       <div class="g3-world" role="list"></div>
-      <p class="g3-hint label"><span class="g3-count">00 / 00</span><span>Desliza para avanzar · Clic para abrir</span></p>
+      <p class="g3-hint label"><span class="g3-count">00 / 00</span><span>Scroll to move · Click to open</span></p>
     </div>`;
   const stage = host.querySelector(".g3-stage"), world = host.querySelector(".g3-world");
   const bg = host.querySelector(".g3-bg"), countEl = host.querySelector(".g3-count");
@@ -71,7 +71,7 @@
       const el = document.createElement("button");
       el.type = "button"; el.className = "g3-card"; el.setAttribute("role", "listitem"); el.dataset.p = o.p.id;
       el.style.width = w + "px"; el.style.height = h + "px";
-      el.setAttribute("aria-label", o.p.title + ". Abrir el proyecto");
+      el.setAttribute("aria-label", o.p.title + ". Open project");
       el.innerHTML = '<canvas></canvas><span class="g3-lab label">' + pad2(projects.indexOf(o.p) + 1) + " · " + esc(o.p.title) + "</span>";
       world.appendChild(el);
       el.addEventListener("click", () => PF.detail && PF.detail.open(o.p.id, el));
