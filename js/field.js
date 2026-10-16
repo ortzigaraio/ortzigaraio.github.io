@@ -39,9 +39,9 @@
 
     float ringAt(vec3 c, vec2 p){
       if (c.z < 0.0) return 0.0;
-      float R = c.z * uRes.y * 0.5, w = uCell * 2.6;
+      float R = c.z * uRes.y * 0.42, w = uCell * 1.8;
       float d = length(p - c.xy);
-      return exp(-pow((d - R) / w, 2.0)) * exp(-c.z * 1.5) * 2.2;
+      return exp(-pow((d - R) / w, 2.0)) * exp(-c.z * 2.4) * 0.9;
     }
     void main(){
       vec2 px = vUv * uRes;
@@ -121,7 +121,7 @@
     if (now - last < 33) return; // ~30 fps es suficiente para un fondo
     last = now;
     U.uTime.value = PF.reducedMotion ? 12.0 : (now - t0) / 1000;
-    for (let i = 0; i < 2; i++) { const c = clicks[i]; if (c.t0 !== null) { const dt = (now - c.t0) / 1000; if (dt > 3) { c.t0 = null; c.v.z = -1; } else c.v.z = dt; } }
+    for (let i = 0; i < 2; i++) { const c = clicks[i]; if (c.t0 !== null) { const dt = (now - c.t0) / 1000; if (dt > 2) { c.t0 = null; c.v.z = -1; } else c.v.z = dt; } }
     renderer.render(scene, cam);
     dirty = false;
   }

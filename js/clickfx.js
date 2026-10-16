@@ -30,10 +30,11 @@
   /* ---- Efectos ---- */
   const DRAW = {
     wave(f, t) {
-      const R = ease(t / 1.6) * Math.hypot(W, H) * 0.35;
-      g.strokeStyle = color(0.5 * (1 - t / 1.6)); g.lineWidth = 1;
+      // La onda la dibuja el fondo; aquí solo un anillo muy fino que se apaga rápido.
+      const R = ease(t / 1.1) * Math.min(W, H) * 0.34;
+      g.strokeStyle = color(0.16 * (1 - t / 1.1)); g.lineWidth = 1;
       g.beginPath(); g.arc(f.x, f.y, R, 0, 6.2832); g.stroke();
-      return t < 1.6;
+      return t < 1.1;
     },
     detect(f, t) {
       const k = ease(t / 0.35), a = t < 1.2 ? 1 : clamp(1 - (t - 1.2) / 0.5);
