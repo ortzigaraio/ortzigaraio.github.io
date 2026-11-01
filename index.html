@@ -35,29 +35,18 @@
 <div id="ui-menu"></div>
 
 <main id="top">
-  <!-- ===== HERO: cañón estriado ===== -->
+  <!-- ===== HERO: esfera y constelación ===== -->
   <section id="hero" aria-label="Introduction">
     <div class="hero-stage">
-      <canvas id="barrel" aria-hidden="true"></canvas>
       <canvas id="orb" aria-hidden="true"></canvas>
       <div id="deck" aria-label="Project constellation"><canvas id="deckfx" aria-hidden="true"></canvas></div>
       <div class="hero-hud">
-        <div class="hud-specs label only-barrel">
-          <span>Cal. 7.62 × 51 mm</span>
-          <span>6 grooves · right-hand twist</span>
-          <span>Twist 1:10″</span>
-        </div>
-        <div class="hud-readout label only-barrel">
-          <span>Depth <b data-hud="depth">000 mm</b></span>
-          <span>Rotation <b data-hud="rot">00000°</b></span>
-          <span>Travel <b data-hud="pct">000%</b></span>
-        </div>
-        <div class="hud-specs label only-orb">
+        <div class="hud-specs label">
           <span>Render · stochastic dithering</span>
           <span>Segmentation · 1-bit mask</span>
           <span>Detection · regions with confidence</span>
         </div>
-        <div class="hud-readout label only-orb">
+        <div class="hud-readout label">
           <span>Scale <b data-ohud="scale">×1.0</b></span>
           <span>Regions <b data-ohud="regions">00</b></span>
           <span>Travel <b data-ohud="pct">000%</b></span>
@@ -104,7 +93,6 @@
 <script src="js/fx.js"></script>
 <script src="js/field.js"></script>
 <script src="js/clickfx.js"></script>
-<script src="js/barrel.js"></script>
 <script src="js/hero2.js"></script>
 <script src="js/music.js"></script>
 <script src="js/menu.js"></script>

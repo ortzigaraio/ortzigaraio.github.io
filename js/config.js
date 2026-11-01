@@ -177,24 +177,13 @@ window.PORTFOLIO = {
     raw:      { label: "No filter", cell: 8 }
   },
 
-  /* Fondo alrededor del cañón al inicio. */
-  barrelBackgrounds: {
-    black:   { label: "Black" },
-    palette: { label: "Palette background" },
-    accent:  { label: "Accent colour" },
-    field:   { label: "Character field" }
-  },
-
   defaults: {
     theme: "dark",
     palette: "hermes",
     font: "stamp",
     effect: "dither",
     density: 1,          // multiplicador del tamaño de celda (0.6 – 1.6)
-    hero: "orb",         // intro: "orb" (esfera + constelación) o "barrel" (cañón)
     click: "wave",       // efecto del clic sobre el fondo: wave | mix | detect | burst | cross | off
-    bullet: false,       // bala sí / no (solo cañón)
-    barrelBg: "black",
     field: true,         // fondo animado de caracteres
     music: 0             // pista inicial del reproductor
   }
