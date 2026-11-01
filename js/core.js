@@ -19,6 +19,8 @@
 
   let saved = {};
   try { saved = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch (e) { saved = {}; }
+  // La intro siempre arranca con la esfera: se puede cambiar en el Laboratorio, pero no se recuerda.
+  delete saved.hero;
   const state = (PF.state = Object.assign({}, C.defaults, saved));
   // Descarta valores guardados que ya no existen en la configuración.
   if (!C.palettes[state.palette]) state.palette = C.defaults.palette;
@@ -68,7 +70,7 @@
   PF.set = (key, value) => {
     if (state[key] === value) return;
     state[key] = value;
-    try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { /* almacenamiento no disponible */ }
+    try { const keep = Object.assign({}, state); delete keep.hero; localStorage.setItem(KEY, JSON.stringify(keep)); } catch (e) { /* almacenamiento no disponible */ }
     if (["theme", "palette", "font", "effect", "hero"].includes(key)) applyTheme();
     PF.emit("change", { key, value, state });
   };
