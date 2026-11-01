@@ -17,7 +17,7 @@ Everything comes from `js/config.js` (`window.PORTFOLIO`):
 - `projects`: title, year, role, problem, solution, stack, metrics, `repo`, `live`, `cover` and `shots`.
   If `cover` or an item in `shots` is `null`, a procedural image is generated with the active effect.
 - `skills`: groups with `[name, level 0–5]`.
-- `palettes`, `fonts`, `effects`: the combinations in the **Lab** (menu *View → Lab*).
+- `palettes`, `fonts`, `effects`, `barrelBackgrounds`: the combinations in the **Lab** (menu *View → Lab*).
 - `defaults`: the look the site starts with.
 
 ## Typography
@@ -30,6 +30,7 @@ The display typeface is `fonts/Print_max.otf` (Stamp RSPK Three by Carl Seal / L
 |---|---|
 | `js/core.js` | Global state (`PF`), themes, palettes, Lenis + ScrollTrigger |
 | `js/fx.js` | Glyph atlas and Canvas 2D version of the effects (covers) |
+| `js/barrel.js` | Rifled barrel: scene shader (bore, muzzle and bullet via SDF) + ASCII / Braille / Dithering / Halftone / LED post-processing |
 | `js/field.js` | Animated character background (WebGL) |
 | `js/menu.js`, `js/music.js` | Menu bar, big index, windows, Lab and synthesized radio (WebAudio) |
 | `js/gallery.js`, `js/detail.js` | 3D gallery, project index and detail view with FLIP transition |

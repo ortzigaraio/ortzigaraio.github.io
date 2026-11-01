@@ -185,7 +185,7 @@
     const plink = (p) => `<a href="#" class="tm-a" data-open="${esc(p.id)}">${esc(p.title)}</a>`;
     const go = (sel) => { const el = document.querySelector(sel); if (el) PF.scrollTo(el); };
     const CMDS = {
-      help() { line(["help", "about", "whoami", "projects", "open &lt;project&gt;", "skills [group]", "stack", "certs", "contact", "github", "ask &lt;question&gt;", "goto &lt;work|about|demo|contact&gt;", "theme &lt;dark|light&gt;", "effect &lt;ascii|braille|dither|halftone|led|raw&gt;", "clear"].map((c) => "  " + c).join("<br>")); },
+      help() { line(["help", "about", "whoami", "projects", "open &lt;project&gt;", "skills [group]", "stack", "certs", "contact", "github", "ask &lt;question&gt;", "goto &lt;work|about|demo|contact&gt;", "theme &lt;dark|light&gt;", "effect &lt;ascii|braille|dither|halftone|led|raw&gt;", "intro &lt;orb|barrel&gt;", "clear"].map((c) => "  " + c).join("<br>")); },
       about() { (owner.bio || []).forEach((b) => line(esc(b))); },
       whoami() { line(esc(owner.name) + " — " + esc(owner.role) + " · " + esc(owner.location)); },
       ls() { CMDS.projects(); },
@@ -205,8 +205,10 @@
       goto(a) { const m = { work: "#work-index", gallery: "#gallery", about: "#about", achievements: "#certs", certs: "#certs", demo: "#demo", terminal: "#terminal", contact: "#contact", top: "#top" }[String(a || "").toLowerCase()]; if (!m) return line("goto &lt;work|gallery|about|certs|demo|contact|top&gt;", "tm-e"); go(m); line("Scrolling to " + esc(a) + "…"); },
       theme(a) { if (a !== "dark" && a !== "light") return line("theme &lt;dark|light&gt;", "tm-e"); PF.set("theme", a); line("Theme: " + a); },
       effect(a) { if (!C.effects[a]) return line("effect &lt;" + Object.keys(C.effects).join("|") + "&gt;", "tm-e"); PF.set("effect", a); line("Effect: " + a); },
+      intro(a) { if (a !== "orb" && a !== "barrel") return line("intro &lt;orb|barrel&gt;", "tm-e"); PF.set("hero", a); line("Intro: " + a + ". Scroll to the top to see it."); },
       clear() { out.innerHTML = ""; },
-      sudo() { line("Nice try. This account has no sudo, only curiosity.", "tm-e"); }
+      sudo() { line("Nice try. This account has no sudo, only curiosity.", "tm-e"); },
+      barrel() { CMDS.intro("barrel"); }
     };
     const run = (raw) => {
       line("<span class=\"tm-p\">visitor@ortzi:~$</span> " + esc(raw), "tm-cmd");

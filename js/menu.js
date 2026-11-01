@@ -284,18 +284,21 @@
 
     body.innerHTML =
       '<form class="lab" onsubmit="return false">' +
-        '<p class="lab-help">Change the palette and effect live. Saved in this browser.</p>' +
+        '<p class="lab-help">Change the barrel and palette live. Saved in this browser.</p>' +
         '<div class="lab-pair">' +
           '<fieldset><legend class="label">Theme</legend>' + seg("lab-theme", [["dark", "Dark"], ["light", "Light"]]) + "</fieldset>" +
+          '<fieldset><legend class="label">Intro</legend>' + seg("lab-hero", [["orb", "Sphere"], ["barrel", "Barrel"]]) + "</fieldset>" +
         "</div>" +
         '<fieldset><legend class="label">Palette</legend><div class="sw-grid">' + pal + "</div></fieldset>" +
         '<fieldset><legend class="label">Typeface</legend><div class="fnt-grid">' + fnt + "</div></fieldset>" +
-        '<fieldset><legend class="label">Image effect</legend>' + seg("lab-effect", Object.keys(C.effects).map((k) => [k, C.effects[k].label]), "seg-3") + "</fieldset>" +
+        '<fieldset><legend class="label">Bullet (barrel only)</legend>' + seg("lab-bullet", [["1", "On"], ["0", "Off"]]) + "</fieldset>" +
+        '<fieldset><legend class="label">Barrel and cover effect</legend>' + seg("lab-effect", Object.keys(C.effects).map((k) => [k, C.effects[k].label]), "seg-3") + "</fieldset>" +
         '<div class="lab-pair">' +
           '<fieldset><legend class="label">Density</legend><div class="lab-row"><input type="range" id="lab-density" min="0.6" max="1.6" step="0.1" aria-label="Density"><output class="lab-out" for="lab-density"></output></div></fieldset>' +
           '<fieldset><legend class="label">Animated background</legend><label class="chk"><input type="checkbox" id="lab-field"><span class="chk-box" aria-hidden="true"></span><span class="chk-txt">Characters</span><span class="chk-state label" aria-hidden="true"></span></label></fieldset>' +
         "</div>" +
         '<fieldset><legend class="label">Click effect</legend>' + seg("lab-click", [["mix", "Mix"], ["wave", "Wave"], ["detect", "Detect"], ["burst", "Dots"], ["cross", "Crosshair"], ["off", "None"]], "seg-3") + "</fieldset>" +
+        '<fieldset><legend class="label">Barrel background</legend>' + seg("lab-bg", Object.keys(C.barrelBackgrounds).map((k) => [k, C.barrelBackgrounds[k].label]), "seg-2x2") + "</fieldset>" +
         '<div class="lab-actions"><button type="button" class="win-btn" data-lab="intro">Replay intro</button><button type="button" class="win-btn" data-lab="reset">Reset</button></div>' +
       "</form>";
 
@@ -305,6 +308,9 @@
     on('input[name="lab-font"]', (e) => PF.set("font", e.target.value));
     on('input[name="lab-effect"]', (e) => PF.set("effect", e.target.value));
     on('input[name="lab-click"]', (e) => PF.set("click", e.target.value));
+    on('input[name="lab-hero"]', (e) => PF.set("hero", e.target.value));
+    on('input[name="lab-bullet"]', (e) => PF.set("bullet", e.target.value === "1"));
+    on('input[name="lab-bg"]', (e) => PF.set("barrelBg", e.target.value));
     on("#lab-field", (e) => PF.set("field", e.target.checked));
     const dens = body.querySelector("#lab-density");
     dens.addEventListener("input", () => { PF.set("density", Math.round(+dens.value * 10) / 10); syncLab(); });
@@ -322,7 +328,10 @@
     setRadio("lab-palette", st.palette);
     setRadio("lab-font", st.font);
     setRadio("lab-effect", st.effect);
+    setRadio("lab-hero", st.hero);
     setRadio("lab-click", st.click);
+    setRadio("lab-bullet", st.bullet ? "1" : "0");
+    setRadio("lab-bg", st.barrelBg);
     const f = b.querySelector("#lab-field");
     f.checked = !!st.field;
     b.querySelector(".chk-state").textContent = st.field ? "Yes" : "No";
@@ -381,7 +390,8 @@
       { label: () => (PF.state.theme === "light" ? "Dark mode" : "Light mode"), key: "T", act: toggleTheme },
       { label: "Lab…", key: "L", act: () => openWin("lab") },
       "sep",
-      { label: "Animated background", checked: () => !!PF.state.field, act: () => PF.set("field", !PF.state.field) }
+      { label: "Animated background", checked: () => !!PF.state.field, act: () => PF.set("field", !PF.state.field) },
+      { label: "Bullet", checked: () => !!PF.state.bullet, act: () => PF.set("bullet", !PF.state.bullet) }
     ] },
     { id: "radio", label: "Radio", items: [
       { label: () => (M.playing ? "Pause" : "Play"), key: "Space", act: () => M.toggle() },

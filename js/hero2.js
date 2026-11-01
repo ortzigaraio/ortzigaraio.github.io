@@ -6,7 +6,7 @@
         de una foto central, unida por líneas, con capas de visión por computador
         (cajas con confianza, puntos de interés, máscara de segmentación).
    La constelación es la entrada a la galería.
-   API: PF.hero2 = { progress() }
+   Se activa con PF.state.hero === "orb". API: PF.hero2 = { progress() }
    ========================================================================== */
 (function () {
   const PF = window.PF;
@@ -23,7 +23,7 @@
   const outCubic = (t) => 1 - Math.pow(1 - t, 3);
   function mulberry(seed) { return function () { seed |= 0; seed = (seed + 0x6d2b79f5) | 0; let t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
   const pad = (n, w) => String(Math.floor(n)).padStart(w, "0");
-  const isOrb = () => true;
+  const isOrb = () => PF.state.hero === "orb";
 
   /* ---------------- Esfera: shader ---------------- */
   let renderer = null;
@@ -396,7 +396,8 @@
   }
   PF.on("theme", () => { if (isOrb()) colors(); });
   PF.on("change", (e) => {
-        if (e.key === "density") resize();
+    if (e.key === "hero" || e.key === "*") { setTimeout(() => { if (window.ScrollTrigger) ScrollTrigger.refresh(); }, 50); }
+    if (e.key === "density") resize();
   });
   window.addEventListener("resize", () => { clearTimeout(resize._t); resize._t = setTimeout(() => { resize(); colors(); }, 160); });
 

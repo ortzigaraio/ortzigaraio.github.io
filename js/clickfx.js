@@ -24,7 +24,7 @@
   }
   size(); window.addEventListener("resize", size);
 
-  const interactive = "a, button, input, textarea, select, label, summary, [role='button'], [role='menu'], [role='dialog'], .win, .bx, #detail, .g3-card, .g3-li, .dk-card, .idx-row, .sk, .gal-link";
+  const interactive = "a, button, input, textarea, select, label, summary, [role='button'], [role='menu'], [role='dialog'], .win, .bx, #detail, .g3-card, .g3-li, .dk-card, .idx-row, .sk, .gal-link, canvas#barrel";
   function color(a) { return "rgba(" + PF.hexToRgb(PF.colors().fg).join(",") + "," + a + ")"; }
 
   /* ---- Efectos ---- */
