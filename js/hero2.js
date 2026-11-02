@@ -401,10 +401,26 @@
   });
   window.addEventListener("resize", () => { clearTimeout(resize._t); resize._t = setTimeout(() => { resize(); colors(); }, 160); });
 
-  const start = () => { resize(); colors(); requestAnimationFrame(frame); };
-  // Espera a "load": gallery.js (PF.covers) se carga después de este archivo.
-  const whenReady = () => (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(start, start);
-  if (document.readyState === "complete") whenReady(); else window.addEventListener("load", whenReady);
+  /* La esfera se pinta de inmediato (sin esperar a "load" ni a las fuentes) para que no haya
+     un instante con solo el fondo de caracteres. Las tarjetas se construyen al terminar de
+     parsear el documento, cuando ya existe PF.covers, y se repintan al llegar las fuentes. */
+  function paintNow() {
+    if (!renderer) return;
+    const d = Math.min(window.devicePixelRatio || 1, 2);
+    const w = stage.clientWidth || window.innerWidth, h = stage.clientHeight || window.innerHeight;
+    renderer.setPixelRatio(d); renderer.setSize(w, h, false);
+    U.uRes.value.set(Math.round(w * d), Math.round(h * d));
+    U.uCell.value = Math.max(1.5, 2 * d * clamp(PF.state.density, 0.7, 1.6));
+    const c = PF.colors(); U.uInk.value.set(c.fg); U.uPaper.value.set(c.bg);
+    U.uA.value = 0; U.uB.value = 0; U.uZ.value = 0; U.uDim.value = 0; U.uTime.value = 0;
+    renderer.render(scene, cam);
+    document.documentElement.classList.add("orb-ready");
+  }
+  paintNow();
+  requestAnimationFrame(frame);
+  const later = () => { resize(); colors(); };
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", later); else later();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { drawOverlays(); }, () => {});
 
   PF.hero2 = { progress: () => prog };
 })();

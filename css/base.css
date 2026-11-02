@@ -111,6 +111,7 @@ main, .site-footer { position: relative; z-index: 1; }
   position: sticky; top: 0;
   height: 100vh; height: 100dvh;
   overflow: hidden;
+  background: var(--bg);
 }
 #barrel { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 .no-webgl .hero-stage { background: radial-gradient(circle at 50% 50%, var(--fg) 0 2%, var(--bg) 40%); }
@@ -204,3 +205,12 @@ html[data-hero="orb"] .hud-bar i { background: var(--fg); }
 .rt.is-hot span { opacity: 1; }
 html.has-reticle, html.has-reticle * { cursor: none !important; }
 html.has-reticle input, html.has-reticle textarea, html.has-reticle select { cursor: text !important; }
+
+/* Pre-render de la esfera: se ve desde el primer pintado, antes de que cargue JS, y se retira
+   en cuanto el lienzo WebGL ha dibujado el primer fotograma. */
+.hero-stage::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(circle at 50% 50%, var(--fg) 0 19.5vmin, rgba(var(--fg-rgb), 0.5) 21vmin, rgba(var(--fg-rgb), 0.16) 27vmin, rgba(var(--fg-rgb), 0) 36vmin);
+}
+html.orb-ready .hero-stage::before { display: none; }
