@@ -405,7 +405,7 @@
      un instante con solo el fondo de caracteres. Las tarjetas se construyen al terminar de
      parsear el documento, cuando ya existe PF.covers, y se repintan al llegar las fuentes. */
   function paintNow() {
-    if (!renderer) return;
+    if (!renderer) { document.documentElement.classList.add("orb-ready"); return; }
     const d = Math.min(window.devicePixelRatio || 1, 2);
     const w = stage.clientWidth || window.innerWidth, h = stage.clientHeight || window.innerHeight;
     renderer.setPixelRatio(d); renderer.setSize(w, h, false);
@@ -417,6 +417,7 @@
     document.documentElement.classList.add("orb-ready");
   }
   paintNow();
+  setTimeout(() => document.documentElement.classList.add("orb-ready"), 2500);   // por si WebGL tarda: el fondo nunca queda oculto
   requestAnimationFrame(frame);
   const later = () => { resize(); colors(); };
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", later); else later();
