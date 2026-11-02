@@ -47,10 +47,13 @@ def build(fragment: bool) -> str:
         html,
     )
     html = re.sub(
-        r'<script src="(js/[^"]+)"></script>',
+        r'<script(?: defer)? src="(js/[^"]+)"></script>',
         lambda m: "<script>\n" + (ROOT / m.group(1)).read_text(encoding="utf-8") + "\n</script>",
         html,
     )
+    # Los scripts locales quedan en línea y se ejecutan al instante: las librerías externas
+    # deben ser síncronas para cargarse antes que ellos.
+    html = html.replace('<script defer src="https', '<script src="https')
     if fragment:
         html = re.sub(r"<!doctype html>\s*", "", html, flags=re.I)
         html = re.sub(r"</?(html|head|body)[^>]*>\s*", "", html)
