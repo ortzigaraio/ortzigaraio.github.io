@@ -403,13 +403,18 @@
 
   PF.on("theme", applyColors);
   PF.on("change", (e) => {
+    if (!started) return;
     if (["effect", "density", "*"].includes(e.key)) resize();
     applyColors();
   });
   window.addEventListener("resize", () => { clearTimeout(resize._t); resize._t = setTimeout(resize, 120); });
 
-  const start = () => { makeAtlas(); resize(); applyColors(); requestAnimationFrame(frame); };
-  (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(start, start);
+  /* El cañón solo se inicializa si se usa: así no frena la carga de la intro con la esfera. */
+  let started = false;
+  const start = () => { if (started) return; started = true; makeAtlas(); resize(); applyColors(); requestAnimationFrame(frame); };
+  const boot = () => (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(start, start);
+  if (PF.state.hero === "barrel") boot();
+  else PF.on("change", (e) => { if (!started && PF.state.hero === "barrel") boot(); });
 
   PF.barrel = { progress: () => prog, canvas, render: () => (dirty = true) };
 })();
