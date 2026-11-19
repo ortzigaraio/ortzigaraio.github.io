@@ -420,7 +420,9 @@
   setTimeout(() => document.documentElement.classList.add("orb-ready"), 2500);   // por si WebGL tarda: el fondo nunca queda oculto
   requestAnimationFrame(frame);
   const later = () => { resize(); colors(); };
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", later); else later();
+  // Los scripts van con defer: este corre antes que gallery.js (PF.covers). Se espera a
+  // DOMContentLoaded, que llega cuando todos los diferidos ya se han ejecutado.
+  if (document.readyState === "loading" || (document.readyState === "interactive" && !PF.covers)) document.addEventListener("DOMContentLoaded", later); else later();
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { drawOverlays(); }, () => {});
 
   PF.hero2 = { progress: () => prog };
